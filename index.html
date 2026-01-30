@@ -3,86 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal VIP - Dr. Portillo</title>
+    <title>Dr. Portillo - Executive Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0a0f1d; color: white; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .urgente { border-left: 5px solid #ef4444; background: rgba(239, 68, 68, 0.1); }
-        @keyframes pulse-red { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-        .pulse-urgente { animation: pulse-red 1.5s infinite; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap');
+        :root { --royal: #0D1235; --gold: #D4AF37; --navy: #14202C; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: radial-gradient(circle at top right, #1a2a44, #0D1235); color: white; }
+        .stat-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 24px; }
+        .urgente-pulse { border-left: 4px solid #ff4d4d; background: rgba(255, 77, 77, 0.05); }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-10">
-    <div class="max-w-5xl mx-auto space-y-8">
-        <header class="flex justify-between items-center">
-            <h1 class="text-3xl font-black italic tracking-tighter uppercase text-white">
-                Dr. Portillo <span class="text-purple-500 text-sm block not-italic font-bold tracking-[0.3em]">Gestión VIP</span>
-            </h1>
-            <button onclick="cargarDatos()" class="bg-purple-600 hover:bg-purple-500 px-6 py-3 rounded-2xl text-xs font-black transition-all uppercase tracking-widest">🔄 Sincronizar</button>
+<body class="p-6">
+    <div class="max-w-md mx-auto space-y-8">
+        <header class="text-center pt-4">
+            <h1 class="text-xs font-black tracking-[0.4em] text-blue-400 uppercase">Executive Dashboard</h1>
+            <p class="text-2xl font-extrabold italic mt-1">DR. PORTILLO</p>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="glass p-8 rounded-[2.5rem] border-b-4 border-purple-500">
-                <p class="text-slate-500 text-[10px] font-black uppercase tracking-widest text-center md:text-left">Total Pacientes</p>
-                <h2 class="text-5xl font-black mt-2 text-center md:text-left" id="total-pacientes">0</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="stat-card">
+                <p class="text-[10px] font-bold text-slate-500 uppercase">Ingresos Hoy</p>
+                <p class="text-xl font-black text-green-400 mt-1" id="kpi-monto">$0</p>
             </div>
-            <div class="glass p-8 rounded-[2.5rem] border-b-4 border-red-500 text-red-500 text-center md:text-left">
-                <p class="text-red-400 text-[10px] font-black uppercase tracking-widest">Alertas IA</p>
-                <h2 class="text-5xl font-black mt-2" id="total-urgencias">0</h2>
-            </div>
-            <div class="glass p-8 rounded-[2.5rem] border-b-4 border-green-500 text-center md:text-left">
-                <p class="text-green-400 text-[10px] font-black uppercase tracking-widest text-center md:text-left">Estado</p>
-                <h2 class="text-2xl font-black mt-2 uppercase text-green-400">Online 🟢</h2>
+            <div class="stat-card">
+                <p class="text-[10px] font-bold text-slate-500 uppercase">Pacientes</p>
+                <p class="text-xl font-black mt-1" id="kpi-total">0</p>
             </div>
         </div>
 
-        <div class="space-y-4" id="contenedor-pacientes">
-            <p class="text-center text-slate-500 animate-pulse font-bold text-xs uppercase">Sincronizando con la nube...</p>
+        <div class="stat-card">
+            <canvas id="docChart" height="180"></canvas>
         </div>
+
+        <div class="space-y-4">
+            <h3 class="text-[10px] font-black text-red-500 uppercase tracking-widest">Prioridades Críticas</h3>
+            <div id="lista-urgencias" class="space-y-3 text-sm">
+                </div>
+        </div>
+
+        <button onclick="location.reload()" class="w-full py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-white/10">Actualizar Reporte</button>
     </div>
 
     <script>
         const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTF1qHxJ4_IhNIVNY5OhSYOvZO4me0b9SH3IOro7b-kyIFx1fAb4HcAVbzq75bKWvg1Lcbr979isUUi/pub?output=csv";
 
-        async function cargarDatos() {
-            const contenedor = document.getElementById('contenedor-pacientes');
-            try {
-                const respuesta = await fetch(CSV_URL);
-                const texto = await respuesta.text();
-                const filas = texto.split("\n");
-                let html = ""; let urgencias = 0; let total = 0;
+        async function fetchExecutiveData() {
+            const res = await fetch(CSV_URL);
+            const rawData = await res.text();
+            const rows = rawData.split("\n").slice(1);
+            
+            let totalCash = 0;
+            let urgenciasHtml = "";
+            let counts = [0, 0, 0, 0, 0]; // Sim para gráfica
 
-                for (let i = filas.length - 1; i >= 1; i--) {
-                    const c = filas[i].split(",");
-                    if (c.length < 3) continue;
-                    total++;
-                    const nombre = c[1] || "Paciente"; const tel = c[2] || ""; const msg = c[3] || "Consulta"; const prioridad = (c[4] || "").toUpperCase();
-                    const esUrgente = prioridad.includes("ALTA") || msg.toLowerCase().includes("sangrado") || msg.toLowerCase().includes("dolor");
-                    if(esUrgente) urgencias++;
-
-                    html += `
-                    <div class="glass p-6 rounded-[2.5rem] flex flex-col md:flex-row justify-between items-center gap-6 ${esUrgente ? 'urgente' : ''}">
-                        <div class="flex-1 text-center md:text-left">
-                            <span class="text-[9px] font-black uppercase ${esUrgente ? 'text-red-500 pulse-urgente' : 'text-slate-500'} tracking-widest">${esUrgente ? '🚨 Prioridad Alta' : 'Normal'}</span>
-                            <h4 class="text-2xl font-black text-white tracking-tight">${nombre.replace(/"/g, '')}</h4>
-                            <p class="text-slate-400 text-sm mt-1 italic border-l-2 border-purple-500/30 pl-3">"${msg.replace(/"/g, '')}"</p>
-                        </div>
-                        <div class="flex gap-2 w-full md:w-auto">
-                            <a href="https://wa.me/${tel.replace(/\D/g,'')}" target="_blank" class="flex-1 text-center bg-green-600 px-6 py-3 rounded-xl font-black text-[10px] uppercase">WhatsApp</a>
-                            <a href="tel:${tel}" class="flex-1 text-center bg-slate-800 px-6 py-3 rounded-xl font-black text-[10px] uppercase">Llamar</a>
-                        </div>
-                    </div>`;
+            rows.forEach((row, i) => {
+                const c = row.split(",");
+                if(c.length < 3) return;
+                
+                totalCash += parseFloat(c[6]) || 0;
+                const prioridad = (c[4] || "").toUpperCase();
+                
+                if(prioridad.includes("ALTA")) {
+                    urgenciasHtml += `
+                        <div class="stat-card urgente-pulse flex justify-between items-center p-4">
+                            <div>
+                                <p class="font-bold text-white">${c[1]}</p>
+                                <p class="text-[10px] text-red-400 italic">${c[3].substring(0,30)}...</p>
+                            </div>
+                            <a href="https://wa.me/${c[2]}" class="bg-red-500 p-2 rounded-lg text-xs">📱</a>
+                        </div>`;
                 }
-                contenedor.innerHTML = html || "<p class='text-center text-slate-500'>No hay datos aún.</p>";
-                document.getElementById('total-pacientes').innerText = total;
-                document.getElementById('total-urgencias').innerText = urgencias;
-            } catch (e) {
-                contenedor.innerHTML = "<p class='text-center text-red-500 font-bold'>Error de acceso. Por favor, sube este archivo a GitHub Pages.</p>";
-            }
+            });
+
+            document.getElementById('kpi-monto').innerText = `$${totalCash}`;
+            document.getElementById('kpi-total').innerText = rows.length;
+            document.getElementById('lista-urgencias').innerHTML = urgenciasHtml || "<p class='text-slate-600 text-xs italic'>No hay urgencias pendientes.</p>";
+            initChart();
         }
-        window.onload = cargarDatos;
+
+        function initChart() {
+            const ctx = document.getElementById('docChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie'],
+                    datasets: [{
+                        data: [12, 19, 15, 8, 22],
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 8
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { ticks: { color: '#64748b', font: { size: 10 } } } } }
+            });
+        }
+        window.onload = fetchExecutiveData;
     </script>
 </body>
 </html>
