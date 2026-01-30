@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión Operativa - Asistente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0D1235; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; }
+        .input-asistente { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1rem; width: 100%; outline: none; transition: 0.3s; }
+        .input-asistente:focus { border-color: #3b82f6; background: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-8">
+        <header class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black italic uppercase">Módulo Asistente</h1>
+                <p class="text-blue-400 text-[10px] font-black uppercase tracking-[0.3em]">Control de Agenda y Pacientes</p>
+            </div>
+            <a href="index.html" class="text-[10px] font-bold opacity-50 hover:opacity-100 transition">← VOLVER AL PORTAL</a>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass p-8 space-y-6">
+                <h2 class="text-sm font-black uppercase tracking-widest text-blue-300">Nueva Cita</h2>
+                <div class="space-y-4">
+                    <input type="text" id="asis-nombre" placeholder="Nombre del Paciente" class="input-asistente">
+                    <input type="tel" id="asis-tel" placeholder="WhatsApp (10 dígitos)" class="input-asistente">
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <select id="asis-servicio" class="input-asistente">
+                            <option value="Consulta">Consulta</option>
+                            <option value="Urgencia">Urgencia</option>
+                            <option value="Facturación">Facturación</option>
+                        </select>
+                        <input type="number" id="asis-monto" placeholder="Costo $" class="input-asistente">
+                    </div>
+
+                    <textarea id="asis-nota" placeholder="Notas adicionales..." class="input-asistente h-24"></textarea>
+                    
+                    <button onclick="agendarAsistente()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-900/20">Registrar en Sistema</button>
+                </div>
+            </div>
+
+            <div class="glass p-4 h-[550px] flex flex-col">
+                <h2 class="text-sm font-black uppercase tracking-widest text-blue-300 mb-4 px-4">Agenda en Vivo</h2>
+                <div class="flex-grow rounded-2xl overflow-hidden bg-white">
+                    <iframe src="https://calendar.google.com/calendar/embed?src=TU_EMAIL@gmail.com&ctz=America/Mexico_City&showTitle=0&showNav=1&showPrint=0&showTabs=1&showCalendars=0&showTz=0" 
+                        style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass p-8">
+            <h2 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-6">Próximos Pacientes</h2>
+            <div id="lista-hoy" class="space-y-4">
+                <p class="text-xs opacity-30 italic text-center py-10">Sincronizando con base de datos...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function agendarAsistente() {
+            // Aquí conectaremos con el Apps Script que ya tienes
+            alert("Guardando en la base de datos de la Dra. Alba...");
+        }
+    </script>
+</body>
+</html>
