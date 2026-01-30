@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Directivo VIP - Dr. Portillo / Dra. Alba</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0D1235; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; }
+        .status-paid { color: #4ade80; background: rgba(74, 222, 128, 0.1); padding: 4px 12px; border-radius: 99px; }
+        .status-pending { color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 4px 12px; border-radius: 99px; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-8">
+        <header class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black italic">PANEL DE CONTROL</h1>
+                <p class="text-blue-400 text-xs font-bold uppercase tracking-widest">Gestión Estratégica</p>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="location.reload()" class="glass p-3 text-sm">🔄 Actualizar</button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass p-6">
+                <h3 class="text-xs font-black uppercase text-slate-400 mb-6 tracking-widest">Ingresos y Flujo</h3>
+                <canvas id="chartDoc" height="150"></canvas>
+            </div>
+
+            <div class="glass p-2 overflow-hidden h-[350px]">
+                <iframe src="https://calendar.google.com/calendar/embed?src=TU_EMAIL@gmail.com&ctz=America/Mexico_City&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0" 
+                    style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+            </div>
+        </div>
+
+        <div class="glass p-8 overflow-x-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-sm font-black uppercase tracking-widest">Control de Citas y Pagos</h3>
+                <button class="text-xs bg-blue-600 px-4 py-2 rounded-lg font-bold">+ Agregar Manual</button>
+            </div>
+            
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="text-[10px] uppercase text-slate-500 border-b border-white/10">
+                        <th class="pb-4">Paciente</th>
+                        <th class="pb-4">Servicio</th>
+                        <th class="pb-4 text-center">Estado Pago</th>
+                        <th class="pb-4 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                        <td class="py-4 font-bold">Kevin Reyes</td>
+                        <td class="py-4 text-slate-400 italic">Consulta General</td>
+                        <td class="py-4 text-center"><span class="status-pending font-bold text-[10px] uppercase">Pendiente</span></td>
+                        <td class="py-4 text-right">
+                            <button class="text-blue-400 font-bold hover:underline">Editar</button>
+                        </td>
+                    </tr>
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                        <td class="py-4 font-bold">Dra. Alba Patricia</td>
+                        <td class="py-4 text-slate-400 italic">Especialidad</td>
+                        <td class="py-4 text-center"><span class="status-paid font-bold text-[10px] uppercase">Pagado</span></td>
+                        <td class="py-4 text-right">
+                            <button class="text-blue-400 font-bold hover:underline">Editar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de la Gráfica
+        const ctx = document.getElementById('chartDoc').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['08am', '10am', '12pm', '02pm', '04pm', '06pm'],
+                datasets: [{
+                    label: 'Ingresos',
+                    data: [0, 150, 450, 300, 600, 200],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { display: false },
+                    x: { grid: { display: false }, ticks: { color: '#475569', font: { size: 10 } } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
