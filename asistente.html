@@ -40,8 +40,7 @@
     </script>
 </body>
 </html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><button onclick="generarFactura()" class="w-full py-4 bg-green-600 text-white rounded-xl font-black uppercase mt-2 shadow-lg hover:bg-green-500 transition">
-    📄 Emitir Factura PDFasync function generarFactura() {
+async function generarFactura() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     
