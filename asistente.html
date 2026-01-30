@@ -3,100 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Asistente - Operativo</title>
+    <title>Asistente - Gestión Médica</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0D1235; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; }
+        .input-asistente { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1rem; width: 100%; color: white; outline: none; }
+    </style>
 </head>
-<body class="bg-[#0D1235] text-white p-6">
+<body class="p-6">
     <div class="max-w-6xl mx-auto space-y-8">
-        <header class="flex justify-between items-center border-b border-white/10 pb-6">
-            <h1 class="text-xl font-black italic uppercase text-blue-400">Módulo Asistente</h1>
-            <a href="index.html" class="text-xs opacity-50 uppercase tracking-widest">← Inicio</a>
+        <header class="flex justify-between items-center">
+            <h1 class="text-xl font-black italic uppercase text-blue-400 tracking-widest">Portal Operativo</h1>
+            <a href="index.html" class="text-xs opacity-50 uppercase">← Volver al inicio</a>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white/5 p-8 rounded-[2rem] border border-white/10 space-y-4 text-black">
-                <h2 class="text-white text-sm font-bold uppercase tracking-widest mb-4">Registrar Nuevo Paciente</h2>
-                <input type="text" id="asis-nombre" placeholder="Nombre" class="w-full p-4 rounded-xl outline-none">
-                <input type="tel" id="asis-tel" placeholder="Teléfono" class="w-full p-4 rounded-xl outline-none">
-                <select id="asis-servicio" class="w-full p-4 rounded-xl outline-none">
-                    <option value="Consulta">Consulta General</option>
+            <div class="glass p-8 space-y-5">
+                <h2 class="text-sm font-black uppercase text-slate-400 tracking-widest">Nuevo Registro / Facturación</h2>
+                <input type="text" id="asis-nombre" placeholder="Nombre del Paciente" class="input-asistente">
+                <input type="tel" id="asis-tel" placeholder="WhatsApp" class="input-asistente">
+                <select id="asis-servicio" class="input-asistente">
+                    <option value="Consulta General">Consulta General</option>
                     <option value="Especialidad">Especialidad</option>
+                    <option value="Facturación Externa">Facturación Externa</option>
                 </select>
-                <input type="number" id="asis-monto" placeholder="Monto $" class="w-full p-4 rounded-xl outline-none">
-                <button onclick="guardarEnExcel()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-black uppercase">Registrar en Agenda</button>
+                <input type="number" id="asis-monto" placeholder="Monto $" class="input-asistente">
+                
+                <div class="pt-4 space-y-3">
+                    <button class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase">Registrar Cita</button>
+                    <button onclick="generarPDF()" class="w-full py-4 bg-green-600 rounded-2xl font-black uppercase">📄 Emitir Factura PDF</button>
+                </div>
             </div>
 
-            <div class="bg-white rounded-[2rem] overflow-hidden h-[500px]">
-                <iframe src="https://calendar.google.com/calendar/embed?src=TU_EMAIL@gmail.com&ctz=America/Mexico_City" style="border:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+            <div class="bg-white rounded-[2.5rem] overflow-hidden h-[500px]">
+                <iframe src="https://calendar.google.com/calendar/embed?src=TU_EMAIL@gmail.com&ctz=America/Mexico_City&showTitle=0&showNav=1" style="border:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
             </div>
         </div>
     </div>
 
     <script>
-        async function guardarEnExcel() {
-            // Aquí conectarás tu Apps Script /exec
-            alert("Guardando en base de datos central...");
+        async function generarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const nombre = document.getElementById('asis-nombre').value || "Paciente";
+            const servicio = document.getElementById('asis-servicio').value;
+            const monto = document.getElementById('asis-monto').value || "0";
+            
+            doc.setFillColor(13, 18, 53); doc.rect(0, 0, 210, 30, 'F');
+            doc.setTextColor(255,255,255); doc.setFontSize(20); doc.text("RECIBO - DRA. ALBA PATRICIA", 20, 20);
+            doc.setTextColor(0,0,0); doc.setFontSize(12);
+            doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 50);
+            doc.text(`Paciente: ${nombre}`, 20, 60);
+            doc.text(`Concepto: ${servicio}`, 20, 70);
+            doc.text(`Total: $${monto} MXN`, 20, 90);
+            doc.text("--------------------------------------", 20, 100);
+            doc.save(`Recibo_${nombre}.pdf`);
         }
     </script>
 </body>
 </html>
-async function generarFactura() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    
-    const nombre = document.getElementById('asis-nombre').value || "Paciente General";
-    const servicio = document.getElementById('asis-servicio').value;
-    const monto = document.getElementById('asis-monto').value || "0";
-    const fecha = new Date().toLocaleDateString('es-MX');
-
-    // --- ENCABEZADO ELEGANTE ---
-    doc.setFillColor(13, 18, 53); // Color azul profundo del portal
-    doc.rect(0, 0, 210, 40, 'F');
-    
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.setFont("helvetica", "bold");
-    doc.text("RECIBO DE HONORARIOS", 20, 25);
-    
-    doc.setFontSize(10);
-    doc.text("DRA. ALBA PATRICIA | Especialista", 20, 32);
-
-    // --- CUERPO DEL RECIBO ---
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
-    
-    doc.text(`FOLIO: #${Math.floor(Math.random() * 1000)}`, 150, 55);
-    doc.text(`FECHA DE EMISIÓN: ${fecha}`, 20, 55);
-    
-    doc.setLineWidth(0.5);
-    doc.line(20, 60, 190, 60);
-
-    doc.setFont("helvetica", "bold");
-    doc.text("DATOS DEL PACIENTE:", 20, 75);
-    doc.setFont("helvetica", "normal");
-    doc.text(nombre.toUpperCase(), 20, 82);
-
-    doc.setFont("helvetica", "bold");
-    doc.text("CONCEPTO DEL SERVICIO:", 20, 95);
-    doc.setFont("helvetica", "normal");
-    doc.text(servicio, 20, 102);
-
-    // --- TOTAL ---
-    doc.setFillColor(240, 240, 240);
-    doc.rect(20, 115, 170, 20, 'F');
-    doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
-    doc.text(`TOTAL PAGADO: $${monto} MXN`, 30, 128);
-
-    // --- FIRMA Y PIE ---
-    doc.setFontSize(10);
-    doc.line(70, 170, 140, 170);
-    doc.text("FIRMA AUTORIZADA", 85, 175);
-    
-    doc.setFontSize(8);
-    doc.setTextColor(150, 150, 150);
-    doc.text("Este documento es un comprobante de pago interno.", 105, 280, null, null, "center");
-
-    doc.save(`Recibo_${nombre.replace(/\s+/g, '_')}.pdf`);
-}
