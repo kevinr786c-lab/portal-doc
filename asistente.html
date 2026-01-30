@@ -40,3 +40,34 @@
     </script>
 </body>
 </html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><button onclick="generarFactura()" class="w-full py-4 bg-green-600 text-white rounded-xl font-black uppercase mt-2 shadow-lg hover:bg-green-500 transition">
+    📄 Emitir Factura PDF
+</button>async function generarFactura() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Datos del formulario
+    const nombre = document.getElementById('asis-nombre').value || "Paciente General";
+    const servicio = document.getElementById('asis-servicio').value;
+    const monto = document.getElementById('asis-monto').value || "0";
+    const fecha = new Date().toLocaleDateString();
+
+    // Diseño del PDF
+    doc.setFontSize(22);
+    doc.text("RECIBO MÉDICO - DRA. ALBA PATRICIA", 20, 30);
+    
+    doc.setFontSize(12);
+    doc.text(`Fecha: ${fecha}`, 20, 50);
+    doc.text(`Paciente: ${nombre}`, 20, 60);
+    doc.text(`Concepto: ${servicio}`, 20, 70);
+    doc.text("------------------------------------------", 20, 80);
+    
+    doc.setFontSize(16);
+    doc.text(`TOTAL A PAGAR: $${monto} MXN`, 20, 90);
+    
+    doc.setFontSize(10);
+    doc.text("Gracias por su confianza. Este recibo es para fines informativos.", 20, 110);
+
+    // Descarga el archivo
+    doc.save(`Factura_${nombre}.pdf`);
+}
