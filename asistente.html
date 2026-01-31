@@ -3,152 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K.B Tech | Gestión Premium</title>
+    <title>K.B Tech Solutions | Ecosistema Médico</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap');
-        
-        :root {
-            --rosa-soft: #fff5f7;
-            --violeta-soft: #f3f0ff;
-            --primario: #d8b4fe;
-            --acentos: #fbcfe8;
-        }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #fcfcfd; 
-            color: #1e293b;
-            overflow-x: hidden;
-        }
-
-        .glass-panel { 
-            background: white; 
-            border: 1px solid #f1f5f9; 
-            border-radius: 2.5rem;
-            box-shadow: 0 10px 40px rgba(216, 180, 254, 0.1);
-        }
-
-        .capsule-menu {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: white; border: 1px solid var(--violeta-soft);
-            padding: 12px 30px; border-radius: 100px;
-            display: flex; gap: 25px; align-items: center;
-            box-shadow: 0 20px 50px rgba(216, 180, 254, 0.2); z-index: 1000;
-        }
-
-        .nav-icon {
-            width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; transition: 0.3s; cursor: pointer; font-size: 1.1rem;
-        }
-        .nav-icon:hover { background: var(--rosa-soft); transform: scale(1.1); }
-        .nav-icon.active { background: var(--violeta-soft); color: #a855f7; }
-
-        .input-pure {
-            background: #f8fafc; border: 2px solid transparent; border-radius: 1.2rem;
-            padding: 14px 18px; width: 100%; outline: none; transition: 0.3s;
-        }
+        :root { --primario: #d8b4fe; --acentos: #fbcfe8; --fondo: #fcfcfd; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--fondo); color: #1e293b; }
+        .glass-panel { background: white; border: 1px solid #f1f5f9; border-radius: 2.5rem; box-shadow: 0 10px 40px rgba(216, 180, 254, 0.1); }
+        .input-pure { background: #f8fafc; border: 2px solid transparent; border-radius: 1.2rem; padding: 14px 18px; width: 100%; outline: none; transition: 0.3s; font-size: 0.9rem; }
         .input-pure:focus { border-color: var(--primario); background: white; }
-
-        .btn-premium {
-            background: linear-gradient(135deg, #d8b4fe 0%, #fbcfe8 100%);
-            color: white; font-weight: 800; border-radius: 1.2rem; padding: 16px;
-            transition: 0.4s; width: 100%; text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 10px 20px rgba(216, 180, 254, 0.4);
-        }
-        .btn-premium:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(216, 180, 254, 0.5); }
+        .capsule-menu { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border: 1px solid #f3f0ff; padding: 12px 30px; border-radius: 100px; display: flex; gap: 25px; align-items: center; box-shadow: 0 20px 50px rgba(216, 180, 254, 0.2); z-index: 1000; }
+        .nav-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; cursor: pointer; }
+        .nav-icon.active { background: #f3f0ff; color: #a855f7; }
+        .btn-premium { background: linear-gradient(135deg, #d8b4fe 0%, #fbcfe8 100%); color: white; font-weight: 800; border-radius: 1.2rem; padding: 16px; transition: 0.4s; width: 100%; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(216, 180, 254, 0.4); }
     </style>
 </head>
 <body class="p-4 md:p-12">
 
-    <header class="max-w-7xl mx-auto flex justify-between items-start mb-12">
+    <header class="max-w-7xl mx-auto flex justify-between items-start mb-10">
         <div>
-            <h1 class="text-4xl font-black text-slate-800 tracking-tight">Bienvenida, <span class="text-purple-400">Dra. Alba</span></h1>
+            <h1 class="text-4xl font-black text-slate-800 tracking-tight">Panel de <span class="text-purple-400">Asistente</span></h1>
             <p id="live-date" class="text-slate-400 font-medium mt-1 uppercase text-[10px] tracking-widest"></p>
         </div>
-        <div class="hidden md:block">
-            <span class="px-6 py-2 bg-white rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-slate-100 text-slate-400 shadow-sm">K.B Tech Solutions</span>
+        <div class="flex items-center gap-3">
+            <span class="px-4 py-2 bg-emerald-50 text-emerald-500 rounded-full text-[9px] font-black uppercase border border-emerald-100">Sync Live</span>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 pb-32">
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 pb-32">
         
-        <div class="lg:col-span-4 space-y-8">
-            <div class="glass-panel p-10 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-2 h-full bg-purple-300"></div>
-                <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300 mb-6">Estado de Consulta</h3>
+        <div class="lg:col-span-4 space-y-6">
+            <div class="glass-panel p-8 border-t-8 border-purple-300">
+                <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">Atención Actual</h3>
                 <div class="mb-8">
-                    <p class="text-3xl font-extrabold text-slate-700 mb-1" id="patient-name">Kevin Reyes</p>
-                    <p class="text-xs font-bold text-purple-300 uppercase tracking-widest" id="patient-id">ID: 0024 • EN ATENCIÓN</p>
+                    <p class="text-3xl font-extrabold text-slate-700 leading-tight" id="patient-display">Kevin Reyes</p>
+                    <p class="text-[10px] font-bold text-purple-400 uppercase mt-1 tracking-widest">En Consultorio</p>
                 </div>
-                
-                <div class="flex flex-col gap-3">
-                    <button onclick="finalizarAtencion()" class="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-emerald-100 hover:bg-emerald-500 hover:text-white transition-all">
+                <div class="space-y-3">
+                    <button onclick="prepararCobro()" class="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-emerald-100 hover:bg-emerald-500 hover:text-white transition-all">
                         💰 Finalizar y Cobrar
                     </button>
-                    <button onclick="nextPatient()" class="btn-premium">Llamar Siguiente ➜</button>
+                    <button onclick="nextPatient()" class="btn-premium">Siguiente Paciente ➜</button>
                 </div>
             </div>
 
-            <div class="glass-panel p-10">
-                <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300 mb-6">Comunicación con Dra.</h3>
-                <textarea id="dr-msg" placeholder="Escribe un aviso..." class="input-pure h-32 resize-none text-sm"></textarea>
-                <button onclick="sendNote()" class="w-full mt-4 py-3 border-2 border-purple-100 text-purple-400 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-purple-50 transition">Enviar Notificación</button>
+            <div class="glass-panel p-8">
+                <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Notas para la Dra.</h3>
+                <textarea id="dr-msg" placeholder="Mensaje interno..." class="input-pure h-28 resize-none"></textarea>
+                <button onclick="sendNote()" class="w-full mt-4 py-3 border border-purple-100 text-purple-400 rounded-xl font-bold text-[9px] uppercase tracking-widest">Enviar Aviso</button>
             </div>
         </div>
 
         <div class="lg:col-span-8">
-            <div id="view-agenda" class="glass-panel p-10 min-h-[600px] flex flex-col">
-                <div class="flex justify-between items-center mb-10">
-                    <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300">Agenda Activa</h3>
-                    <button onclick="switchView('register')" class="text-[10px] font-black text-purple-400 uppercase tracking-widest">+ Registro Manual</button>
+            <div id="view-agenda" class="glass-panel p-10 min-h-[550px]">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-[9px] font-black uppercase tracking-widest text-slate-400">Agenda del Día</h3>
+                    <button onclick="switchView('register')" class="text-[10px] font-black text-purple-400 uppercase">+ Cita Manual</button>
                 </div>
-                
-                <div class="flex-grow overflow-auto rounded-3xl border border-slate-50">
+                <div class="overflow-hidden rounded-3xl border border-slate-50">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-50 text-[9px] uppercase font-black text-slate-400 tracking-widest">
-                            <tr>
-                                <th class="p-5">Estatus</th>
-                                <th class="p-5">Paciente</th>
-                                <th class="p-5">Servicio</th>
-                                <th class="p-5">Total</th>
-                            </tr>
+                        <thead class="bg-slate-50 text-[9px] uppercase font-black text-slate-400">
+                            <tr><th class="p-5">Paciente</th><th class="p-5">Servicio</th><th class="p-5">Monto</th></tr>
                         </thead>
-                        <tbody id="table-body" class="text-sm font-medium text-slate-600">
-                            </tbody>
+                        <tbody class="text-sm font-medium text-slate-600">
+                            <tr class="border-b border-slate-50"><td class="p-5">Kevin Reyes</td><td class="p-5">Consulta Esp.</td><td class="p-5 font-bold">$1,200</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
             <div id="view-register" class="hidden glass-panel p-10 animate-fade-in">
-                <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300 mb-8">Facturación & Registro SAT Pro</h3>
+                <h3 class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-8">Sincronización de Cobro SAT</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Nombre del Paciente</label>
-                        <input type="text" id="reg-nombre" class="input-pure" placeholder="Nombre Completo">
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Nombre Completo</label>
+                        <input type="text" id="reg-nombre" class="input-pure" placeholder="Nombre del Paciente">
                     </div>
-                    <div class="space-y-2">
+                    <div>
                         <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Tipo de Servicio</label>
                         <select id="reg-servicio" class="input-pure">
                             <option value="Consulta Especialidad">Consulta Especialidad</option>
                             <option value="Consulta General">Consulta General</option>
-                            <option value="Procedimiento Quirúrgico">Procedimiento Quirúrgico</option>
-                            <option value="Certificado Médico">Certificado Médico</option>
+                            <option value="Procedimiento">Procedimiento</option>
                         </select>
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Monto del Cobro ($)</label>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Monto ($)</label>
                         <input type="number" id="reg-monto" class="input-pure" placeholder="0.00">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">RFC del Paciente</label>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">RFC Receptor</label>
                         <input type="text" id="reg-rfc" class="input-pure" placeholder="XAXX010101000">
                     </div>
                 </div>
                 <div class="flex gap-4">
-                    <button onclick="procesarTodo()" class="btn-premium flex-grow shadow-emerald-200">Emitir Factura & Guardar</button>
-                    <button onclick="switchView('agenda')" class="px-8 bg-slate-100 text-slate-400 rounded-2xl font-bold uppercase text-[10px]">Cancelar</button>
+                    <button onclick="procesarCobro()" class="btn-premium flex-grow">Registrar & Generar CFDI</button>
+                    <button onclick="switchView('agenda')" class="px-8 bg-slate-100 text-slate-400 rounded-2xl font-bold uppercase text-[10px]">Atrás</button>
                 </div>
             </div>
         </div>
@@ -177,13 +128,13 @@
             if(event) event.currentTarget.classList.add('active');
         }
 
-        function finalizarAtencion() {
-            const nombre = document.getElementById('patient-name').innerText;
+        function prepararCobro() {
+            const nombre = document.getElementById('patient-display').innerText;
             document.getElementById('reg-nombre').value = nombre;
             switchView('register');
         }
 
-        async function procesarTodo() {
+        async function procesarCobro() {
             const btn = event.target;
             const datos = {
                 nombre: document.getElementById('reg-nombre').value,
@@ -191,59 +142,37 @@
                 servicio: document.getElementById('reg-servicio').value,
                 rfc: document.getElementById('reg-rfc').value || 'XAXX010101000'
             };
-
-            if(!datos.nombre || !datos.monto) return alert("Faltan datos.");
-            btn.innerText = "TIMBRANDO..."; btn.disabled = true;
-
+            if(!datos.nombre || !datos.monto) return alert("Datos insuficientes.");
+            btn.innerText = "REGISTRANDO..."; btn.disabled = true;
             try {
                 await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(datos) });
-                generarPDF_SAT_Pro(datos);
-                alert("Sincronización Cuántica Exitosa.");
+                generarFacturaSAT(datos);
+                alert("Operación Exitosa");
                 location.reload();
-            } catch (e) { alert("Error."); btn.disabled = false; }
+            } catch (e) { alert("Error de Sincronización"); btn.disabled = false; }
         }
 
-        function generarPDF_SAT_Pro(datos) {
+        function generarFacturaSAT(datos) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             const uuid = Math.random().toString(36).substring(2, 15).toUpperCase();
-
-            // HEADER SAT PRO
-            doc.setFillColor(216, 180, 254);
-            doc.rect(0, 0, 210, 45, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(22); doc.setFont("helvetica", "bold");
-            doc.text("RECIBO DE HONORARIOS MÉDICOS", 20, 25);
-            doc.setFontSize(8); doc.setFont("helvetica", "normal");
-            doc.text("EMISOR: DRA. ALBA PATRICIA | RFC: PATA850101HDFLNA01", 20, 32);
-            doc.text("RÉGIMEN SIMPLIFICADO DE CONFIANZA (RESICO)", 20, 37);
-
-            // DATOS FISCALES FICTICIOS
-            doc.setTextColor(60, 60, 60); doc.setFontSize(9);
-            doc.text(`FOLIO FISCAL (UUID): ${uuid}`, 20, 60);
-            doc.text(`FECHA CERTIFICACIÓN: ${new Date().toLocaleString()}`, 20, 65);
-            doc.line(20, 70, 190, 70);
-
-            doc.setFont("helvetica", "bold");
-            doc.text("RECEPTOR / PACIENTE:", 20, 80);
-            doc.setFont("helvetica", "normal");
-            doc.text(datos.nombre.toUpperCase(), 20, 85);
-            doc.text(`RFC: ${datos.rfc}`, 20, 90);
-
-            doc.setFillColor(248, 250, 252); doc.rect(20, 100, 170, 15, 'F');
-            doc.setFont("helvetica", "bold"); doc.text("CONCEPTO", 25, 110); doc.text("IMPORTE", 160, 110);
-            doc.setFont("helvetica", "normal"); doc.text(datos.servicio, 25, 125); doc.text(`$${datos.monto}.00`, 160, 125);
-
-            doc.setFontSize(16); doc.setFont("helvetica", "bold");
-            doc.text(`TOTAL MXN: $${datos.monto}.00`, 130, 150);
             
-            doc.setFontSize(7); doc.setTextColor(150, 150, 150);
-            doc.text("ESTE DOCUMENTO ES UNA REPRESENTACIÓN IMPRESA DE UN CFDI GENERADO POR K.B TECH SOLUTIONS", 105, 285, null, null, "center");
-            
-            doc.save(`Factura_Alba_${datos.nombre}.pdf`);
+            // Header Fiscal
+            doc.setFillColor(216, 180, 254); doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(255, 255, 255); doc.setFontSize(20); doc.setFont("helvetica", "bold");
+            doc.text("HONORARIOS MÉDICOS", 20, 25);
+            doc.setFontSize(8); doc.text("DRA. ALBA PATRICIA | RFC: PATA850101HDFLNA01 | RESICO", 20, 33);
+
+            // Cuerpo
+            doc.setTextColor(60, 60, 60); doc.setFontSize(10);
+            doc.text(`UUID: ${uuid}`, 20, 55);
+            doc.text(`PACIENTE: ${datos.nombre.toUpperCase()}`, 20, 65);
+            doc.text(`RFC RECEPTOR: ${datos.rfc}`, 20, 72);
+            doc.setFontSize(14); doc.text(`TOTAL: $${datos.monto}.00 MXN`, 20, 90);
+            doc.save(`Recibo_Alba_${datos.nombre}.pdf`);
         }
 
-        function nextPatient() { alert("Notificación enviada al intercomunicador..."); }
+        function nextPatient() { alert("Llamando al siguiente..."); }
         function sendNote() { alert("Nota enviada a la Dra."); document.getElementById('dr-msg').value = ""; }
     </script>
 </body>
