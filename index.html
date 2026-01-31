@@ -3,73 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Médico - Dra. Alba Patricia</title>
+    <title>Citas | Dra. Alba Patricia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0D1235; color: white; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; color: #1e293b; }
+        .glass-card { background: white; border: 1px solid #f1f5f9; border-radius: 2rem; box-shadow: 0 10px 40px rgba(216, 180, 254, 0.1); }
+        .input-pure { background: #f8fafc; border: 2px solid transparent; border-radius: 1rem; padding: 12px 15px; width: 100%; outline: none; transition: 0.3s; }
+        .input-pure:focus { border-color: #d8b4fe; background: white; }
     </style>
 </head>
-<body>
-    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
-        <div class="flex items-center gap-3">
-            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold text-xl">AP</div>
-            <h1 class="text-xl font-black italic tracking-tighter uppercase">Dra. Alba Patricia</h1>
-        </div>
-        
-        <div class="relative">
-            <button onclick="toggleMenu()" class="p-3 glass hover:bg-white/10 transition">
-                <div class="w-6 h-0.5 bg-white mb-1"></div>
-                <div class="w-6 h-0.5 bg-white mb-1"></div>
-                <div class="w-6 h-0.5 bg-white"></div>
-            </button>
-            <div id="menu-desplegable" class="hidden absolute right-0 mt-4 w-48 glass p-4 shadow-2xl z-50 overflow-hidden">
-                <a href="asistente.html" class="block py-2 text-sm font-bold hover:text-blue-400 transition">Acceso Asistente</a>
-                <div class="h-[1px] bg-white/10 my-2"></div>
-                <a href="doctor-privado.html" class="block py-2 text-sm font-bold hover:text-blue-400 transition">Panel del Dr.</a>
-            </div>
-        </div>
-    </nav>
+<body class="p-6 md:p-12">
 
-    <main class="max-w-4xl mx-auto p-6 space-y-10">
-        <section class="glass p-8 text-center">
-            <h2 class="text-3xl font-black italic mb-2">Bienvenido</h2>
-            <p class="text-slate-400 text-sm">Reserva tu espacio con especialistas de élite.</p>
+    <main class="max-w-xl mx-auto space-y-8">
+        <header class="text-center space-y-2">
+            <h1 class="text-3xl font-black text-slate-800 tracking-tight">Agendar Cita</h1>
+            <p class="text-purple-400 font-bold uppercase text-[10px] tracking-widest">Dra. Alba Patricia | Medicina Especializada</p>
+        </header>
+
+        <section class="glass-card p-8 space-y-6">
+            <div class="space-y-4">
+                <input type="text" id="p-nombre" placeholder="Nombre completo" class="input-pure">
+                <input type="tel" id="p-tel" placeholder="WhatsApp / Teléfono" class="input-pure">
+                <input type="date" id="p-fecha" class="input-pure">
+                <select id="p-motivo" class="input-pure">
+                    <option value="">Motivo de consulta</option>
+                    <option value="Consulta General">Consulta General</option>
+                    <option value="Seguimiento">Seguimiento</option>
+                    <option value="Especialidad">Especialidad</option>
+                </select>
+            </div>
+            <button onclick="enviarCita()" class="w-full py-4 bg-gradient-to-r from-purple-300 to-pink-200 text-white font-black uppercase rounded-xl shadow-lg shadow-purple-100 hover:scale-[1.02] transition">Confirmar Solicitud</button>
         </section>
 
-        <section class="glass p-8">
-            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-blue-300 mb-6">Nuestros Precios</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex justify-between border-b border-white/10 pb-2"><span>Consulta General</span><b class="text-green-400">$50</b></div>
-                <div class="flex justify-between border-b border-white/10 pb-2"><span>Especialidad</span><b class="text-green-400">$120</b></div>
-                <div class="flex justify-between border-b border-white/10 pb-2"><span>Urgencias</span><b class="text-green-400">$150</b></div>
-                <div class="flex justify-between border-b border-white/10 pb-2"><span>Facturación</span><b class="text-blue-400">Incluida</b></div>
+        <footer class="space-y-10 pt-10 border-t border-slate-100">
+            <div class="text-[10px] text-slate-400 leading-relaxed text-justify px-4">
+                <p class="font-bold mb-2 uppercase tracking-widest">Aviso de Privacidad Integral:</p>
+                Los datos personales aquí recabados serán utilizados exclusivamente para la gestión de su cita médica y la creación de su expediente clínico, conforme a la Ley Federal de Protección de Datos Personales. Sus datos están protegidos por medidas de seguridad administrativas y técnicas para garantizar su confidencialidad. Al agendar, usted acepta el tratamiento de sus datos para fines médicos.
             </div>
-        </section>
 
-        <section class="glass p-8">
-            <h2 class="text-3xl font-black italic mb-6">Agendar Cita</h2>
-            <div class="space-y-4 text-black">
-                <input type="text" id="nombre-paciente" placeholder="Nombre Completo" class="w-full p-4 rounded-xl outline-none">
-                <input type="tel" id="tel-paciente" placeholder="WhatsApp (10 dígitos)" class="w-full p-4 rounded-xl outline-none">
-                <button onclick="enviarWhatsApp()" class="w-full py-5 bg-green-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-green-500 transition">Solicitar por WhatsApp</button>
+            <div class="text-center">
+                <div class="flex justify-center items-center gap-2 mb-2">
+                    <span class="h-[1px] w-8 bg-slate-200"></span>
+                    <p class="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em]">Powered by</p>
+                    <span class="h-[1px] w-8 bg-slate-200"></span>
+                </div>
+                <h2 class="text-lg font-black italic text-slate-400 tracking-tighter uppercase">K.B <span class="text-purple-300">TECH</span> SOLUTIONS</h2>
+                <p class="text-[8px] text-slate-300 font-bold uppercase tracking-widest mt-1">Innovation for Medical Excellence</p>
             </div>
-        </section>
+        </footer>
     </main>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('menu-desplegable').classList.toggle('hidden');
-        }
+        // Aquí conectamos con tu Hoja 1 del Excel
+        const WEB_APP_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
 
-        function enviarWhatsApp() {
-            const nombre = document.getElementById('nombre-paciente').value;
-            const tel = "TU_NUMERO_AQUI"; // Pon el número de la asistente aquí
-            const msg = `Hola, soy ${nombre}, me gustaría agendar una cita con la Dra. Alba Patricia.`;
-            window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`, '_blank');
+        async function enviarCita() {
+            const datos = {
+                nombre: document.getElementById('p-nombre').value,
+                tel: document.getElementById('p-tel').value,
+                fecha: document.getElementById('p-fecha').value,
+                motivo: document.getElementById('p-motivo').value
+            };
+
+            if(!datos.nombre || !datos.tel) return alert("Por favor completa tus datos.");
+
+            try {
+                // Sincronización con el motor
+                await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(datos) });
+                alert("¡Cita solicitada! En breve nos pondremos en contacto contigo.");
+                location.reload();
+            } catch (e) { alert("Error al conectar."); }
         }
     </script>
 </body>
 </html>
+
 
