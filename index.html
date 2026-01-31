@@ -3,25 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citas | Dra. Alba Patricia</title>
+    <title>Portal Médico | Dra. Alba Patricia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; color: #1e293b; }
-        .glass-card { background: white; border: 1px solid #f1f5f9; border-radius: 2rem; box-shadow: 0 10px 40px rgba(216, 180, 254, 0.1); }
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; color: #1e293b; overflow-x: hidden; }
+        
+        /* Estilo de la Barra Lateral */
+        .sidebar { 
+            position: fixed; left: 0; top: 0; height: 100%; width: 70px; 
+            background: white; border-right: 1px solid #f1f5f9; 
+            display: flex; flex-direction: column; align-items: center; 
+            padding-top: 20px; z-index: 100; transition: 0.3s;
+        }
+        .sidebar:hover { width: 200px; }
+        .sidebar-item { 
+            width: 100%; padding: 15px 20px; display: flex; align-items: center; 
+            gap: 15px; cursor: pointer; transition: 0.2s; color: #94a3b8;
+        }
+        .sidebar-item:hover { background: #fdf2f8; color: #d8b4fe; }
+        .sidebar-label { opacity: 0; pointer-events: none; white-space: nowrap; font-size: 12px; font-weight: 700; }
+        .sidebar:hover .sidebar-label { opacity: 1; pointer-events: auto; }
+
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid #f1f5f9; border-radius: 2rem; box-shadow: 0 10px 40px rgba(216, 180, 254, 0.1); }
         .input-pure { background: #f8fafc; border: 2px solid transparent; border-radius: 1rem; padding: 12px 15px; width: 100%; outline: none; transition: 0.3s; }
         .input-pure:focus { border-color: #d8b4fe; background: white; }
+
+        /* Lirios Decorativos */
+        .flower-decoration {
+            position: fixed; pointer-events: none; z-index: 0; opacity: 0.4;
+        }
     </style>
 </head>
-<body class="p-6 md:p-12">
+<body class="p-6 md:p-12 pl-20 md:pl-32">
 
-    <main class="max-w-xl mx-auto space-y-8">
-        <header class="text-center space-y-2">
-            <h1 class="text-3xl font-black text-slate-800 tracking-tight">Agendar Cita</h1>
+    <div class="flower-decoration top-0 right-0 p-4 text-7xl">🌸</div>
+    <div class="flower-decoration bottom-0 left-20 p-4 text-6xl">🪷</div>
+
+    <aside class="sidebar">
+        <div class="mb-10 text-xl font-black italic text-purple-400">K.B</div>
+        
+        <div class="sidebar-item" onclick="window.location.href='asistente.html'">
+            <span>📋</span>
+            <span class="sidebar-label uppercase tracking-widest">Asistente</span>
+        </div>
+        
+        <div class="sidebar-item" onclick="window.location.href='dra_alba.html'">
+            <span>👩‍⚕️</span>
+            <span class="sidebar-label uppercase tracking-widest">Dra. Alba</span>
+        </div>
+        
+        <div class="sidebar-item mt-auto mb-5" onclick="alert('Acceso a Mantenimiento K.B Tech')">
+            <span>🛠️</span>
+            <span class="sidebar-label uppercase tracking-widest text-slate-400">Mantenimiento</span>
+        </div>
+    </aside>
+
+    <main class="max-w-xl mx-auto space-y-8 relative z-10">
+        <header class="text-center space-y-4">
+            <div class="inline-block p-3 bg-white rounded-2xl shadow-sm border border-slate-50 mb-4">
+                <h2 class="text-xl font-black italic text-slate-400 tracking-tighter uppercase">K.B <span class="text-purple-300">TECH</span></h2>
+            </div>
+            
+            <h1 class="text-4xl font-black text-slate-800 tracking-tight">Agendar Cita</h1>
             <p class="text-purple-400 font-bold uppercase text-[10px] tracking-widest">Dra. Alba Patricia | Medicina Especializada</p>
         </header>
 
-        <section class="glass-card p-8 space-y-6">
+        <section class="glass-card p-10 space-y-6">
             <div class="space-y-4">
                 <input type="text" id="p-nombre" placeholder="Nombre completo" class="input-pure">
                 <input type="tel" id="p-tel" placeholder="WhatsApp / Teléfono" class="input-pure">
@@ -33,29 +82,23 @@
                     <option value="Especialidad">Especialidad</option>
                 </select>
             </div>
-            <button onclick="enviarCita()" class="w-full py-4 bg-gradient-to-r from-purple-300 to-pink-200 text-white font-black uppercase rounded-xl shadow-lg shadow-purple-100 hover:scale-[1.02] transition">Confirmar Solicitud</button>
+            <button onclick="enviarCita()" class="w-full py-5 bg-gradient-to-r from-purple-300 to-pink-200 text-white font-black uppercase rounded-2xl shadow-xl shadow-purple-100 hover:scale-[1.02] transition">Confirmar Cita</button>
         </section>
 
         <footer class="space-y-10 pt-10 border-t border-slate-100">
             <div class="text-[10px] text-slate-400 leading-relaxed text-justify px-4">
-                <p class="font-bold mb-2 uppercase tracking-widest">Aviso de Privacidad Integral:</p>
-                Los datos personales aquí recabados serán utilizados exclusivamente para la gestión de su cita médica y la creación de su expediente clínico, conforme a la Ley Federal de Protección de Datos Personales. Sus datos están protegidos por medidas de seguridad administrativas y técnicas para garantizar su confidencialidad. Al agendar, usted acepta el tratamiento de sus datos para fines médicos.
+                <p class="font-bold mb-2 uppercase tracking-widest">Aviso de Privacidad:</p>
+                Los datos personales aquí recabados serán utilizados exclusivamente para la gestión de su cita médica bajo los estándares de confidencialidad de la Dra. Alba Patricia.
             </div>
 
-            <div class="text-center">
-                <div class="flex justify-center items-center gap-2 mb-2">
-                    <span class="h-[1px] w-8 bg-slate-200"></span>
-                    <p class="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em]">Powered by</p>
-                    <span class="h-[1px] w-8 bg-slate-200"></span>
-                </div>
+            <div class="text-center pb-10">
+                <p class="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em] mb-2">Powered by</p>
                 <h2 class="text-lg font-black italic text-slate-400 tracking-tighter uppercase">K.B <span class="text-purple-300">TECH</span> SOLUTIONS</h2>
-                <p class="text-[8px] text-slate-300 font-bold uppercase tracking-widest mt-1">Innovation for Medical Excellence</p>
             </div>
         </footer>
     </main>
 
     <script>
-        // Aquí conectamos con tu Hoja 1 del Excel
         const WEB_APP_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
 
         async function enviarCita() {
@@ -69,14 +112,14 @@
             if(!datos.nombre || !datos.tel) return alert("Por favor completa tus datos.");
 
             try {
-                // Sincronización con el motor
                 await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(datos) });
-                alert("¡Cita solicitada! En breve nos pondremos en contacto contigo.");
+                alert("¡Cita solicitada exitosamente!");
                 location.reload();
             } catch (e) { alert("Error al conectar."); }
         }
     </script>
 </body>
 </html>
+
 
 
