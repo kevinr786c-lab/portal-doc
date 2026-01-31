@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #02040a; color: white; overflow: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #02040a; color: white; overflow-x: hidden; }
         
         .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2rem; }
         
@@ -31,17 +31,19 @@
         }
         .menu-wrapper.active .menu-item { opacity: 1; transform: scale(1); pointer-events: auto; }
         
-        /* Posiciones Exactas de tu Captura */
         .menu-wrapper.active .item-factura { transform: translate(0, -130px); }
         .menu-wrapper.active .item-cafe { transform: translate(130px, 0); }
         .menu-wrapper.active .item-agenda { transform: translate(0, 130px); }
         .menu-wrapper.active .item-chat { transform: translate(-130px, 0); }
 
         .input-kb { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.2rem; padding: 1.2rem; width: 100%; color: white; outline: none; transition: 0.3s; }
-        .input-kb:focus { border-color: #3b82f6; background: rgba(255,255,255,0.08); box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+        .input-kb:focus { border-color: #3b82f6; background: rgba(255,255,255,0.08); }
+        
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen p-6">
 
     <div id="login-screen" class="glass p-12 w-full max-w-md text-center space-y-8">
         <h1 class="text-4xl font-black italic text-blue-500 tracking-tighter uppercase">K.B Tech</h1>
@@ -49,8 +51,8 @@
         <button onclick="checkPass()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase hover:bg-blue-500 transition">Entrar</button>
     </div>
 
-    <div id="main-panel" class="hidden w-full max-w-7xl px-10 animate-fade-in">
-        <header class="flex justify-between items-start mb-16">
+    <div id="main-panel" class="hidden w-full max-w-7xl animate-fade-in">
+        <header class="flex justify-between items-start mb-10">
             <div>
                 <h2 class="text-5xl font-extrabold text-white tracking-tight">Bienvenida, Dra. Alba</h2>
                 <p class="text-blue-500 text-xs font-bold uppercase tracking-[0.2em] mt-1">K.B Tech Solutions | Operativo</p>
@@ -58,8 +60,9 @@
             <button onclick="location.reload()" class="text-slate-500 hover:text-white transition text-[10px] font-black uppercase tracking-widest">Cerrar Sesión</button>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div class="flex flex-col items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            
+            <div class="flex flex-col items-center justify-center pt-10">
                 <div class="menu-wrapper" id="radial-menu">
                     <div class="central-pill" onclick="toggleMenu()">
                         <span class="text-4xl">💊</span>
@@ -69,46 +72,70 @@
                     <button onclick="showSection('agenda')" class="menu-item item-agenda" title="Agenda">📅</button>
                     <button onclick="alert('💬 Soporte K.B Tech activo')" class="menu-item item-chat" title="Chat">💬</button>
                 </div>
-                <p class="mt-10 text-slate-600 text-[10px] font-black uppercase tracking-[0.3em]">Toque la pastilla central</p>
+                <p class="mt-10 text-slate-600 text-[10px] font-black uppercase tracking-[0.3em]">Interactúe con la pastilla</p>
             </div>
 
-            <div id="section-factura" class="glass p-10 space-y-6">
-                <h3 class="text-blue-500 font-black uppercase text-xs tracking-widest mb-8 border-b border-white/5 pb-4">Generador de Facturas SAT Pro</h3>
-                <input type="text" id="fac-nombre" placeholder="Nombre Completo del Paciente" class="input-kb">
-                <input type="number" id="fac-monto" placeholder="Monto a Cobrar ($)" class="input-kb">
-                <select id="fac-servicio" class="input-kb">
-                    <option value="Consulta General">Consulta General</option>
-                    <option value="Especialidad">Consulta Especialidad</option>
-                    <option value="Procedimiento">Procedimiento Médico</option>
-                </select>
-                <button onclick="registrarYFacturar()" id="btn-main" class="w-full py-5 bg-blue-600 rounded-2xl font-extrabold uppercase mt-6 hover:bg-blue-500 transition shadow-xl shadow-blue-900/30">
-                    Procesar Pago
-                </button>
-            </div>
+            <div class="space-y-6">
+                
+                <div id="section-espejo" class="glass p-8 space-y-6">
+                    <h3 class="text-blue-500 font-black uppercase text-xs tracking-widest border-b border-white/5 pb-4">Espejo de Rendimiento</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white/5 p-6 rounded-3xl border border-white/5 text-center">
+                            <p class="text-[9px] text-slate-500 font-bold uppercase mb-1">Ingresos Hoy</p>
+                            <h4 class="text-3xl font-black">$4,300</h4>
+                        </div>
+                        <div class="bg-white/5 p-6 rounded-3xl border border-white/5 text-center">
+                            <p class="text-[9px] text-slate-500 font-bold uppercase mb-1">Pacientes</p>
+                            <h4 class="text-3xl font-black">02</h4>
+                        </div>
+                    </div>
+                    <button onclick="showSection('factura')" class="w-full py-4 bg-blue-600/20 border border-blue-600/30 rounded-2xl text-blue-400 font-bold text-xs uppercase hover:bg-blue-600 hover:text-white transition">Nueva Factura Rápida</button>
+                </div>
 
-            <div id="section-agenda" class="hidden glass p-4 h-[500px]">
-                <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full h-full rounded-3xl border-none invert-[0.05] grayscale-[0.5]"></iframe>
+                <div id="section-agenda" class="hidden glass p-4 h-[450px] fade-in">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <span class="text-[9px] font-bold text-slate-500 uppercase">Motor del Sistema (Google Sheets)</span>
+                        <button onclick="showSection('espejo')" class="text-[9px] text-blue-500 font-bold uppercase">Volver al Espejo</button>
+                    </div>
+                    <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full h-[380px] rounded-2xl border-none invert-[0.05] grayscale-[0.5]"></iframe>
+                </div>
+
+                <div id="section-factura" class="hidden glass p-8 space-y-4 fade-in">
+                    <h3 class="text-blue-500 font-black uppercase text-xs tracking-widest mb-4">Generador SAT Pro</h3>
+                    <input type="text" id="fac-nombre" placeholder="Nombre del Paciente" class="input-kb">
+                    <input type="number" id="fac-monto" placeholder="Monto ($)" class="input-kb">
+                    <select id="fac-servicio" class="input-kb">
+                        <option value="Consulta General">Consulta General</option>
+                        <option value="Especialidad">Especialidad</option>
+                    </select>
+                    <button onclick="registrarYFacturar()" id="btn-main" class="w-full py-5 bg-blue-600 rounded-2xl font-extrabold uppercase mt-2 shadow-xl shadow-blue-900/30">Procesar</button>
+                    <button onclick="showSection('espejo')" class="w-full text-[10px] text-slate-500 font-bold uppercase mt-2">Cancelar</button>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
-        // EL LINK QUE ME PASASTE
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdwL0e3aAcJvPU7Ie60G9VNmpAlEBjZNGd4Af7w7Tmi9jfqE7Ia3rXj3Nx2KG49o-u/exec";
 
         function checkPass() {
-            const pass = document.getElementById('pass-input').value;
-            if(pass === "1234") { // Contraseña por defecto
+            if(document.getElementById('pass-input').value === "1234") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-panel').classList.remove('hidden');
-            } else { alert("Acceso denegado"); }
+            } else { alert("Error"); }
         }
 
         function toggleMenu() { document.getElementById('radial-menu').classList.toggle('active'); }
 
         function showSection(name) {
-            document.getElementById('section-factura').classList.toggle('hidden', name !== 'factura');
-            document.getElementById('section-agenda').classList.toggle('hidden', name !== 'agenda');
+            // Ocultamos todo
+            document.getElementById('section-espejo').classList.add('hidden');
+            document.getElementById('section-factura').classList.add('hidden');
+            document.getElementById('section-agenda').classList.add('hidden');
+            
+            // Mostramos la seleccionada
+            document.getElementById('section-' + name).classList.remove('hidden');
         }
 
         async function registrarYFacturar() {
@@ -116,51 +143,25 @@
             const datos = {
                 nombre: document.getElementById('fac-nombre').value,
                 monto: document.getElementById('fac-monto').value,
-                servicio: document.getElementById('fac-servicio').value,
-                whatsapp: 'N/A'
+                servicio: document.getElementById('fac-servicio').value
             };
-
-            if(!datos.nombre || !datos.monto) return alert("Complete los datos");
-            btn.innerText = "SINCRONIZANDO...";
+            if(!datos.nombre || !datos.monto) return alert("Faltan datos");
+            btn.innerText = "Sincronizando...";
             btn.disabled = true;
-
             try {
                 await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(datos) });
                 generarPDF_SAT(datos);
-                alert("¡Pago Procesado con éxito!");
+                alert("Éxito");
                 location.reload();
-            } catch (e) { 
-                alert("Error de conexión");
-                btn.disabled = false;
-                btn.innerText = "PROCESAR PAGO";
-            }
+            } catch (e) { alert("Error"); btn.disabled = false; }
         }
 
         function generarPDF_SAT(datos) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const folio = Math.random().toString(36).substring(2, 12).toUpperCase();
-            
-            doc.setFillColor(5, 8, 22);
-            doc.rect(0, 0, 210, 45, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(22);
-            doc.text("RECIBO DE HONORARIOS", 20, 28);
-            doc.setFontSize(9);
-            doc.text("SISTEMA DE GESTIÓN K.B TECH SOLUTIONS", 20, 36);
-
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(10);
-            doc.text(`UUID: ${folio}`, 20, 60);
-            doc.text(`PACIENTE: ${datos.nombre.toUpperCase()}`, 20, 75);
-            doc.text(`CONCEPTO: ${datos.servicio}`, 20, 90);
-            doc.setFontSize(18);
-            doc.text(`TOTAL: $${datos.monto}.00 MXN`, 20, 110);
-            
-            doc.setFontSize(8);
-            doc.setTextColor(150, 150, 150);
-            doc.text("Este documento es una representación digital de K.B Tech Solutions", 105, 285, null, null, "center");
-            
+            doc.text("K.B TECH SOLUTIONS - RECIBO", 20, 20);
+            doc.text(`Paciente: ${datos.nombre}`, 20, 30);
+            doc.text(`Total: $${datos.monto}`, 20, 40);
             doc.save(`Factura_${datos.nombre}.pdf`);
         }
     </script>
