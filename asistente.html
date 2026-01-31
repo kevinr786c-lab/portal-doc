@@ -3,64 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistente - Gestión Médica</title>
+    <title>Asistente - K.B Tech Solutions</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0D1235; color: white; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; }
-        .input-asistente { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1rem; width: 100%; color: white; outline: none; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050816; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
+        .input-kb { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.8rem; width: 100%; color: white; outline: none; transition: 0.3s; }
+        .input-kb:focus { border-color: #3b82f6; background: rgba(255,255,255,0.1); }
     </style>
 </head>
-<body class="p-6">
-    <div class="max-w-6xl mx-auto space-y-8">
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto space-y-8">
         <header class="flex justify-between items-center">
-            <h1 class="text-xl font-black italic uppercase text-blue-400 tracking-widest">Portal Operativo</h1>
-            <a href="index.html" class="text-xs opacity-50 uppercase">← Volver al inicio</a>
+            <div>
+                <h1 class="text-2xl font-black italic text-blue-500 uppercase tracking-tighter">K.B Tech Solutions</h1>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Panel Operativo | Dra. Alba Patricia</p>
+            </div>
+            <div id="status-ball" class="w-3 h-3 bg-green-500 rounded-full shadow-[0_0_10px_#22c55e]"></div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="glass p-8 space-y-5">
-                <h2 class="text-sm font-black uppercase text-slate-400 tracking-widest">Nuevo Registro / Facturación</h2>
-                <input type="text" id="asis-nombre" placeholder="Nombre del Paciente" class="input-asistente">
-                <input type="tel" id="asis-tel" placeholder="WhatsApp" class="input-asistente">
-                <select id="asis-servicio" class="input-asistente">
-                    <option value="Consulta General">Consulta General</option>
-                    <option value="Especialidad">Especialidad</option>
-                    <option value="Facturación Externa">Facturación Externa</option>
-                </select>
-                <input type="number" id="asis-monto" placeholder="Monto $" class="input-asistente">
-                
-                <div class="pt-4 space-y-3">
-                    <button class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase">Registrar Cita</button>
-                    <button onclick="generarPDF()" class="w-full py-4 bg-green-600 rounded-2xl font-black uppercase">📄 Emitir Factura PDF</button>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <div class="lg:col-span-5 space-y-6">
+                <div class="glass p-6 space-y-4">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-4">
+                        <h2 class="text-sm font-black uppercase text-blue-400">Facturación Híbrida</h2>
+                        <span class="text-[9px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded">MODO PRO</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="text-[10px] uppercase font-bold text-slate-500">Datos del Paciente</label>
+                        <input type="text" id="fac-nombre" placeholder="Nombre Completo" class="input-kb">
+                        <input type="tel" id="fac-tel" placeholder="WhatsApp (10 dígitos)" class="input-kb">
+                        
+                        <label class="text-[10px] uppercase font-bold text-slate-500 pt-2 block">Detalles del Cobro</label>
+                        <select id="fac-servicio" class="input-kb">
+                            <option value="Consulta General">Consulta General</option>
+                            <option value="Especialidad">Especialidad</option>
+                            <option value="Procedimiento">Procedimiento Quirúrgico</option>
+                            <option value="Certificado">Certificado Médico</option>
+                        </select>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-slate-500">$</span>
+                            <input type="number" id="fac-monto" placeholder="0.00" class="input-kb pl-8">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 pt-4">
+                        <button onclick="registrarYFacturar()" class="col-span-2 py-4 bg-blue-600 hover:bg-blue-500 rounded-xl font-black uppercase transition shadow-lg shadow-blue-900/20">
+                            Registrar y Generar PDF
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass p-6">
+                    <h3 class="text-xs font-black uppercase text-slate-500 mb-4 tracking-widest text-center">Intercomunicador Dr.</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button class="p-3 text-[10px] font-bold bg-white/5 rounded-lg border border-white/10 hover:bg-white/10">PEDIR EXPEDIENTE</button>
+                        <button class="p-3 text-[10px] font-bold bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 text-yellow-500">OCUPO CAFÉ ☕</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-[2.5rem] overflow-hidden h-[500px]">
-                <iframe src="https://calendar.google.com/calendar/embed?src=TU_EMAIL@gmail.com&ctz=America/Mexico_City&showTitle=0&showNav=1" style="border:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+            <div class="lg:col-span-7">
+                <div class="glass h-[650px] overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-white/10 flex justify-between items-center bg-white/5">
+                        <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Agenda en Tiempo Real</span>
+                        <button onclick="window.location.reload()" class="text-[10px] text-blue-400 font-bold">RECARGAR DATOS</button>
+                    </div>
+                    <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full flex-grow border-none grayscale-[0.5] invert-[0.05]"></iframe>
+                </div>
             </div>
+
         </div>
     </div>
 
     <script>
-        async function generarPDF() {
+        // LA LLAVE MAESTRA QUE ME PASASTE
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwuWzgIyJF-DSKbawtH6OcnpzMGbAwaS2NlqiX8J0cMT_CLX3AHHkSo1mu7cNggjsBy/exec";
+
+        async function registrarYFacturar() {
+            const btn = event.target;
+            const originalText = btn.innerText;
+            
+            const datos = {
+                nombre: document.getElementById('fac-nombre').value,
+                whatsapp: document.getElementById('fac-tel').value,
+                servicio: document.getElementById('fac-servicio').value,
+                monto: document.getElementById('fac-monto').value
+            };
+
+            if(!datos.nombre || !datos.monto) return alert("Por favor llena Nombre y Monto");
+
+            btn.innerText = "PROCESANDO...";
+            btn.disabled = true;
+
+            try {
+                // 1. MANDAR AL EXCEL
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+
+                // 2. GENERAR EL PDF (ESTILO ODOO)
+                generarPDF(datos);
+
+                alert("¡Éxito! Datos guardados y Factura lista.");
+                location.reload();
+
+            } catch (error) {
+                console.error(error);
+                alert("Error en la conexión.");
+            }
+        }
+
+        function generarPDF(datos) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const nombre = document.getElementById('asis-nombre').value || "Paciente";
-            const servicio = document.getElementById('asis-servicio').value;
-            const monto = document.getElementById('asis-monto').value || "0";
             
-            doc.setFillColor(13, 18, 53); doc.rect(0, 0, 210, 30, 'F');
-            doc.setTextColor(255,255,255); doc.setFontSize(20); doc.text("RECIBO - DRA. ALBA PATRICIA", 20, 20);
-            doc.setTextColor(0,0,0); doc.setFontSize(12);
-            doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 50);
-            doc.text(`Paciente: ${nombre}`, 20, 60);
-            doc.text(`Concepto: ${servicio}`, 20, 70);
-            doc.text(`Total: $${monto} MXN`, 20, 90);
-            doc.text("--------------------------------------", 20, 100);
-            doc.save(`Recibo_${nombre}.pdf`);
+            // Encabezado Corporativo
+            doc.setFillColor(5, 8, 22);
+            doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont("helvetica", "bold");
+            doc.text("RECIBO DE HONORARIOS", 20, 25);
+            
+            doc.setFontSize(10);
+            doc.text("DRA. ALBA PATRICIA | K.B Tech Solutions", 20, 32);
+
+            // Cuerpo
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            doc.text(`FECHA: ${new Date().toLocaleDateString()}`, 20, 55);
+            doc.text(`PACIENTE: ${datos.nombre.toUpperCase()}`, 20, 65);
+            doc.line(20, 70, 190, 70);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("CONCEPTO:", 20, 85);
+            doc.setFont("helvetica", "normal");
+            doc.text(datos.servicio, 60, 85);
+
+            doc.setFontSize(16);
+            doc.setFillColor(245, 245, 245);
+            doc.rect(20, 100, 170, 20, 'F');
+            doc.text(`TOTAL A PAGAR: $${datos.monto} MXN`, 30, 113);
+
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text("Desarrollado por K.B Tech Solutions - Innovación Médica", 105, 285, null, null, "center");
+
+            doc.save(`Factura_${datos.nombre}.pdf`);
         }
     </script>
 </body>
