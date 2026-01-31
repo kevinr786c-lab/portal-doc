@@ -3,166 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K.B Tech Solutions | Operativo</title>
+    <title>K.B Tech Solutions | Inmersive Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #02040a; color: white; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&display=swap');
+        body { margin: 0; padding: 0; background: #000; color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
         
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2rem; }
-        
-        /* Animación Menú Radial Pro */
-        .menu-wrapper { position: relative; width: 350px; height: 350px; display: flex; justify-content: center; align-items: center; }
-        .central-pill { 
-            width: 100px; height: 100px; background: radial-gradient(circle, #3b82f6 0%, #1d4ed8 100%); 
-            border-radius: 50%; display: flex; justify-content: center; align-items: center; 
-            cursor: pointer; z-index: 50; box-shadow: 0 0 40px rgba(59, 130, 246, 0.5); 
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-        .central-pill:hover { transform: scale(1.1); box-shadow: 0 0 60px rgba(59, 130, 246, 0.8); }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        .menu-item { 
-            position: absolute; width: 65px; height: 65px; background: rgba(255,255,255,0.05); 
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; display: flex; 
-            justify-content: center; align-items: center; font-size: 1.6rem; 
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-            opacity: 0; transform: scale(0); pointer-events: none;
+        .glass { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2.5rem; }
+        
+        /* Estilo ADN Interactivo */
+        .adn-container { position: relative; height: 500px; width: 100px; display: flex; flex-direction: column; justify-content: space-around; align-items: center; }
+        .node { 
+            width: 60px; height: 60px; background: rgba(59, 130, 246, 0.2); 
+            border: 2px solid #3b82f6; border-radius: 50%; display: flex; 
+            justify-content: center; align-items: center; font-size: 1.5rem; 
+            cursor: pointer; transition: all 0.4s ease; z-index: 10;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            animation: orbit 4s infinite ease-in-out;
         }
-        .menu-wrapper.active .menu-item { opacity: 1; transform: scale(1); pointer-events: auto; }
-        
-        .menu-wrapper.active .item-factura { transform: translate(0, -130px); }
-        .menu-wrapper.active .item-cafe { transform: translate(130px, 0); }
-        .menu-wrapper.active .item-agenda { transform: translate(0, 130px); }
-        .menu-wrapper.active .item-chat { transform: translate(-130px, 0); }
+        .node:hover { transform: scale(1.2); background: #3b82f6; box-shadow: 0 0 40px #3b82f6; }
 
-        .input-kb { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.2rem; padding: 1.2rem; width: 100%; color: white; outline: none; transition: 0.3s; }
-        .input-kb:focus { border-color: #3b82f6; background: rgba(255,255,255,0.08); }
-        
-        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes orbit {
+            0%, 100% { transform: translateX(-30px); }
+            50% { transform: translateX(30px); }
+        }
+
+        .input-kb { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1.2rem; width: 100%; color: white; outline: none; }
+        .fade-in { animation: fadeIn 1.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
+<body>
 
-    <div id="login-screen" class="glass p-12 w-full max-w-md text-center space-y-8">
-        <h1 class="text-4xl font-black italic text-blue-500 tracking-tighter uppercase">K.B Tech</h1>
-        <input type="password" id="pass-input" placeholder="CONTRASEÑA" class="input-kb text-center tracking-[0.5em]">
-        <button onclick="checkPass()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase hover:bg-blue-500 transition">Entrar</button>
+    <div id="login-screen" class="flex items-center justify-center min-h-screen">
+        <div class="glass p-12 w-full max-w-md text-center space-y-8">
+            <h1 class="text-4xl font-black italic text-blue-500 tracking-tighter">K.B TECH</h1>
+            <input type="password" id="pass-input" placeholder="PROTOCOLO DE ACCESO" class="input-kb text-center tracking-[0.4em]">
+            <button onclick="checkPass()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase hover:bg-blue-400 transition">Sincronizar</button>
+        </div>
     </div>
 
-    <div id="main-panel" class="hidden w-full max-w-7xl animate-fade-in">
-        <header class="flex justify-between items-start mb-10">
-            <div>
-                <h2 class="text-5xl font-extrabold text-white tracking-tight">Bienvenida, Dra. Alba</h2>
-                <p class="text-blue-500 text-xs font-bold uppercase tracking-[0.2em] mt-1">K.B Tech Solutions | Operativo</p>
-            </div>
-            <button onclick="location.reload()" class="text-slate-500 hover:text-white transition text-[10px] font-black uppercase tracking-widest">Cerrar Sesión</button>
+    <div id="main-panel" class="hidden min-h-screen p-8 md:p-20 fade-in">
+        <header class="mb-20">
+            <h2 class="text-6xl font-black tracking-tighter">Bienvenida, Dra. Alba</h2>
+            <p class="text-blue-500 font-bold uppercase tracking-[0.5em] text-xs">Ecosistema Digital Medicov</p>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
-            <div class="flex flex-col items-center justify-center pt-10">
-                <div class="menu-wrapper" id="radial-menu">
-                    <div class="central-pill" onclick="toggleMenu()">
-                        <span class="text-4xl">💊</span>
-                    </div>
-                    <button onclick="showSection('factura')" class="menu-item item-factura" title="Facturar">📄</button>
-                    <button onclick="alert('☕ Notificación: Café en camino')" class="menu-item item-cafe" title="Café">☕</button>
-                    <button onclick="showSection('agenda')" class="menu-item item-agenda" title="Agenda">📅</button>
-                    <button onclick="alert('💬 Soporte K.B Tech activo')" class="menu-item item-chat" title="Chat">💬</button>
+            <div class="lg:col-span-2 flex justify-center">
+                <div class="adn-container">
+                    <div class="node" style="animation-delay: 0s" onclick="showSection('factura')" title="Facturar">📄</div>
+                    <div class="node" style="animation-delay: 1s" onclick="alert('☕ Café solicitado')" title="Café">☕</div>
+                    <div class="node" style="animation-delay: 2s" onclick="showSection('agenda')" title="Agenda">📅</div>
+                    <div class="node" style="animation-delay: 3s" onclick="alert('💬 Soporte K.B')" title="Soporte">💬</div>
                 </div>
-                <p class="mt-10 text-slate-600 text-[10px] font-black uppercase tracking-[0.3em]">Interactúe con la pastilla</p>
             </div>
 
-            <div class="space-y-6">
+            <div class="lg:col-span-10 space-y-8">
                 
-                <div id="section-espejo" class="glass p-8 space-y-6">
-                    <h3 class="text-blue-500 font-black uppercase text-xs tracking-widest border-b border-white/5 pb-4">Espejo de Rendimiento</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white/5 p-6 rounded-3xl border border-white/5 text-center">
-                            <p class="text-[9px] text-slate-500 font-bold uppercase mb-1">Ingresos Hoy</p>
-                            <h4 class="text-3xl font-black">$4,300</h4>
-                        </div>
-                        <div class="bg-white/5 p-6 rounded-3xl border border-white/5 text-center">
-                            <p class="text-[9px] text-slate-500 font-bold uppercase mb-1">Pacientes</p>
-                            <h4 class="text-3xl font-black">02</h4>
-                        </div>
+                <div id="section-factura" class="glass p-10 max-w-2xl">
+                    <h3 class="text-blue-400 font-black uppercase text-xs mb-8 tracking-widest">Generador Inmersivo SAT</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="fac-nombre" placeholder="Paciente" class="input-kb">
+                        <input type="number" id="fac-monto" placeholder="Monto" class="input-kb">
+                        <button onclick="registrarYFacturar()" class="w-full py-5 bg-blue-600 rounded-3xl font-black uppercase hover:scale-105 transition">Emitir Factura</button>
                     </div>
-                    <button onclick="showSection('factura')" class="w-full py-4 bg-blue-600/20 border border-blue-600/30 rounded-2xl text-blue-400 font-bold text-xs uppercase hover:bg-blue-600 hover:text-white transition">Nueva Factura Rápida</button>
                 </div>
 
-                <div id="section-agenda" class="hidden glass p-4 h-[450px] fade-in">
-                    <div class="flex justify-between items-center mb-4 px-2">
-                        <span class="text-[9px] font-bold text-slate-500 uppercase">Motor del Sistema (Google Sheets)</span>
-                        <button onclick="showSection('espejo')" class="text-[9px] text-blue-500 font-bold uppercase">Volver al Espejo</button>
-                    </div>
-                    <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full h-[380px] rounded-2xl border-none invert-[0.05] grayscale-[0.5]"></iframe>
+                <div id="section-agenda" class="hidden glass p-4 h-[500px]">
+                    <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full h-full rounded-3xl border-none invert-[0.1] grayscale-[0.8]"></iframe>
                 </div>
-
-                <div id="section-factura" class="hidden glass p-8 space-y-4 fade-in">
-                    <h3 class="text-blue-500 font-black uppercase text-xs tracking-widest mb-4">Generador SAT Pro</h3>
-                    <input type="text" id="fac-nombre" placeholder="Nombre del Paciente" class="input-kb">
-                    <input type="number" id="fac-monto" placeholder="Monto ($)" class="input-kb">
-                    <select id="fac-servicio" class="input-kb">
-                        <option value="Consulta General">Consulta General</option>
-                        <option value="Especialidad">Especialidad</option>
-                    </select>
-                    <button onclick="registrarYFacturar()" id="btn-main" class="w-full py-5 bg-blue-600 rounded-2xl font-extrabold uppercase mt-2 shadow-xl shadow-blue-900/30">Procesar</button>
-                    <button onclick="showSection('espejo')" class="w-full text-[10px] text-slate-500 font-bold uppercase mt-2">Cancelar</button>
-                </div>
-
             </div>
         </div>
     </div>
 
     <script>
+        // FONDO DE PARTÍCULAS (ARTE DIGITAL)
+        let points = [];
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            for(let i=0; i<200; i++) points.push(new Point());
+        }
+        function draw() {
+            background(0, 20); // Efecto estela
+            points.forEach(p => { p.update(); p.show(); });
+        }
+        class Point {
+            constructor() { this.x = random(width); this.y = random(height); this.z = random(width); }
+            update() { 
+                this.z -= 5; 
+                if(this.z < 1) { this.z = width; this.x = random(width); this.y = random(height); }
+            }
+            show() {
+                let sx = map(this.x / this.z, 0, 1, 0, width);
+                let sy = map(this.y / this.z, 0, 1, 0, height);
+                let r = map(this.z, 0, width, 8, 0);
+                fill(59, 130, 246, 150); noStroke();
+                ellipse(sx + width/2, sy + height/2, r, r);
+            }
+        }
+
+        // LÓGICA DEL SISTEMA
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdwL0e3aAcJvPU7Ie60G9VNmpAlEBjZNGd4Af7w7Tmi9jfqE7Ia3rXj3Nx2KG49o-u/exec";
 
         function checkPass() {
             if(document.getElementById('pass-input').value === "1234") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-panel').classList.remove('hidden');
-            } else { alert("Error"); }
+            } else { alert("Acceso Incorrecto"); }
         }
 
-        function toggleMenu() { document.getElementById('radial-menu').classList.toggle('active'); }
-
         function showSection(name) {
-            // Ocultamos todo
-            document.getElementById('section-espejo').classList.add('hidden');
             document.getElementById('section-factura').classList.add('hidden');
             document.getElementById('section-agenda').classList.add('hidden');
-            
-            // Mostramos la seleccionada
             document.getElementById('section-' + name).classList.remove('hidden');
         }
 
         async function registrarYFacturar() {
-            const btn = document.getElementById('btn-main');
-            const datos = {
-                nombre: document.getElementById('fac-nombre').value,
-                monto: document.getElementById('fac-monto').value,
-                servicio: document.getElementById('fac-servicio').value
-            };
-            if(!datos.nombre || !datos.monto) return alert("Faltan datos");
-            btn.innerText = "Sincronizando...";
-            btn.disabled = true;
+            const nombre = document.getElementById('fac-nombre').value;
+            const monto = document.getElementById('fac-monto').value;
+            if(!nombre || !monto) return;
             try {
-                await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(datos) });
-                generarPDF_SAT(datos);
-                alert("Éxito");
+                await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({nombre, monto, servicio: 'Consulta'}) });
+                alert("Sincronizado con Éxito");
                 location.reload();
-            } catch (e) { alert("Error"); btn.disabled = false; }
-        }
-
-        function generarPDF_SAT(datos) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text("K.B TECH SOLUTIONS - RECIBO", 20, 20);
-            doc.text(`Paciente: ${datos.nombre}`, 20, 30);
-            doc.text(`Total: $${datos.monto}`, 20, 40);
-            doc.save(`Factura_${datos.nombre}.pdf`);
+            } catch(e) { alert("Error"); }
         }
     </script>
 </body>
