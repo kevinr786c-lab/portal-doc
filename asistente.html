@@ -3,119 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K.B Tech Solutions | Inmersive Experience</title>
+    <title>K.B Tech | Inmersive Mobile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&display=swap');
-        body { margin: 0; padding: 0; background: #000; color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
+        body { margin: 0; padding: 0; background: #000; color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
         
         canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        .glass { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2.5rem; }
+        .glass { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; }
         
-        /* Estilo ADN Interactivo */
-        .adn-container { position: relative; height: 500px; width: 100px; display: flex; flex-direction: column; justify-content: space-around; align-items: center; }
+        /* Navegación ADN Adaptable */
+        .adn-nav { 
+            position: fixed; display: flex; justify-content: space-around; align-items: center; 
+            z-index: 100; transition: all 0.5s ease;
+        }
+
+        /* PC: Lado izquierdo | Móvil: Abajo */
+        @media (min-width: 1024px) {
+            .adn-nav { left: 5%; top: 50%; transform: translateY(-50%); flex-direction: column; height: 400px; width: 80px; }
+        }
+        @media (max-width: 1023px) {
+            .adn-nav { bottom: 20px; left: 5%; right: 5%; height: 80px; flex-direction: row; background: rgba(0,0,0,0.5); border-radius: 50px; padding: 0 10px; border: 1px solid rgba(255,255,255,0.1); }
+        }
+
         .node { 
-            width: 60px; height: 60px; background: rgba(59, 130, 246, 0.2); 
+            width: 50px; height: 50px; background: rgba(59, 130, 246, 0.1); 
             border: 2px solid #3b82f6; border-radius: 50%; display: flex; 
-            justify-content: center; align-items: center; font-size: 1.5rem; 
-            cursor: pointer; transition: all 0.4s ease; z-index: 10;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-            animation: orbit 4s infinite ease-in-out;
+            justify-content: center; align-items: center; font-size: 1.2rem; 
+            cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+            animation: float 3s infinite ease-in-out;
         }
-        .node:hover { transform: scale(1.2); background: #3b82f6; box-shadow: 0 0 40px #3b82f6; }
+        .node:active { transform: scale(0.9); background: #3b82f6; }
 
-        @keyframes orbit {
-            0%, 100% { transform: translateX(-30px); }
-            50% { transform: translateX(30px); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
-        .input-kb { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1.2rem; width: 100%; color: white; outline: none; }
-        .fade-in { animation: fadeIn 1.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .input-kb { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1rem; width: 100%; color: white; outline: none; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="flex items-center justify-center min-h-screen">
-        <div class="glass p-12 w-full max-w-md text-center space-y-8">
-            <h1 class="text-4xl font-black italic text-blue-500 tracking-tighter">K.B TECH</h1>
-            <input type="password" id="pass-input" placeholder="PROTOCOLO DE ACCESO" class="input-kb text-center tracking-[0.4em]">
-            <button onclick="checkPass()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase hover:bg-blue-400 transition">Sincronizar</button>
+    <div id="login-screen" class="flex items-center justify-center min-h-screen p-6">
+        <div class="glass p-10 w-full max-w-sm text-center space-y-6">
+            <h1 class="text-3xl font-black italic text-blue-500 tracking-tighter">K.B TECH</h1>
+            <input type="password" id="pass-input" placeholder="ACCESO" class="input-kb text-center tracking-widest">
+            <button onclick="checkPass()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase shadow-lg shadow-blue-900/40">Entrar</button>
         </div>
     </div>
 
-    <div id="main-panel" class="hidden min-h-screen p-8 md:p-20 fade-in">
-        <header class="mb-20">
-            <h2 class="text-6xl font-black tracking-tighter">Bienvenida, Dra. Alba</h2>
-            <p class="text-blue-500 font-bold uppercase tracking-[0.5em] text-xs">Ecosistema Digital Medicov</p>
+    <div id="main-panel" class="hidden min-h-screen p-6 md:p-20 pb-32">
+        <header class="mb-10 text-center md:text-left">
+            <h2 class="text-4xl md:text-6xl font-black tracking-tighter">Bienvenida, Dra. Alba</h2>
+            <p class="text-blue-500 font-bold uppercase tracking-[0.3em] text-[10px]">K.B Tech Solutions</p>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            
-            <div class="lg:col-span-2 flex justify-center">
-                <div class="adn-container">
-                    <div class="node" style="animation-delay: 0s" onclick="showSection('factura')" title="Facturar">📄</div>
-                    <div class="node" style="animation-delay: 1s" onclick="alert('☕ Café solicitado')" title="Café">☕</div>
-                    <div class="node" style="animation-delay: 2s" onclick="showSection('agenda')" title="Agenda">📅</div>
-                    <div class="node" style="animation-delay: 3s" onclick="alert('💬 Soporte K.B')" title="Soporte">💬</div>
-                </div>
+        <nav class="adn-nav" id="adn-menu">
+            <div class="node" onclick="showSection('factura')" title="Facturar">📄</div>
+            <div class="node" style="animation-delay: 0.5s" onclick="alert('☕ Café en camino')" title="Café">☕</div>
+            <div class="node" style="animation-delay: 1s" onclick="showSection('agenda')" title="Agenda">📅</div>
+            <div class="node" style="animation-delay: 1.5s" onclick="alert('💬 Soporte Activo')" title="Soporte">💬</div>
+        </nav>
+
+        <div class="max-w-4xl mx-auto lg:ml-40">
+            <div id="section-factura" class="glass p-6 md:p-10 space-y-6">
+                <h3 class="text-blue-400 font-black uppercase text-xs tracking-widest border-b border-white/5 pb-2">Facturación Pro</h3>
+                <input type="text" id="fac-nombre" placeholder="Paciente" class="input-kb">
+                <input type="number" id="fac-monto" placeholder="Monto" class="input-kb">
+                <button onclick="registrarYFacturar()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase shadow-xl shadow-blue-900/20">Registrar Pago</button>
             </div>
 
-            <div class="lg:col-span-10 space-y-8">
-                
-                <div id="section-factura" class="glass p-10 max-w-2xl">
-                    <h3 class="text-blue-400 font-black uppercase text-xs mb-8 tracking-widest">Generador Inmersivo SAT</h3>
-                    <div class="space-y-4">
-                        <input type="text" id="fac-nombre" placeholder="Paciente" class="input-kb">
-                        <input type="number" id="fac-monto" placeholder="Monto" class="input-kb">
-                        <button onclick="registrarYFacturar()" class="w-full py-5 bg-blue-600 rounded-3xl font-black uppercase hover:scale-105 transition">Emitir Factura</button>
-                    </div>
-                </div>
-
-                <div id="section-agenda" class="hidden glass p-4 h-[500px]">
-                    <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full h-full rounded-3xl border-none invert-[0.1] grayscale-[0.8]"></iframe>
-                </div>
+            <div id="section-agenda" class="hidden glass p-2 h-[500px] overflow-hidden">
+                <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full h-full rounded-2xl border-none invert-[0.1] grayscale-[0.8]"></iframe>
             </div>
         </div>
     </div>
 
     <script>
-        // FONDO DE PARTÍCULAS (ARTE DIGITAL)
-        let points = [];
+        // FONDO CINEMÁTICO (Optimizado para móvil)
+        let stars = [];
         function setup() {
             createCanvas(windowWidth, windowHeight);
-            for(let i=0; i<200; i++) points.push(new Point());
+            let count = windowWidth < 600 ? 80 : 200; // Menos estrellas en móvil
+            for(let i=0; i<count; i++) stars.push(new Star());
         }
         function draw() {
-            background(0, 20); // Efecto estela
-            points.forEach(p => { p.update(); p.show(); });
+            background(0, 30);
+            stars.forEach(s => { s.update(); s.show(); });
         }
-        class Point {
-            constructor() { this.x = random(width); this.y = random(height); this.z = random(width); }
+        class Star {
+            constructor() { this.x = random(-width, width); this.y = random(-height, height); this.z = random(width); }
             update() { 
-                this.z -= 5; 
-                if(this.z < 1) { this.z = width; this.x = random(width); this.y = random(height); }
+                this.z -= 4; 
+                if(this.z < 1) { this.z = width; this.x = random(-width, width); this.y = random(-height, height); }
             }
             show() {
                 let sx = map(this.x / this.z, 0, 1, 0, width);
                 let sy = map(this.y / this.z, 0, 1, 0, height);
-                let r = map(this.z, 0, width, 8, 0);
+                let r = map(this.z, 0, width, 6, 0);
                 fill(59, 130, 246, 150); noStroke();
                 ellipse(sx + width/2, sy + height/2, r, r);
             }
         }
 
-        // LÓGICA DEL SISTEMA
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdwL0e3aAcJvPU7Ie60G9VNmpAlEBjZNGd4Af7w7Tmi9jfqE7Ia3rXj3Nx2KG49o-u/exec";
-
         function checkPass() {
             if(document.getElementById('pass-input').value === "1234") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-panel').classList.remove('hidden');
-            } else { alert("Acceso Incorrecto"); }
+            } else { alert("Acceso Denegado"); }
         }
 
         function showSection(name) {
@@ -124,13 +123,16 @@
             document.getElementById('section-' + name).classList.remove('hidden');
         }
 
+        // URL DE TU SCRIPT
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdwL0e3aAcJvPU7Ie60G9VNmpAlEBjZNGd4Af7w7Tmi9jfqE7Ia3rXj3Nx2KG49o-u/exec";
+
         async function registrarYFacturar() {
             const nombre = document.getElementById('fac-nombre').value;
             const monto = document.getElementById('fac-monto').value;
             if(!nombre || !monto) return;
             try {
                 await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({nombre, monto, servicio: 'Consulta'}) });
-                alert("Sincronizado con Éxito");
+                alert("Sincronizado!");
                 location.reload();
             } catch(e) { alert("Error"); }
         }
