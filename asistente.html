@@ -3,182 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistente - K.B Tech Solutions</title>
+    <title>Panel Operativo - K.B Tech Solutions</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050816; color: white; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
-        .input-kb { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.8rem; width: 100%; color: white; outline: none; transition: 0.3s; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #02040a; color: white; overflow: hidden; }
+        
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; }
+        
+        /* Animación Menú Radial */
+        .menu-wrapper { position: relative; width: 320px; height: 320px; display: flex; justify-content: center; align-items: center; }
+        .central-pill { 
+            width: 90px; height: 90px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+            border-radius: 50%; display: flex; justify-content: center; align-items: center; 
+            cursor: pointer; z-index: 50; box-shadow: 0 0 30px rgba(59, 130, 246, 0.4); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .central-pill:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(59, 130, 246, 0.7); }
+        .central-pill:active { transform: scale(0.9); }
+
+        .menu-item { 
+            position: absolute; width: 60px; height: 60px; background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; display: flex; 
+            justify-content: center; align-items: center; font-size: 1.5rem; 
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            opacity: 0; transform: scale(0); pointer-events: none;
+        }
+        .menu-wrapper.active .menu-item { opacity: 1; transform: scale(1); pointer-events: auto; }
+        
+        /* Posiciones Circulares */
+        .menu-wrapper.active .item-factura { transform: translate(0, -120px); }
+        .menu-wrapper.active .item-cafe { transform: translate(120px, 0); }
+        .menu-wrapper.active .item-agenda { transform: translate(0, 120px); }
+        .menu-wrapper.active .item-chat { transform: translate(-120px, 0); }
+
+        .input-kb { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1rem; width: 100%; color: white; outline: none; transition: 0.3s; }
         .input-kb:focus { border-color: #3b82f6; background: rgba(255,255,255,0.1); }
+        
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-7xl mx-auto space-y-8">
-        <header class="flex justify-between items-center">
+<body class="flex items-center justify-center min-h-screen">
+
+    <div id="login-screen" class="glass p-12 w-full max-w-md text-center space-y-8 fade-in">
+        <div class="space-y-2">
+            <h1 class="text-4xl font-black italic text-blue-500 tracking-tighter">K.B TECH</h1>
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em]">Security Protocol</p>
+        </div>
+        <input type="password" id="pass-input" placeholder="Contraseña de Acceso" class="input-kb text-center text-xl tracking-widest">
+        <button onclick="checkPass()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase hover:bg-blue-500 transition shadow-lg shadow-blue-900/40">Autenticar</button>
+    </div>
+
+    <div id="main-panel" class="hidden w-full max-w-6xl px-6 fade-in">
+        <header class="flex justify-between items-center mb-12">
             <div>
-                <h1 class="text-2xl font-black italic text-blue-500 uppercase tracking-tighter">K.B Tech Solutions</h1>
-                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Panel Operativo | Dra. Alba Patricia</p>
+                <h2 id="welcome-msg" class="text-3xl font-black"></h2>
+                <p class="text-blue-500 text-[10px] font-bold uppercase tracking-widest">K.B Tech Solutions | Operativo</p>
             </div>
-            <div id="status-ball" class="w-3 h-3 bg-green-500 rounded-full shadow-[0_0_10px_#22c55e]"></div>
+            <button onclick="location.reload()" class="text-slate-500 hover:text-white transition text-xs font-bold uppercase">Cerrar Sesión</button>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
-            <div class="lg:col-span-5 space-y-6">
-                <div class="glass p-6 space-y-4">
-                    <div class="flex justify-between items-center border-b border-white/10 pb-4">
-                        <h2 class="text-sm font-black uppercase text-blue-400">Facturación SAT Pro</h2>
-                        <span class="text-[9px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded">MODO HÍBRIDO</span>
+            <div class="flex flex-col items-center">
+                <div class="menu-wrapper" id="radial-menu">
+                    <div class="central-pill shadow-blue-500/50" onclick="toggleMenu()">
+                        <span class="text-3xl">💊</span>
                     </div>
-
-                    <div class="space-y-3">
-                        <label class="text-[10px] uppercase font-bold text-slate-500">Datos del Paciente</label>
-                        <input type="text" id="fac-nombre" placeholder="Nombre Completo" class="input-kb">
-                        <input type="tel" id="fac-tel" placeholder="WhatsApp (10 dígitos)" class="input-kb">
-                        
-                        <label class="text-[10px] uppercase font-bold text-slate-500 pt-2 block">Detalles del Cobro</label>
-                        <select id="fac-servicio" class="input-kb">
-                            <option value="Consulta General">Consulta General</option>
-                            <option value="Especialidad">Especialidad</option>
-                            <option value="Procedimiento">Procedimiento Quirúrgico</option>
-                            <option value="Certificado">Certificado Médico</option>
-                        </select>
-                        <div class="relative">
-                            <span class="absolute left-3 top-3 text-slate-500">$</span>
-                            <input type="number" id="fac-monto" placeholder="0.00" class="input-kb pl-8">
-                        </div>
-                    </div>
-
-                    <div class="pt-4">
-                        <button onclick="registrarYFacturar()" class="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-xl font-black uppercase transition shadow-lg shadow-blue-900/20">
-                            Registrar y Generar Factura SAT
-                        </button>
-                    </div>
+                    <button onclick="showSection('factura')" class="menu-item item-factura hover:bg-blue-500/20" title="Facturar">📄</button>
+                    <button onclick="alert('☕ Notificación enviada: El Dr. solicita un café')" class="menu-item item-cafe hover:bg-yellow-500/20" title="Pedir Café">☕</button>
+                    <button onclick="showSection('agenda')" class="menu-item item-agenda hover:bg-green-500/20" title="Ver Agenda">📅</button>
+                    <button onclick="alert('💬 Chat de soporte K.B activado')" class="menu-item item-chat hover:bg-purple-500/20" title="Chat Soporte">💬</button>
                 </div>
-
-                <div class="glass p-6 text-center">
-                    <h3 class="text-xs font-black uppercase text-slate-500 mb-4 tracking-widest">Intercomunicador Dr.</h3>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button class="p-3 text-[10px] font-bold bg-white/5 rounded-lg border border-white/10 hover:bg-white/10">PEDIR EXPEDIENTE</button>
-                        <button class="p-3 text-[10px] font-bold bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 text-yellow-500">OCUPO CAFÉ ☕</button>
-                    </div>
-                </div>
+                <p class="mt-8 text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] animate-pulse">Toque la pastilla central</p>
             </div>
 
-            <div class="lg:col-span-7">
-                <div class="glass h-[650px] overflow-hidden flex flex-col">
-                    <div class="p-4 border-b border-white/10 flex justify-between items-center bg-white/5">
-                        <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Control de Pacientes (Hoja 2)</span>
-                        <button onclick="window.location.reload()" class="text-[10px] text-blue-400 font-bold hover:underline">RECARGAR</button>
-                    </div>
-                    <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full flex-grow border-none grayscale-[0.2] invert-[0.02]"></iframe>
+            <div class="relative min-h-[450px]">
+                
+                <div id="section-factura" class="glass p-8 space-y-4">
+                    <h3 class="text-blue-400 font-black uppercase text-sm mb-6 border-b border-white/10 pb-2">Generador de Facturas SAT Pro</h3>
+                    <input type="text" id="fac-nombre" placeholder="Nombre Completo del Paciente" class="input-kb">
+                    <input type="number" id="fac-monto" placeholder="Monto a Cobrar ($)" class="input-kb">
+                    <select id="fac-servicio" class="input-kb">
+                        <option value="Consulta General">Consulta General</option>
+                        <option value="Especialidad">Consulta Especialidad</option>
+                        <option value="Procedimiento">Procedimiento Médico</option>
+                    </select>
+                    <button onclick="registrarYFacturar()" id="btn-main" class="w-full py-4 bg-blue-600 rounded-xl font-black uppercase mt-4 hover:bg-blue-500 transition">Procesar Pago</button>
                 </div>
+
+                <div id="section-agenda" class="hidden glass p-2 h-[450px] overflow-hidden">
+                    <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full h-full rounded-2xl border-none invert-[0.05] grayscale-[0.3]"></iframe>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
-        // TU NUEVO LINK DE EJECUCIÓN (CONECTADO)
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxTtkTKZgtMLd05FeN7dMwyfbyUEvI7SWFfQYvJYLh4OoWG5BBDhbJUUi_ojIYOn8_-/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdwL0e3aAcJvPU7Ie60G9VNmpAlEBjZNGd4Af7w7Tmi9jfqE7Ia3rXj3Nx2KG49o-u/exec";
 
-        async function registrarYFacturar() {
-            const btn = event.target;
-            const nombre = document.getElementById('fac-nombre').value;
-            const tel = document.getElementById('fac-tel').value;
-            const servicio = document.getElementById('fac-servicio').value;
-            const monto = document.getElementById('fac-monto').value;
-
-            if(!nombre || !monto) return alert("Llena nombre y monto para proceder.");
-
-            btn.innerText = "PROCESANDO...";
-            btn.disabled = true;
-
-            const datos = { nombre, whatsapp: tel, servicio, monto };
-
-            try {
-                // 1. Enviar a Google Sheets (Usando el nuevo link)
-                await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    cache: 'no-cache',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(datos)
-                });
-
-                // 2. Generar PDF SAT Pro
-                generarPDF(datos);
-
-                alert("Registro exitoso en Hoja 2 y Factura generada.");
-                
-                // Esperamos 2 segundos para que el usuario vea el mensaje antes de recargar
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
-
-            } catch (error) {
-                console.error(error);
-                alert("Hubo un detalle en la conexión. Revisa que el Script esté bien publicado.");
-                btn.disabled = false;
-                btn.innerText = "REGISTRAR Y GENERAR FACTURA SAT";
+        function checkPass() {
+            const pass = document.getElementById('pass-input').value;
+            if(pass === "1234") {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-panel').classList.remove('hidden');
+                document.getElementById('welcome-msg').innerText = "Bienvenida, Dra. Alba";
+            } else {
+                alert("Código de acceso incorrecto.");
             }
         }
 
-        function generarPDF(datos) {
+        function toggleMenu() {
+            document.getElementById('radial-menu').classList.toggle('active');
+        }
+
+        function showSection(section) {
+            document.getElementById('section-factura').classList.add('hidden');
+            document.getElementById('section-agenda').classList.add('hidden');
+            document.getElementById('section-' + section).classList.remove('hidden');
+        }
+
+        async function registrarYFacturar() {
+            const btn = document.getElementById('btn-main');
+            const nombre = document.getElementById('fac-nombre').value;
+            const monto = document.getElementById('fac-monto').value;
+            const servicio = document.getElementById('fac-servicio').value;
+
+            if(!nombre || !monto) return alert("Por favor, ingrese los datos del cobro.");
+
+            btn.innerText = "CONECTANDO CON SAT...";
+            btn.disabled = true;
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ nombre, monto, servicio, whatsapp: 'N/A' })
+                });
+
+                generarPDF_SAT({ nombre, monto, servicio });
+                alert("¡Éxito! Pago registrado en Ecosistema Digital y Factura generada.");
+                location.reload();
+            } catch (e) {
+                alert("Error de conexión con el Excel.");
+                btn.disabled = false;
+                btn.innerText = "PROCESAR PAGO";
+            }
+        }
+
+        function generarPDF_SAT(datos) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
-            // Generador de datos SAT ficticios
-            const folioFiscal = Math.random().toString(36).substring(2, 12).toUpperCase();
-            const rfcFicticio = "PATA850101HDFLNA01"; 
+            const folio = Math.random().toString(36).substring(2, 12).toUpperCase();
 
-            // Encabezado
-            doc.setFillColor(13, 18, 53);
-            doc.rect(0, 0, 210, 45, 'F');
+            doc.setFillColor(5, 8, 22);
+            doc.rect(0, 0, 210, 40, 'F');
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(20);
-            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
             doc.text("RECIBO DE HONORARIOS MÉDICOS", 20, 25);
-            doc.setFontSize(9);
-            doc.text(`DRA. ALBA PATRICIA | RFC: ${rfcFicticio}`, 20, 32);
-            doc.text("Régimen Simplificado de Confianza (RESICO)", 20, 38);
+            doc.setFontSize(8);
+            doc.text("K.B TECH SOLUTIONS - SISTEMA DE GESTIÓN FISCAL", 20, 32);
 
-            // Cuerpo SAT
             doc.setTextColor(0, 0, 0);
             doc.setFontSize(10);
-            doc.text(`UUID (Folio Fiscal): ${folioFiscal}`, 120, 55);
-            doc.text(`Fecha: ${new Date().toLocaleString()}`, 120, 62);
-            doc.line(20, 75, 190, 75);
+            doc.text(`UUID: ${folio}`, 20, 55);
+            doc.text(`Fecha: ${new Date().toLocaleString()}`, 20, 62);
+            doc.line(20, 70, 190, 70);
 
             doc.setFont("helvetica", "bold");
-            doc.text("PACIENTE:", 20, 85);
+            doc.text("CLIENTE / PACIENTE:", 20, 85);
             doc.setFont("helvetica", "normal");
             doc.text(datos.nombre.toUpperCase(), 20, 92);
 
             doc.setFont("helvetica", "bold");
             doc.text("CONCEPTO:", 20, 105);
             doc.setFont("helvetica", "normal");
-            doc.text(`${datos.servicio} - Atención médica especializada`, 20, 112);
+            doc.text(datos.servicio, 20, 112);
 
-            // Total
-            doc.setFillColor(245, 245, 245);
-            doc.rect(20, 130, 170, 15, 'F');
-            doc.setFontSize(14);
-            doc.setFont("helvetica", "bold");
-            doc.text(`TOTAL PAGADO: $${datos.monto}.00 MXN`, 30, 140);
-
-            // Sellos y Marcas
+            doc.setFontSize(16);
+            doc.text(`TOTAL: $${datos.monto}.00 MXN`, 20, 130);
+            
             doc.setFontSize(7);
             doc.setTextColor(150, 150, 150);
-            doc.text("SELLO DIGITAL DEL SAT:", 20, 170);
-            doc.text("MIIEpAIBAAKCAQEA7V+h... (Certificado Digital K.B Tech Solutions)", 20, 175);
-            
-            doc.setFontSize(8);
-            doc.setTextColor(59, 130, 246);
-            doc.text("DOCUMENTO GENERADO POR SISTEMA K.B TECH SOLUTIONS", 105, 285, null, null, "center");
+            doc.text("Este documento es una representación digital generada por K.B Tech Solutions", 105, 280, null, null, "center");
 
-            doc.save(`Factura_${datos.nombre.replace(/\s+/g, '_')}.pdf`);
+            doc.save(`Factura_KB_${datos.nombre}.pdf`);
         }
     </script>
 </body>
