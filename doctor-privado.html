@@ -3,52 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Dr. - Dirección</title>
+    <title>K.B Tech | Dra. Alba Master Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; color: #1e293b; }
+        .glass-card { background: white; border: 1px solid #f1f5f9; border-radius: 2.5rem; box-shadow: 0 10px 40px rgba(216, 180, 254, 0.1); }
+        .stat-card { background: linear-gradient(135deg, #fdfcfd 0%, #f3f0ff 100%); border: 1px solid #e9e4ff; }
+    </style>
 </head>
-<body class="bg-[#05081a] text-white p-6">
-    <div id="login" class="max-w-md mx-auto mt-20 p-10 bg-white/5 rounded-[2rem] border border-white/10 text-center">
-        <h2 class="text-2xl font-black italic mb-6 uppercase">Acceso Master</h2>
-        <input type="password" id="pass" placeholder="Contraseña" class="w-full p-4 rounded-xl bg-white/10 border-none outline-none mb-4 text-center">
-        <button onclick="entrar()" class="w-full py-4 bg-blue-600 rounded-xl font-black uppercase">Entrar</button>
-    </div>
+<body class="p-4 md:p-12">
 
-    <div id="panel" class="hidden max-w-6xl mx-auto space-y-8">
-        <h1 class="text-2xl font-black italic uppercase">Dashboard Ejecutivo</h1>
+    <header class="max-w-7xl mx-auto flex justify-between items-end mb-12">
+        <div>
+            <p class="text-[10px] font-black uppercase text-purple-400 tracking-[0.4em] mb-2">Master Intelligence</p>
+            <h1 class="text-5xl font-black text-slate-800 tracking-tighter">Panel de Control <br><span class="text-slate-400">Dra. Alba Patricia</span></h1>
+        </div>
+        <div class="text-right">
+            <button onclick="location.reload()" class="px-6 py-2 bg-white rounded-full text-[10px] font-black uppercase tracking-widest border border-slate-100 shadow-sm hover:bg-slate-50 transition">Actualizar Datos</button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto space-y-8">
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-white/5 p-8 rounded-[2rem] border border-white/10">
-                <h3 class="text-xs font-bold text-blue-400 uppercase mb-4">Ingresos Semanales</h3>
-                <canvas id="grafica"></canvas>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-card stat-card p-8">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Ingresos del Mes</p>
+                <h3 class="text-4xl font-black text-slate-800">$42,500 <span class="text-xs text-emerald-500">+12%</span></h3>
             </div>
-            <div class="bg-white/5 p-8 rounded-[2rem] border border-white/10">
-                <h3 class="text-xs font-bold text-green-400 uppercase mb-4">Resumen Hoy</h3>
-                <div class="text-4xl font-black">$2,450.00</div>
-                <p class="text-slate-500 text-xs mt-2">12 pacientes atendidos</p>
+            <div class="glass-card stat-card p-8">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Pacientes Atendidos</p>
+                <h3 class="text-4xl font-black text-slate-800">124</h3>
+            </div>
+            <div class="glass-card stat-card p-8">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Promedio por Consulta</p>
+                <h3 class="text-4xl font-black text-slate-800">$850</h3>
             </div>
         </div>
-    </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-8 glass-card p-10">
+                <div class="flex justify-between items-center mb-10">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-400">Flujo de Pacientes Semanal</h3>
+                </div>
+                <canvas id="performanceChart" height="150"></canvas>
+            </div>
+
+            <div class="lg:col-span-4 glass-card p-10 bg-purple-50/30 border-purple-100">
+                <h3 class="text-xs font-black uppercase tracking-widest text-purple-400 mb-6 italic">Mensajes de Recepción</h3>
+                <div class="space-y-4">
+                    <div class="p-4 bg-white rounded-2xl border border-purple-100 shadow-sm">
+                        <p class="text-xs font-bold text-slate-600">"El paciente de las 4 PM ya llegó, está esperando en sala 1."</p>
+                        <span class="text-[8px] text-slate-400 uppercase mt-2 block">Hace 5 minutos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-4">
+            <details>
+                <summary class="text-[10px] font-black uppercase text-slate-300 cursor-pointer p-2 hover:text-purple-400 transition">Ver Base de Datos (Motor Sheets)</summary>
+                <div class="mt-4 h-[400px] rounded-3xl overflow-hidden">
+                    <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full h-full border-none grayscale-[0.5] opacity-50"></iframe>
+                </div>
+            </details>
+        </div>
+    </main>
 
     <script>
-        function entrar() {
-            if(document.getElementById('pass').value === "PORTILLO2026") {
-                document.getElementById('login').classList.add('hidden');
-                document.getElementById('panel').classList.remove('hidden');
-                cargarGrafica();
-            }
-        }
-
-        function cargarGrafica() {
-            const ctx = document.getElementById('grafica').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['L','M','M','J','V'],
-                    datasets: [{ label: 'Ventas', data: [100, 200, 150, 300, 400], backgroundColor: '#3b82f6' }]
+        // GRÁFICA DE EJEMPLO (Se conectará a tus datos del Excel después)
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+                datasets: [{
+                    label: 'Pacientes',
+                    data: [12, 19, 15, 25, 22, 30],
+                    borderColor: '#d8b4fe',
+                    backgroundColor: 'rgba(216, 180, 254, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { display: false },
+                    x: { grid: { display: false }, border: { display: false } }
                 }
-            });
-        }
+            }
+        });
     </script>
 </body>
 </html>
