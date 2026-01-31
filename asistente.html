@@ -62,3 +62,124 @@
                     <h3 class="text-xs font-black uppercase text-slate-500 mb-4 tracking-widest">Intercomunicador Dr.</h3>
                     <div class="grid grid-cols-2 gap-2">
                         <button class="p-3 text-[10px] font-bold bg-white/5 rounded-lg border border-white/10 hover:bg-white/10">PEDIR EXPEDIENTE</button>
+                        <button class="p-3 text-[10px] font-bold bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 text-yellow-500">OCUPO CAFÉ ☕</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7">
+                <div class="glass h-[650px] overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-white/10 flex justify-between items-center bg-white/5">
+                        <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Control de Pacientes (Hoja 2)</span>
+                        <button onclick="window.location.reload()" class="text-[10px] text-blue-400 font-bold hover:underline">RECARGAR</button>
+                    </div>
+                    <iframe src="https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit?gid=0#gid=0" class="w-full flex-grow border-none grayscale-[0.2] invert-[0.02]"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TU NUEVO LINK DE EJECUCIÓN (CONECTADO)
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxTtkTKZgtMLd05FeN7dMwyfbyUEvI7SWFfQYvJYLh4OoWG5BBDhbJUUi_ojIYOn8_-/exec";
+
+        async function registrarYFacturar() {
+            const btn = event.target;
+            const nombre = document.getElementById('fac-nombre').value;
+            const tel = document.getElementById('fac-tel').value;
+            const servicio = document.getElementById('fac-servicio').value;
+            const monto = document.getElementById('fac-monto').value;
+
+            if(!nombre || !monto) return alert("Llena nombre y monto para proceder.");
+
+            btn.innerText = "PROCESANDO...";
+            btn.disabled = true;
+
+            const datos = { nombre, whatsapp: tel, servicio, monto };
+
+            try {
+                // 1. Enviar a Google Sheets (Usando el nuevo link)
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+
+                // 2. Generar PDF SAT Pro
+                generarPDF(datos);
+
+                alert("Registro exitoso en Hoja 2 y Factura generada.");
+                
+                // Esperamos 2 segundos para que el usuario vea el mensaje antes de recargar
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+
+            } catch (error) {
+                console.error(error);
+                alert("Hubo un detalle en la conexión. Revisa que el Script esté bien publicado.");
+                btn.disabled = false;
+                btn.innerText = "REGISTRAR Y GENERAR FACTURA SAT";
+            }
+        }
+
+        function generarPDF(datos) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Generador de datos SAT ficticios
+            const folioFiscal = Math.random().toString(36).substring(2, 12).toUpperCase();
+            const rfcFicticio = "PATA850101HDFLNA01"; 
+
+            // Encabezado
+            doc.setFillColor(13, 18, 53);
+            doc.rect(0, 0, 210, 45, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(20);
+            doc.setFont("helvetica", "bold");
+            doc.text("RECIBO DE HONORARIOS MÉDICOS", 20, 25);
+            doc.setFontSize(9);
+            doc.text(`DRA. ALBA PATRICIA | RFC: ${rfcFicticio}`, 20, 32);
+            doc.text("Régimen Simplificado de Confianza (RESICO)", 20, 38);
+
+            // Cuerpo SAT
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.text(`UUID (Folio Fiscal): ${folioFiscal}`, 120, 55);
+            doc.text(`Fecha: ${new Date().toLocaleString()}`, 120, 62);
+            doc.line(20, 75, 190, 75);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("PACIENTE:", 20, 85);
+            doc.setFont("helvetica", "normal");
+            doc.text(datos.nombre.toUpperCase(), 20, 92);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("CONCEPTO:", 20, 105);
+            doc.setFont("helvetica", "normal");
+            doc.text(`${datos.servicio} - Atención médica especializada`, 20, 112);
+
+            // Total
+            doc.setFillColor(245, 245, 245);
+            doc.rect(20, 130, 170, 15, 'F');
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text(`TOTAL PAGADO: $${datos.monto}.00 MXN`, 30, 140);
+
+            // Sellos y Marcas
+            doc.setFontSize(7);
+            doc.setTextColor(150, 150, 150);
+            doc.text("SELLO DIGITAL DEL SAT:", 20, 170);
+            doc.text("MIIEpAIBAAKCAQEA7V+h... (Certificado Digital K.B Tech Solutions)", 20, 175);
+            
+            doc.setFontSize(8);
+            doc.setTextColor(59, 130, 246);
+            doc.text("DOCUMENTO GENERADO POR SISTEMA K.B TECH SOLUTIONS", 105, 285, null, null, "center");
+
+            doc.save(`Factura_${datos.nombre.replace(/\s+/g, '_')}.pdf`);
+        }
+    </script>
+</body>
+</html>
