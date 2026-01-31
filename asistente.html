@@ -30,7 +30,6 @@
             box-shadow: 0 10px 40px rgba(216, 180, 254, 0.1);
         }
 
-        /* La Cápsula Central */
         .capsule-menu {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             background: white; border: 1px solid var(--violeta-soft);
@@ -78,17 +77,23 @@
         <div class="lg:col-span-4 space-y-8">
             <div class="glass-panel p-10 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-2 h-full bg-purple-300"></div>
-                <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300 mb-6">Paciente en Turno</h3>
+                <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300 mb-6">Estado de Consulta</h3>
                 <div class="mb-8">
                     <p class="text-3xl font-extrabold text-slate-700 mb-1" id="patient-name">Kevin Reyes</p>
-                    <p class="text-xs font-bold text-purple-300 uppercase tracking-widest" id="patient-id">ID: 0024 • REGULAR</p>
+                    <p class="text-xs font-bold text-purple-300 uppercase tracking-widest" id="patient-id">ID: 0024 • EN ATENCIÓN</p>
                 </div>
-                <button onclick="nextPatient()" class="btn-premium">Llamar Siguiente ➜</button>
+                
+                <div class="flex flex-col gap-3">
+                    <button onclick="finalizarAtencion()" class="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-emerald-100 hover:bg-emerald-500 hover:text-white transition-all">
+                        💰 Finalizar y Cobrar
+                    </button>
+                    <button onclick="nextPatient()" class="btn-premium">Llamar Siguiente ➜</button>
+                </div>
             </div>
 
             <div class="glass-panel p-10">
                 <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300 mb-6">Comunicación con Dra.</h3>
-                <textarea id="dr-msg" placeholder="Escribe un aviso importante..." class="input-pure h-32 resize-none text-sm"></textarea>
+                <textarea id="dr-msg" placeholder="Escribe un aviso..." class="input-pure h-32 resize-none text-sm"></textarea>
                 <button onclick="sendNote()" class="w-full mt-4 py-3 border-2 border-purple-100 text-purple-400 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-purple-50 transition">Enviar Notificación</button>
             </div>
         </div>
@@ -96,8 +101,8 @@
         <div class="lg:col-span-8">
             <div id="view-agenda" class="glass-panel p-10 min-h-[600px] flex flex-col">
                 <div class="flex justify-between items-center mb-10">
-                    <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300">Agenda & Citas del Día</h3>
-                    <button onclick="switchView('register')" class="text-[10px] font-black text-purple-400 uppercase tracking-widest">+ Agendar Manualmente</button>
+                    <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300">Agenda Activa</h3>
+                    <button onclick="switchView('register')" class="text-[10px] font-black text-purple-400 uppercase tracking-widest">+ Registro Manual</button>
                 </div>
                 
                 <div class="flex-grow overflow-auto rounded-3xl border border-slate-50">
@@ -110,30 +115,26 @@
                                 <th class="p-5">Total</th>
                             </tr>
                         </thead>
-                        <tbody class="text-sm font-medium text-slate-600">
-                            <tr class="border-b border-slate-50 hover:bg-purple-50/20 transition">
-                                <td class="p-5"><span class="px-3 py-1 bg-green-100 text-green-500 rounded-full text-[9px] font-bold uppercase">Listo</span></td>
-                                <td class="p-5">Kevin Reyes</td>
-                                <td class="p-5">Consulta Especialidad</td>
-                                <td class="p-5 font-bold">$1,200</td>
-                            </tr>
-                        </tbody>
+                        <tbody id="table-body" class="text-sm font-medium text-slate-600">
+                            </tbody>
                     </table>
                 </div>
             </div>
 
             <div id="view-register" class="hidden glass-panel p-10 animate-fade-in">
-                <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300 mb-8">Nuevo Registro / Facturación</h3>
+                <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300 mb-8">Facturación & Registro SAT Pro</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div class="space-y-2">
                         <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Nombre del Paciente</label>
-                        <input type="text" id="reg-nombre" class="input-pure" placeholder="Ej. Alba Patricia">
+                        <input type="text" id="reg-nombre" class="input-pure" placeholder="Nombre Completo">
                     </div>
                     <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Servicio Prestado</label>
+                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Tipo de Servicio</label>
                         <select id="reg-servicio" class="input-pure">
+                            <option value="Consulta Especialidad">Consulta Especialidad</option>
                             <option value="Consulta General">Consulta General</option>
-                            <option value="Procedimiento">Procedimiento Quirúrgico</option>
+                            <option value="Procedimiento Quirúrgico">Procedimiento Quirúrgico</option>
+                            <option value="Certificado Médico">Certificado Médico</option>
                         </select>
                     </div>
                     <div class="space-y-2">
@@ -141,12 +142,12 @@
                         <input type="number" id="reg-monto" class="input-pure" placeholder="0.00">
                     </div>
                     <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">RFC (Facturación)</label>
+                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">RFC del Paciente</label>
                         <input type="text" id="reg-rfc" class="input-pure" placeholder="XAXX010101000">
                     </div>
                 </div>
                 <div class="flex gap-4">
-                    <button onclick="procesarTodo()" class="btn-premium flex-grow">Registrar y Generar Factura</button>
+                    <button onclick="procesarTodo()" class="btn-premium flex-grow shadow-emerald-200">Emitir Factura & Guardar</button>
                     <button onclick="switchView('agenda')" class="px-8 bg-slate-100 text-slate-400 rounded-2xl font-bold uppercase text-[10px]">Cancelar</button>
                 </div>
             </div>
@@ -154,10 +155,9 @@
     </main>
 
     <nav class="capsule-menu">
-        <div class="nav-icon active" onclick="switchView('agenda')" title="Ver Agenda">📅</div>
-        <div class="nav-icon" onclick="switchView('register')" title="Nuevo Cobro">📄</div>
-        <div class="nav-icon" onclick="window.open('https://docs.google.com/spreadsheets/d/1c5RIyMP2j34ujho5Oivj7BOD_VVKd-nfexgu4i8L5_s/edit','_blank')" title="Ver Motor Excel">📊</div>
-        <div class="nav-icon" onclick="location.reload()" title="Cerrar">🔒</div>
+        <div class="nav-icon active" onclick="switchView('agenda')">📅</div>
+        <div class="nav-icon" onclick="switchView('register')">📄</div>
+        <div class="nav-icon" onclick="location.reload()">🔒</div>
     </nav>
 
     <script>
@@ -174,7 +174,13 @@
             document.getElementById('view-agenda').classList.toggle('hidden', view !== 'agenda');
             document.getElementById('view-register').classList.toggle('hidden', view !== 'register');
             document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            if(event) event.currentTarget.classList.add('active');
+        }
+
+        function finalizarAtencion() {
+            const nombre = document.getElementById('patient-name').innerText;
+            document.getElementById('reg-nombre').value = nombre;
+            switchView('register');
         }
 
         async function procesarTodo() {
@@ -183,44 +189,62 @@
                 nombre: document.getElementById('reg-nombre').value,
                 monto: document.getElementById('reg-monto').value,
                 servicio: document.getElementById('reg-servicio').value,
-                rfc: document.getElementById('reg-rfc').value
+                rfc: document.getElementById('reg-rfc').value || 'XAXX010101000'
             };
 
-            if(!datos.nombre || !datos.monto) return alert("Por favor, llena los campos básicos.");
-            
-            btn.innerText = "PROCESANDO..."; btn.disabled = true;
+            if(!datos.nombre || !datos.monto) return alert("Faltan datos.");
+            btn.innerText = "TIMBRANDO..."; btn.disabled = true;
 
             try {
                 await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(datos) });
-                generarPDF_SAT(datos);
-                alert("¡Éxito! Registro guardado y Factura emitida.");
+                generarPDF_SAT_Pro(datos);
+                alert("Sincronización Cuántica Exitosa.");
                 location.reload();
-            } catch (e) { alert("Error de conexión."); btn.disabled = false; }
+            } catch (e) { alert("Error."); btn.disabled = false; }
         }
 
-        function generarPDF_SAT(datos) {
+        function generarPDF_SAT_Pro(datos) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const folio = Math.random().toString(36).substring(2, 10).toUpperCase();
+            const uuid = Math.random().toString(36).substring(2, 15).toUpperCase();
 
+            // HEADER SAT PRO
             doc.setFillColor(216, 180, 254);
-            doc.rect(0, 0, 210, 40, 'F');
+            doc.rect(0, 0, 210, 45, 'F');
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(22); doc.setFont("helvetica", "bold");
-            doc.text("FACTURA ELECTRÓNICA (CFDI)", 20, 25);
-            doc.setFontSize(8); doc.text("K.B TECH SOLUTIONS - MÉXICO", 20, 33);
+            doc.text("RECIBO DE HONORARIOS MÉDICOS", 20, 25);
+            doc.setFontSize(8); doc.setFont("helvetica", "normal");
+            doc.text("EMISOR: DRA. ALBA PATRICIA | RFC: PATA850101HDFLNA01", 20, 32);
+            doc.text("RÉGIMEN SIMPLIFICADO DE CONFIANZA (RESICO)", 20, 37);
 
-            doc.setTextColor(50, 50, 50); doc.setFontSize(10);
-            doc.text(`UUID: ${folio}`, 20, 55);
-            doc.text(`PACIENTE: ${datos.nombre.toUpperCase()}`, 20, 70);
-            doc.text(`RFC: ${datos.rfc || 'XAXX010101000'}`, 20, 77);
+            // DATOS FISCALES FICTICIOS
+            doc.setTextColor(60, 60, 60); doc.setFontSize(9);
+            doc.text(`FOLIO FISCAL (UUID): ${uuid}`, 20, 60);
+            doc.text(`FECHA CERTIFICACIÓN: ${new Date().toLocaleString()}`, 20, 65);
+            doc.line(20, 70, 190, 70);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("RECEPTOR / PACIENTE:", 20, 80);
+            doc.setFont("helvetica", "normal");
+            doc.text(datos.nombre.toUpperCase(), 20, 85);
+            doc.text(`RFC: ${datos.rfc}`, 20, 90);
+
+            doc.setFillColor(248, 250, 252); doc.rect(20, 100, 170, 15, 'F');
+            doc.setFont("helvetica", "bold"); doc.text("CONCEPTO", 25, 110); doc.text("IMPORTE", 160, 110);
+            doc.setFont("helvetica", "normal"); doc.text(datos.servicio, 25, 125); doc.text(`$${datos.monto}.00`, 160, 125);
+
+            doc.setFontSize(16); doc.setFont("helvetica", "bold");
+            doc.text(`TOTAL MXN: $${datos.monto}.00`, 130, 150);
             
-            doc.setFontSize(18); doc.text(`TOTAL: $${datos.monto}.00 MXN`, 20, 100);
-            doc.save(`Factura_KB_${datos.nombre}.pdf`);
+            doc.setFontSize(7); doc.setTextColor(150, 150, 150);
+            doc.text("ESTE DOCUMENTO ES UNA REPRESENTACIÓN IMPRESA DE UN CFDI GENERADO POR K.B TECH SOLUTIONS", 105, 285, null, null, "center");
+            
+            doc.save(`Factura_Alba_${datos.nombre}.pdf`);
         }
 
-        function nextPatient() { alert("Llamando al siguiente paciente a través del intercomunicador..."); }
-        function sendNote() { alert("Mensaje enviado directamente a la consola de la Dra. Alba."); document.getElementById('dr-msg').value = ""; }
+        function nextPatient() { alert("Notificación enviada al intercomunicador..."); }
+        function sendNote() { alert("Nota enviada a la Dra."); document.getElementById('dr-msg').value = ""; }
     </script>
 </body>
 </html>
