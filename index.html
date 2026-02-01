@@ -76,20 +76,24 @@
 
         async function enviarCita() {
             const btn = event.target;
+            
+            // Los nombres de la izquierda deben ser IGUALES a las columnas en Supabase
             const datos = {
                 nombre: document.getElementById('p-nombre').value,
                 telefono: document.getElementById('p-tel').value,
                 fecha: document.getElementById('p-fecha').value,
                 motivo: document.getElementById('p-motivo').value
-                // Quitamos "estado" porque no existe en tu tabla manual de Supabase
             };
 
-            if(!datos.nombre || !datos.telefono) return alert("Por favor complete los datos.");
+            if(!datos.nombre || !datos.telefono || !datos.fecha) {
+                return alert("Por favor completa los datos obligatorios.");
+            }
 
             btn.innerText = "SINCRONIZANDO...";
             btn.disabled = true;
 
             try {
+                // Importante: La tabla debe llamarse "Citas" con C mayúscula en Supabase
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
                     method: 'POST',
                     headers: {
@@ -106,12 +110,14 @@
                     location.reload();
                 } else {
                     const errorMsg = await response.json();
-                    console.error(errorMsg);
-                    throw new Error('Error en el Motor');
+                    console.error("Error de Supabase:", errorMsg);
+                    alert("Error en el Motor: Revisa los nombres de las columnas.");
                 }
             } catch (e) {
-                alert("Error de conexión. Revisa que tu tabla se llame 'Citas' con C mayúscula.");
-                btn.innerText = "REINTENTAR";
+                console.error(e);
+                alert("Error de conexión. Verifica internet o la URL.");
+            } finally {
+                btn.innerText = "CONFIRMAR SOLICITUD";
                 btn.disabled = false;
             }
         }
