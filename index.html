@@ -69,65 +69,72 @@
         </div>
     </main>
 
-    <script>
-        // 🗝️ MOTOR CENTRAL K.B TECH SOLUTIONS
-        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
-        const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
+    // 🗝️ MOTOR CENTRAL K.B SOLUTIONS
+const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
+const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
 
-        async function enviarCita() {
-            const btn = event.target;
-            
-            // Los nombres de la izquierda deben ser IGUALES a las columnas en Supabase
-            const datos = {
-    nombre: document.getElementById('p-nombre').value,
-    telefono: document.getElementById('p-tel').value,
-    fecha: document.getElementById('p-fecha').value,
-    motivo: document.getElementById('p-motivo').value,
-    // Enviamos los valores iniciales para tus nuevas columnas
-    prioridad_ia: "Pendiente de análisis", 
-    estado_contacto: "Nuevo registro"
-};
-            };
+async function enviarCita() {
+    // 1. Prevenir que el botón se use dos veces
+    const btn = event.target;
+    
+    // 2. Recolectar datos
+    const nombre = document.getElementById('p-nombre').value;
+    const telefono = document.getElementById('p-tel').value;
+    const fecha = document.getElementById('p-fecha').value;
+    const motivo = document.getElementById('p-motivo').value;
 
-            if(!datos.nombre || !datos.telefono || !datos.fecha) {
-                return alert("Por favor completa los datos obligatorios.");
-            }
+    // 3. Validación de campos (Aquí corregimos el 'Illegal Return')
+    if(!nombre || !telefono || !fecha) {
+        alert("⚠️ Por favor llena Nombre, Teléfono y Fecha.");
+        return; // Ahora el return está dentro de la función, donde sí es legal
+    }
 
-            btn.innerText = "SINCRONIZANDO...";
-            btn.disabled = true;
+    // 4. Paquete de datos sincronizado con tus columnas de Supabase
+    const datos = {
+        nombre: nombre,
+        telefono: telefono,
+        fecha: fecha,
+        motivo: motivo,
+        prioridad_ia: "Pendiente",
+        estado_contacto: "Nuevo"
+    };
 
-            try {
-                // Importante: La tabla debe llamarse "Citas" con C mayúscula en Supabase
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify(datos)
-                });
+    btn.innerText = "CONECTANDO...";
+    btn.disabled = true;
 
-                if (response.ok) {
-                    alert("¡Cita enviada al Motor K.B con éxito!");
-                    location.reload();
-                } else {
-                    const errorMsg = await response.json();
-                    console.error("Error de Supabase:", errorMsg);
-                    alert("Error en el Motor: Revisa los nombres de las columnas.");
-                }
-            } catch (e) {
-                console.error(e);
-                alert("Error de conexión. Verifica internet o la URL.");
-            } finally {
-                btn.innerText = "CONFIRMAR SOLICITUD";
-                btn.disabled = false;
-            }
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(datos)
+        });
+
+        if (response.ok) {
+            alert("✅ ¡Cita sincronizada con éxito en K.B Tech!");
+            location.reload();
+        } else {
+            const errorJson = await response.json();
+            console.error("Error del Motor:", errorJson);
+            alert("❌ Error 400: Revisa que las columnas prioridad_ia y estado_contacto existan en Supabase.");
+            btn.innerText = "REINTENTAR";
+            btn.disabled = false;
         }
+    } catch (e) {
+        console.error("Fallo de red:", e);
+        alert("📡 Error de conexión con el motor.");
+        btn.innerText = "CONFIRMAR SOLICITUD";
+        btn.disabled = false;
+    }
+}
     </script>
 </body>
 </html>
+
 
 
 
