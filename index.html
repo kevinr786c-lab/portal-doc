@@ -10,7 +10,7 @@
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: linear-gradient(135deg, #ffffff 0%, #fff5f7 100%);
-            min-height: screen;
+            min-height: 100vh;
         }
         .glass-card { 
             background: rgba(255, 255, 255, 0.8); 
@@ -38,7 +38,7 @@
             <div class="mt-auto px-4 py-6 border-t border-pink-50">
                 <a href="mantenimiento.html" class="flex items-center text-slate-300 hover:text-purple-400">
                     <span class="text-xl">🛠️</span>
-                    <span class="ml-4 opacity-0 group-hover:opacity-100 font-bold [10px] uppercase tracking-tighter">Soporte K.B</span>
+                    <span class="ml-4 opacity-0 group-hover:opacity-100 font-bold text-[10px] uppercase tracking-tighter">Soporte K.B</span>
                 </a>
             </div>
         </div>
@@ -70,9 +70,9 @@
     </main>
 
     <script>
-      // 🗝️ MOTOR CENTRAL SOLUCIONES KB
-const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
-const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
+        // 🗝️ MOTOR CENTRAL K.B TECH SOLUTIONS
+        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
 
         async function enviarCita() {
             const btn = event.target;
@@ -80,13 +80,13 @@ const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM";
                 nombre: document.getElementById('p-nombre').value,
                 telefono: document.getElementById('p-tel').value,
                 fecha: document.getElementById('p-fecha').value,
-                motivo: document.getElementById('p-motivo').value,
-                estado: 'Pendiente'
+                motivo: document.getElementById('p-motivo').value
+                // Quitamos "estado" porque no existe en tu tabla manual de Supabase
             };
 
             if(!datos.nombre || !datos.telefono) return alert("Por favor complete los datos.");
 
-            btn.innerText = "ENVIANDO...";
+            btn.innerText = "SINCRONIZANDO...";
             btn.disabled = true;
 
             try {
@@ -104,16 +104,21 @@ const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM";
                 if (response.ok) {
                     alert("¡Cita enviada al Motor K.B con éxito!");
                     location.reload();
-                } else { throw new Error('Error'); }
+                } else {
+                    const errorMsg = await response.json();
+                    console.error(errorMsg);
+                    throw new Error('Error en el Motor');
+                }
             } catch (e) {
-                alert("Error de conexión con el motor.");
-                btn.innerText = "CONFIRMAR SOLICITUD";
+                alert("Error de conexión. Revisa que tu tabla se llame 'Citas' con C mayúscula.");
+                btn.innerText = "REINTENTAR";
                 btn.disabled = false;
             }
         }
     </script>
 </body>
 </html>
+
 
 
 
