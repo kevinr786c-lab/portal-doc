@@ -6,40 +6,43 @@
     <title>Panel Dra. Alba | K.B Tech Solutions</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fdfcfd; }
-        .card-cita { transition: transform 0.2s; border-left: 4px solid #f472b6; }
-        .card-cita:hover { transform: scale(1.01); }
+        .card-cita { transition: all 0.3s ease; border-left: 6px solid #f472b6; }
+        .card-cita:hover { transform: translateY(-5px); shadow: 0 10px 25px -5px rgba(244, 114, 182, 0.2); }
+        .badge-ia { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.05em; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
     <div class="max-w-4xl mx-auto">
-        <header class="flex justify-between items-center mb-10 border-b border-pink-100 pb-6">
+        <header class="flex justify-between items-end mb-10 border-b border-pink-100 pb-6">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800">Agenda Médica</h1>
-                <p class="text-pink-500 font-medium">Dra. Alba Patricia</p>
+                <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Agenda Médica</h1>
+                <p class="text-pink-500 font-medium flex items-center gap-2">
+                    Dra. Alba Patricia 
+                    <span id="contador-citas" class="bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full text-xs">0 citas</span>
+                </p>
             </div>
             <div class="text-right">
-                <span class="text-[10px] bg-slate-100 px-3 py-1 rounded-full text-slate-500 uppercase tracking-widest">Motor K.B v1.0</span>
+                <span class="text-[10px] bg-slate-800 text-white px-3 py-1 rounded-full uppercase tracking-widest font-bold">Motor K.B Inteligente</span>
             </div>
         </header>
 
-        <div id="contenedor-citas" class="grid gap-4">
-            <div class="text-center py-20 text-slate-400 italic">
-                Conectando con el servidor central de K.B...
+        <div id="contenedor-citas" class="grid gap-6">
+            <div class="text-center py-20 text-slate-400 italic animate-pulse">
+                Sincronizando con el servidor central de K.B...
             </div>
         </div>
     </div>
 
     <script>
-        // 🗝️ LLAVES MAESTRAS CORREGIDAS
+        // 🗝️ LLAVES MAESTRAS K.B SOLUTIONS
         const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
 
         async function obtenerCitas() {
             try {
-                // Hacemos la consulta a la tabla 'Citas'
                 const respuesta = await fetch(`${SUPABASE_URL}/rest/v1/Citas?select=*`, {
                     method: 'GET',
                     headers: {
@@ -51,37 +54,61 @@
 
                 const citas = await respuesta.json();
                 const lista = document.getElementById('contenedor-citas');
+                const contador = document.getElementById('contador-citas');
+
+                // Actualizar contador
+                contador.innerText = `${citas.length} citas registradas`;
 
                 if (citas.length === 0) {
-                    lista.innerHTML = `<p class="text-center text-slate-400">No hay citas registradas hoy.</p>`;
+                    lista.innerHTML = `<div class="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-100 text-slate-400">No hay citas pendientes hoy.</div>`;
                     return;
                 }
 
-                // Dibujamos las citas en la pantalla
-                lista.innerHTML = citas.map(cita => `
-                    <div class="card-cita bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                        <div>
-                            <h3 class="font-bold text-xl text-slate-800">${cita.nombre}</h3>
-                            <p class="text-slate-500 text-sm">📅 Fecha: ${cita.fecha} | 📱 WhatsApp: ${cita.telefono}</p>
-                        </div>
-                        <div class="bg-pink-50 p-3 rounded-xl w-full md:w-64">
-                            <p class="text-xs text-pink-400 uppercase font-bold mb-1">Motivo:</p>
-                            <p class="text-slate-600 text-sm italic">"${cita.motivo || 'Sin motivo especificado'}"</p>
+                // Dibujamos las citas con las nuevas funciones inteligentes
+                lista.innerHTML = citas.map(cita => {
+                    // Lógica para color de Prioridad
+                    const colorPrioridad = cita.prioridad_ia === 'Urgente' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600';
+                    const colorEstado = cita.estado_contacto === 'Nuevo' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-600';
+
+                    return `
+                    <div class="card-cita bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                        <div class="flex flex-col md:flex-row justify-between gap-4">
+                            <div class="flex-grow">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <h3 class="font-black text-xl text-slate-800">${cita.nombre}</h3>
+                                    <span class="badge-ia uppercase px-2 py-1 rounded-lg ${colorEstado}">${cita.estado_contacto || 'Pendiente'}</span>
+                                </div>
+                                <p class="text-slate-500 text-sm font-medium italic">📅 ${cita.fecha} | 📱 WhatsApp: ${cita.telefono}</p>
+                                
+                                <div class="mt-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                    <p class="text-[10px] text-slate-400 uppercase font-black mb-1 tracking-tighter text-left">Motivo de consulta:</p>
+                                    <p class="text-slate-700 text-sm leading-relaxed font-medium">"${cita.motivo || 'Sin descripción'}"</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col justify-center items-end min-w-[140px] border-l border-slate-50 pl-4">
+                                <span class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest text-left">Análisis IA:</span>
+                                <div class="badge-ia uppercase px-4 py-2 rounded-xl text-center w-full ${colorPrioridad}">
+                                    ${cita.prioridad_ia || 'Analizando...'}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
 
             } catch (error) {
                 document.getElementById('contenedor-citas').innerHTML = `
-                    <div class="bg-red-50 text-red-500 p-4 rounded-xl text-center">
-                        Error de conexión: Revisa la URL y la Key de Supabase.
+                    <div class="bg-red-50 text-red-500 p-6 rounded-3xl text-center font-bold">
+                        ⚠️ Error en el Motor K.B: Verifica la conexión.
                     </div>
                 `;
             }
         }
 
-        // Ejecutar la carga al abrir la página
         obtenerCitas();
+        // Refresco automático cada 30 segundos para la Dra.
+        setInterval(obtenerCitas, 30000);
     </script>
 </body>
 </html>
