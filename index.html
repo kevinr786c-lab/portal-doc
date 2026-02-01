@@ -79,10 +79,14 @@
             
             // Los nombres de la izquierda deben ser IGUALES a las columnas en Supabase
             const datos = {
-                nombre: document.getElementById('p-nombre').value,
-                telefono: document.getElementById('p-tel').value,
-                fecha: document.getElementById('p-fecha').value,
-                motivo: document.getElementById('p-motivo').value
+    nombre: document.getElementById('p-nombre').value,
+    telefono: document.getElementById('p-tel').value,
+    fecha: document.getElementById('p-fecha').value,
+    motivo: document.getElementById('p-motivo').value,
+    // Enviamos los valores iniciales para tus nuevas columnas
+    prioridad_ia: "Pendiente de análisis", 
+    estado_contacto: "Nuevo registro"
+};
             };
 
             if(!datos.nombre || !datos.telefono || !datos.fecha) {
@@ -124,6 +128,7 @@
     </script>
 </body>
 </html>
+
 
 
 
