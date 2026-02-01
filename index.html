@@ -63,77 +63,81 @@
             <input type="date" id="p-fecha" class="w-full p-4 rounded-2xl bg-white border border-pink-50 focus:border-pink-300 outline-none transition">
             <textarea id="p-motivo" class="w-full p-4 rounded-2xl bg-white border border-pink-50 focus:border-pink-300 outline-none transition h-24" placeholder="Motivo de la consulta"></textarea>
 
-            <button onclick="enviarCita()" class="w-full py-5 bg-pink-400 text-white font-bold rounded-2xl hover:bg-pink-500 transition-all shadow-lg shadow-pink-200 mt-4">
+            <button onclick="enviarCita()" id="btn-confirmar" class="w-full py-5 bg-pink-400 text-white font-bold rounded-2xl hover:bg-pink-500 transition-all shadow-lg shadow-pink-200 mt-4">
                 Confirmar Solicitud
             </button>
         </div>
     </main>
 
-    // 🗝️ MOTOR CENTRAL K.B SOLUTIONS
-const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
-const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
+    <script>
+        // 🗝️ MOTOR CENTRAL K.B TECH SOLUTIONS
+        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
 
-async function enviarCita() {
-    // 1. Prevenir que el botón se use dos veces
-    const btn = event.target;
-    
-    // 2. Recolectar datos
-    const nombre = document.getElementById('p-nombre').value;
-    const telefono = document.getElementById('p-tel').value;
-    const fecha = document.getElementById('p-fecha').value;
-    const motivo = document.getElementById('p-motivo').value;
+        async function enviarCita() {
+            // 1. Obtener el botón correctamente
+            const btn = document.getElementById('btn-confirmar');
+            
+            // 2. Recolectar datos de los campos
+            const nombreVal = document.getElementById('p-nombre').value;
+            const telVal = document.getElementById('p-tel').value;
+            const fechaVal = document.getElementById('p-fecha').value;
+            const motivoVal = document.getElementById('p-motivo').value;
 
-    // 3. Validación de campos (Aquí corregimos el 'Illegal Return')
-    if(!nombre || !telefono || !fecha) {
-        alert("⚠️ Por favor llena Nombre, Teléfono y Fecha.");
-        return; // Ahora el return está dentro de la función, donde sí es legal
-    }
+            // 3. Validación (El 'return' ahora es legal aquí adentro)
+            if(!nombreVal || !telVal || !fechaVal) {
+                alert("⚠️ Por favor completa los campos obligatorios: Nombre, Teléfono y Fecha.");
+                return;
+            }
 
-    // 4. Paquete de datos sincronizado con tus columnas de Supabase
-    const datos = {
-        nombre: nombre,
-        telefono: telefono,
-        fecha: fecha,
-        motivo: motivo,
-        prioridad_ia: "Pendiente",
-        estado_contacto: "Nuevo"
-    };
+            // 4. Preparar el paquete de datos para Supabase
+            const datosCita = {
+                nombre: nombreVal,
+                telefono: telVal,
+                fecha: fechaVal,
+                motivo: motivoVal,
+                prioridad_ia: "Pendiente",
+                estado_contacto: "Nuevo"
+            };
 
-    btn.innerText = "CONECTANDO...";
-    btn.disabled = true;
+            // 5. Bloquear botón para evitar duplicados
+            btn.innerText = "SINCRONIZANDO...";
+            btn.disabled = true;
 
-    try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
-            method: 'POST',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify(datos)
-        });
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(datosCita)
+                });
 
-        if (response.ok) {
-            alert("✅ ¡Cita sincronizada con éxito en K.B Tech!");
-            location.reload();
-        } else {
-            const errorJson = await response.json();
-            console.error("Error del Motor:", errorJson);
-            alert("❌ Error 400: Revisa que las columnas prioridad_ia y estado_contacto existan en Supabase.");
-            btn.innerText = "REINTENTAR";
-            btn.disabled = false;
+                if (response.ok) {
+                    alert("✅ ¡Cita sincronizada con éxito en el Motor K.B!");
+                    location.reload();
+                } else {
+                    const errorResponse = await response.json();
+                    console.error("Error del Motor:", errorResponse);
+                    alert("❌ Error 400: Revisa que las columnas prioridad_ia y estado_contacto existan en Supabase.");
+                    btn.innerText = "REINTENTAR";
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error("Fallo de conexión:", error);
+                alert("📡 Error de red. Revisa tu conexión o la URL del motor.");
+                btn.innerText = "CONFIRMAR SOLICITUD";
+                btn.disabled = false;
+            }
         }
-    } catch (e) {
-        console.error("Fallo de red:", e);
-        alert("📡 Error de conexión con el motor.");
-        btn.innerText = "CONFIRMAR SOLICITUD";
-        btn.disabled = false;
-    }
-}
     </script>
 </body>
 </html>
+
+
 
 
 
