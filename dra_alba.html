@@ -20,8 +20,8 @@
     <div id="pantalla-bloqueo" class="fixed inset-0 lock-screen flex items-center justify-center">
         <div class="text-center p-10 bg-white rounded-[3rem] shadow-2xl border border-pink-100 max-w-sm w-full">
             <span class="text-6xl mb-6 block">🩺</span>
-            <h2 class="text-xl font-black text-slate-800 mb-2 uppercase tracking-tighter">Acceso Restringido</h2>
-            <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-8 font-bold italic">Panel de Control Dra. Alba Patricia</p>
+            <h2 class="text-xl font-black text-slate-800 mb-2 uppercase tracking-tighter text-left">Acceso Restringido</h2>
+            <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-8 font-bold italic text-left">Panel de Control Dra. Alba Patricia</p>
             <input type="password" id="pin-acceso" class="w-full p-5 rounded-2xl bg-slate-100 text-center text-3xl tracking-[0.8em] mb-6 outline-none border-none focus:ring-2 focus:ring-pink-300 transition-all" placeholder="****">
             <button onclick="verificarAcceso()" class="w-full py-4 bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-pink-500 shadow-lg transition-all">Desbloquear Panel</button>
         </div>
@@ -29,15 +29,15 @@
 
     <div id="contenido-panel" class="hidden opacity-0 transition-opacity duration-1000">
         <nav class="glass-header sticky top-0 z-50 border-b border-slate-200 px-6 py-4 mb-8">
-            <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="max-w-7xl mx-auto flex justify-between items-center text-left">
                 <div>
-                    <h1 class="text-2xl font-extrabold text-slate-800 tracking-tighter">K.B <span class="text-pink-500 italic">Medical Intelligence</span></h1>
+                    <h1 class="text-2xl font-extrabold text-slate-800 tracking-tighter uppercase">K.B TECH SOLUTIONS</h1>
                     <p class="text-[10px] text-slate-400 uppercase tracking-[0.4em] font-bold">Powered by K.B Tech Solutions</p>
                 </div>
                 <div class="flex gap-4 items-center">
                     <div class="text-right hidden md:block">
                         <p id="fecha-actual" class="text-xs font-bold text-slate-500 uppercase"></p>
-                        <p class="text-[10px] text-emerald-500 font-black tracking-widest">LIVE SYNC ACTIVE</p>
+                        <p class="text-[10px] text-emerald-500 font-black tracking-widest italic uppercase">Sync Live Active</p>
                     </div>
                     <div class="h-10 w-10 bg-pink-100 rounded-full flex items-center justify-center text-xl border-2 border-white shadow-sm">👩‍⚕️</div>
                 </div>
@@ -47,18 +47,17 @@
         <main class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
             
             <div class="lg:col-span-4 space-y-8">
-                
                 <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-pink-100 relative overflow-hidden">
                     <div class="absolute top-0 right-0 p-4 opacity-10 text-4xl">📝</div>
-                    <h2 class="text-lg font-black text-slate-800 mb-4 flex items-center gap-2">Notas Asistente <span class="animate-ping h-2 w-2 rounded-full bg-pink-400"></span></h2>
+                    <h2 class="text-lg font-black text-slate-800 mb-4 flex items-center gap-2 text-left">Notas Asistente <span class="animate-ping h-2 w-2 rounded-full bg-pink-400"></span></h2>
                     <div id="contenedor-notas" class="bg-pink-50/50 p-5 rounded-3xl min-h-[100px] text-sm text-slate-600 italic border border-pink-100 text-left">Sincronizando avisos...</div>
                 </div>
 
                 <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-6 opacity-10 text-5xl italic font-black">K.B</div>
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-5xl italic font-black text-left">K.B</div>
                     <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-pink-300 mb-1 leading-tight text-left">Rentabilidad Mensual</h3>
                     <p class="text-4xl font-black mb-1 tracking-tighter text-left" id="ganancia-mes">$0.00</p>
-                    <p class="text-[8px] text-slate-500 uppercase font-bold tracking-widest text-left">Balance en tiempo real</p>
+                    <p class="text-[8px] text-slate-500 uppercase font-bold tracking-widest text-left uppercase">Balance en tiempo real</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100">
@@ -72,10 +71,11 @@
 
             <div class="lg:col-span-8">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-black text-slate-800 italic">Agenda Activa</h2>
+                    <h2 class="text-2xl font-black text-slate-800 italic text-left uppercase tracking-tight">Agenda Activa</h2>
                     <div class="bg-white px-4 py-2 rounded-2xl shadow-sm text-xs font-bold text-slate-500 border border-slate-100">En Espera: <span id="total-hoy" class="text-pink-500">0</span></div>
                 </div>
-                <div id="contenedor-citas" class="space-y-4"></div>
+                <div id="contenedor-citas" class="space-y-4">
+                    </div>
             </div>
         </main>
 
@@ -89,7 +89,6 @@
         const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
 
-        // 📊 Inicializar Gráfica de Línea Profesional
         const ctx = document.getElementById('graficaFinanciera').getContext('2d');
         let chartFinanzas = new Chart(ctx, {
             type: 'line',
@@ -105,11 +104,12 @@
 
         function verificarAcceso() {
             const pin = document.getElementById('pin-acceso').value;
-            if(pin === "1234") { // PIN de acceso
+            if(pin === "1234") {
                 document.getElementById('pantalla-bloqueo').classList.add('hidden');
-                document.getElementById('contenido-panel').classList.remove('hidden');
-                setTimeout(() => { document.getElementById('contenido-panel').style.opacity = "1"; }, 50);
-                syncMaster();
+                const panel = document.getElementById('contenido-panel');
+                panel.classList.remove('hidden');
+                setTimeout(() => { panel.style.opacity = "1"; }, 50);
+                syncMaster(); // Ejecutar carga inmediata
             } else {
                 alert("Acceso Denegado: PIN Incorrecto.");
             }
@@ -117,42 +117,34 @@
 
         async function syncMaster() {
             try {
-                // 1. Obtener Citas
                 const resCitas = await fetch(`${SUPABASE_URL}/rest/v1/Citas?select=*&order=id.desc`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const todasLasCitas = await resCitas.json();
                 
-                // 2. Obtener Gastos
                 const resGastos = await fetch(`${SUPABASE_URL}/rest/v1/Gastos?select=*`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const gastosData = await resGastos.json();
 
-                // 3. Obtener Notas
                 const resNotas = await fetch(`${SUPABASE_URL}/rest/v1/Notas?select=*&order=id.desc&limit=1`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const notasData = await resNotas.json();
 
-                // Actualizar Notas
                 if (notasData.length > 0) {
-                    document.getElementById('contenedor-notas').innerHTML = `<p class="font-bold text-pink-600 mb-1">Último aviso:</p>"${notasData[0].contenido}"<p class="text-[9px] mt-2 text-slate-400 font-bold tracking-widest uppercase">${new Date(notasData[0].fecha).toLocaleTimeString()}</p>`;
+                    document.getElementById('contenedor-notas').innerHTML = `<p class="font-bold text-pink-600 mb-1">Último aviso:</p>"${notasData[0].contenido}"<p class="text-[9px] mt-2 text-slate-400 font-bold uppercase tracking-widest">${new Date(notasData[0].fecha).toLocaleTimeString()}</p>`;
                 }
 
-                // Filtrar Citas Activas
                 const citasActivas = todasLasCitas.filter(c => c.estado_contacto !== 'Cobrado');
                 document.getElementById('total-hoy').innerText = citasActivas.length;
 
-                // Calcular Finanzas
-                const ingresosMensuales = todasLasCitas.filter(c => c.estado_contacto === 'Cobrado').length * 800; // Asumiendo $800 por paciente
+                const ingresosMensuales = todasLasCitas.filter(c => c.estado_contacto === 'Cobrado').length * 800; 
                 const gastosMensuales = gastosData.reduce((acc, g) => acc + parseFloat(g.monto), 0);
                 document.getElementById('ganancia-mes').innerText = `$${(ingresosMensuales - gastosMensuales).toLocaleString()}.00`;
 
-                // Actualizar Gráfica
                 actualizarGraficaFinanciera(todasLasCitas, gastosData);
 
-                // Pintar Pacientes
                 const contenedor = document.getElementById('contenedor-citas');
                 contenedor.innerHTML = citasActivas.map(cita => `
                     <div class="card-pro bg-white p-6 rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-4">
@@ -160,14 +152,14 @@
                             <div class="h-14 w-14 bg-pink-50 rounded-2xl flex items-center justify-center text-2xl border border-pink-100 shadow-inner">👤</div>
                             <div class="flex-grow">
                                 <div class="flex items-center gap-3">
-                                    <h3 class="font-bold text-slate-800 text-lg">${cita.nombre}</h3>
-                                    <span class="badge-ia px-2 py-1 rounded-lg bg-emerald-100 text-emerald-600 uppercase font-black tracking-tighter">${cita.estado_contacto || 'NUEVO'}</span>
+                                    <h3 class="font-bold text-slate-800 text-lg tracking-tight uppercase">${cita.nombre}</h3>
+                                    <span class="px-2 py-1 rounded-lg bg-emerald-100 text-emerald-600 text-[10px] font-black uppercase tracking-tighter">${cita.estado_contacto || 'NUEVO'}</span>
                                 </div>
                                 <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest italic">📅 ${cita.fecha} | 📱 ${cita.telefono}</p>
                             </div>
                         </div>
                         <div class="text-right">
-                            <span class="badge-ia px-3 py-1 rounded-xl uppercase ${cita.prioridad_ia === 'Urgente' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}">${cita.prioridad_ia || 'NORMAL'}</span>
+                            <span class="px-3 py-1 rounded-xl uppercase text-[10px] font-bold ${cita.prioridad_ia === 'Urgente' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}">${cita.prioridad_ia || 'NORMAL'}</span>
                         </div>
                     </div>
                 `).join('');
@@ -178,7 +170,6 @@
         function actualizarGraficaFinanciera(citas, gastos) {
             const ingresosSemana = [0,0,0,0,0,0,0];
             const gastosSemana = [0,0,0,0,0,0,0];
-
             citas.filter(c => c.estado_contacto === 'Cobrado').forEach(c => {
                 const dia = new Date(c.fecha).getDay();
                 ingresosSemana[dia] += 800;
@@ -187,7 +178,6 @@
                 const dia = new Date(g.fecha).getDay();
                 gastosSemana[dia] += parseFloat(g.monto);
             });
-
             chartFinanzas.data.datasets[0].data = ingresosSemana;
             chartFinanzas.data.datasets[1].data = gastosSemana;
             chartFinanzas.update();
