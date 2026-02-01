@@ -2,22 +2,80 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Portal Dra. Alba Patricia</title>
-    </head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Dra. Alba Patricia | K.B Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;700&display=swap');
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(135deg, #ffffff 0%, #fff5f7 100%);
+            min-height: screen;
+        }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 192, 203, 0.3);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <input type="text" id="p-nombre" placeholder="Nombre">
-    <input type="text" id="p-tel" placeholder="WhatsApp">
-    <input type="date" id="p-fecha">
-    <textarea id="p-motivo" placeholder="Motivo"></textarea>
-    <button onclick="enviarCita()">Confirmar Solicitud</button>
+    <aside class="fixed left-0 top-0 h-full w-16 hover:w-48 bg-white/80 backdrop-blur-md border-r border-pink-100 transition-all duration-300 z-50 overflow-hidden group shadow-xl">
+        <div class="flex flex-col h-full py-6">
+            <div class="px-4 mb-10 font-black text-purple-400 italic">K.B</div>
+            <nav class="flex-grow space-y-4">
+                <a href="asistente.html" class="flex items-center px-4 py-3 text-slate-400 hover:text-purple-400 hover:bg-pink-50 transition">
+                    <span class="text-xl">📋</span>
+                    <span class="ml-4 opacity-0 group-hover:opacity-100 font-bold text-xs tracking-widest uppercase">Asistente</span>
+                </a>
+                <a href="dra_alba.html" class="flex items-center px-4 py-3 text-slate-400 hover:text-purple-400 hover:bg-pink-50 transition">
+                    <span class="text-xl">👩‍⚕️</span>
+                    <span class="ml-4 opacity-0 group-hover:opacity-100 font-bold text-xs tracking-widest uppercase">Dra. Alba</span>
+                </a>
+            </nav>
+            <div class="mt-auto px-4 py-6 border-t border-pink-50">
+                <a href="mantenimiento.html" class="flex items-center text-slate-300 hover:text-purple-400">
+                    <span class="text-xl">🛠️</span>
+                    <span class="ml-4 opacity-0 group-hover:opacity-100 font-bold [10px] uppercase tracking-tighter">Soporte K.B</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <div class="fixed top-0 right-0 p-8 opacity-20 pointer-events-none select-none z-0">
+        <span class="text-7xl">🪷</span>
+    </div>
+    <div class="fixed bottom-0 right-10 p-8 opacity-20 pointer-events-none select-none z-0 rotate-12">
+        <span class="text-8xl">🌸</span>
+    </div>
+
+    <main class="glass-card p-10 w-full max-w-lg shadow-2xl relative z-10">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-slate-700 tracking-tight">Dra. Alba <span class="text-pink-400">Patricia</span></h1>
+            <p class="text-[10px] text-slate-400 uppercase tracking-[0.3em] mt-2">Agenda de Citas Médicas</p>
+        </header>
+
+        <div class="space-y-4">
+            <input type="text" id="p-nombre" class="w-full p-4 rounded-2xl bg-white border border-pink-50 focus:border-pink-300 outline-none transition" placeholder="Nombre completo">
+            <input type="text" id="p-tel" class="w-full p-4 rounded-2xl bg-white border border-pink-50 focus:border-pink-300 outline-none transition" placeholder="WhatsApp / Teléfono">
+            <input type="date" id="p-fecha" class="w-full p-4 rounded-2xl bg-white border border-pink-50 focus:border-pink-300 outline-none transition">
+            <textarea id="p-motivo" class="w-full p-4 rounded-2xl bg-white border border-pink-50 focus:border-pink-300 outline-none transition h-24" placeholder="Motivo de la consulta"></textarea>
+
+            <button onclick="enviarCita()" class="w-full py-5 bg-pink-400 text-white font-bold rounded-2xl hover:bg-pink-500 transition-all shadow-lg shadow-pink-200 mt-4">
+                Confirmar Solicitud
+            </button>
+        </div>
+    </main>
 
     <script>
-        // 🗝️ CONFIGURACIÓN DEL MOTOR K.B (Tus llaves actuales)
-        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; //
-        const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7Ghz..."; //
+        // 🗝️ MOTOR CENTRAL K.B SOLUTIONS
+        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
+        const SUPABASE_KEY = "TU_LLAVE_ANON_AQUÍ"; // Pon aquí la llave de Supabase
 
         async function enviarCita() {
+            const btn = event.target;
             const datos = {
                 nombre: document.getElementById('p-nombre').value,
                 telefono: document.getElementById('p-tel').value,
@@ -26,8 +84,12 @@
                 estado: 'Pendiente'
             };
 
+            if(!datos.nombre || !datos.telefono) return alert("Por favor complete los datos.");
+
+            btn.innerText = "ENVIANDO...";
+            btn.disabled = true;
+
             try {
-                // Conexión directa a la tabla 'Citas'
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
                     method: 'POST',
                     headers: {
@@ -40,16 +102,19 @@
                 });
 
                 if (response.ok) {
-                    alert("¡Motor K.B: Cita sincronizada!");
+                    alert("¡Cita enviada al Motor K.B con éxito!");
                     location.reload();
-                }
+                } else { throw new Error('Error'); }
             } catch (e) {
-                alert("Error de conexión con el Motor Central");
+                alert("Error de conexión con el motor.");
+                btn.innerText = "CONFIRMAR SOLICITUD";
+                btn.disabled = false;
             }
         }
     </script>
 </body>
 </html>
+
 
 
 
