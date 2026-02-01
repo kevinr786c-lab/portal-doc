@@ -33,10 +33,9 @@
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
         
         <div class="lg:col-span-4 space-y-8">
-            
             <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-pink-100 relative overflow-hidden">
                 <div class="absolute top-0 right-0 p-4 opacity-10 text-4xl">📝</div>
                 <h2 class="text-lg font-black text-slate-800 mb-4 flex items-center gap-2">
@@ -58,7 +57,7 @@
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-black text-slate-800">Próximos Pacientes</h2>
                 <div class="bg-white px-4 py-2 rounded-2xl shadow-sm text-xs font-bold text-slate-500 border border-slate-100">
-                    Total Registros: <span id="total-hoy" class="text-pink-500">0</span>
+                    En Espera: <span id="total-hoy" class="text-pink-500">0</span>
                 </div>
             </div>
 
@@ -67,19 +66,23 @@
         </div>
     </main>
 
+    <footer class="text-center py-10 opacity-60">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em] mb-1">K.B TECH SOLUTIONS</p>
+        <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Powered by <span class="text-pink-400">K.B Tech Solutions</span></p>
+    </footer>
+
     <script>
         const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
 
-        // 📊 Inicializar Gráfica
         const ctx = document.getElementById('graficaCitas').getContext('2d');
         let chartCitas = new Chart(ctx, {
-            type: 'bar', // Cambiado a barras para mejor visualización de carga
+            type: 'bar',
             data: {
                 labels: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
                 datasets: [{
                     label: 'Pacientes',
-                    data: [0, 0, 0, 0, 0, 0, 0], // Se llenará con datos reales
+                    data: [0, 0, 0, 0, 0, 0, 0],
                     backgroundColor: '#f472b6',
                     borderRadius: 10
                 }]
@@ -89,19 +92,22 @@
 
         async function syncMaster() {
             try {
-                // 1. Obtener Citas con toda la información inteligente
+                // 🚀 FILTRO INTELIGENTE: Traemos todos pero filtramos los finalizados en el código
                 const resCitas = await fetch(`${SUPABASE_URL}/rest/v1/Citas?select=*&order=id.desc`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
-                const citas = await resCitas.json();
+                const todasLasCitas = await resCitas.json();
                 
-                // 2. Obtener Notas Reales de la Tabla 'Notas'
+                // Filtramos para que la Dra. NO vea los que ya pagaron o se fueron
+                const citasActivas = todasLasCitas.filter(c => 
+                    c.estado_contacto !== 'Finalizado' && c.estado_contacto !== 'Cobrado'
+                );
+
                 const resNotas = await fetch(`${SUPABASE_URL}/rest/v1/Notas?select=*&order=id.desc&limit=1`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const notasData = await resNotas.json();
 
-                // Pintar Notas
                 if (notasData.length > 0) {
                     document.getElementById('contenedor-notas').innerHTML = `
                         <p class="font-bold text-pink-600 mb-1">Último aviso:</p>
@@ -110,11 +116,10 @@
                     `;
                 }
 
-                // Actualizar Contador e Interfaz de Citas
-                document.getElementById('total-hoy').innerText = citas.length;
+                document.getElementById('total-hoy').innerText = citasActivas.length;
                 
                 const contenedor = document.getElementById('contenedor-citas');
-                contenedor.innerHTML = citas.map(cita => {
+                contenedor.innerHTML = citasActivas.map(cita => {
                     const colorPrioridad = cita.prioridad_ia === 'Urgente' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600';
                     return `
                     <div class="card-pro bg-white p-6 rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-4">
@@ -138,8 +143,7 @@
                     `;
                 }).join('');
 
-                // 3. Actualizar Gráfica con datos reales
-                actualizarGrafica(citas);
+                actualizarGrafica(todasLasCitas); // La gráfica sí usa todos para ver el historial
 
             } catch (e) { console.error("Error en Sync:", e); }
         }
@@ -154,10 +158,9 @@
             chartCitas.update();
         }
 
-        // Reloj y Carga Inicial
         document.getElementById('fecha-actual').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
         syncMaster();
-        setInterval(syncMaster, 10000); // Live Sync cada 10 seg
+        setInterval(syncMaster, 10000);
     </script>
 </body>
 </html>
