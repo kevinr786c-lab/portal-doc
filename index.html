@@ -1,45 +1,56 @@
-<script>
-    // 🗝️ CONFIGURACIÓN DEL MOTOR K.B SOLUTIONS
-    const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co."; 
-    const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Portal Dra. Alba Patricia</title>
+    </head>
+<body>
 
-    async function enviarCita() {
-        const datos = {
-            nombre: document.getElementById('p-nombre').value,
-            telefono: document.getElementById('p-tel').value, // Asegúrate que el id sea 'p-tel' o 'p-telefono'
-            fecha: document.getElementById('p-fecha').value,
-            motivo: document.getElementById('p-motivo').value,
-            estado: 'Pendiente'
-        };
+    <input type="text" id="p-nombre" placeholder="Nombre">
+    <input type="text" id="p-tel" placeholder="WhatsApp">
+    <input type="date" id="p-fecha">
+    <textarea id="p-motivo" placeholder="Motivo"></textarea>
+    <button onclick="enviarCita()">Confirmar Solicitud</button>
 
-        // Validación rápida
-        if(!datos.nombre || !datos.telefono) return alert("Por favor completa tus datos.");
+    <script>
+        // 🗝️ CONFIGURACIÓN DEL MOTOR K.B (Tus llaves actuales)
+        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; //
+        const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7Ghz..."; //
 
-        try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'return=minimal'
-                },
-                body: JSON.stringify(datos)
-            });
+        async function enviarCita() {
+            const datos = {
+                nombre: document.getElementById('p-nombre').value,
+                telefono: document.getElementById('p-tel').value,
+                fecha: document.getElementById('p-fecha').value,
+                motivo: document.getElementById('p-motivo').value,
+                estado: 'Pendiente'
+            };
 
-            if (response.ok) {
-                alert("¡Cita registrada en Motor K.B con éxito!");
-                location.reload();
-            } else {
-                const error = await response.json();
-                console.log(error);
-                alert("Error en el Motor: " + error.message);
+            try {
+                // Conexión directa a la tabla 'Citas'
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(datos)
+                });
+
+                if (response.ok) {
+                    alert("¡Motor K.B: Cita sincronizada!");
+                    location.reload();
+                }
+            } catch (e) {
+                alert("Error de conexión con el Motor Central");
             }
-        } catch (e) {
-            alert("Error de conexión con el servidor K.B");
         }
-    }
-</script>
+    </script>
+</body>
+</html>
+
 
 
 
