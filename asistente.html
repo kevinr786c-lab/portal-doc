@@ -3,110 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K.B Tech Solutions | Gestión Asistente</title>
+    <title>K.B Tech Solutions | Gestión Asistente PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap');
         :root { --primario: #d8b4fe; --acentos: #fbcfe8; --fondo: #fcfcfd; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--fondo); color: #1e293b; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--fondo); color: #1e293b; overflow-x: hidden; }
         .glass-panel { background: white; border: 1px solid #f1f5f9; border-radius: 2.5rem; box-shadow: 0 10px 40px rgba(216, 180, 254, 0.1); }
         .input-pure { background: #f8fafc; border: 2px solid transparent; border-radius: 1.2rem; padding: 14px 18px; width: 100%; outline: none; transition: 0.3s; font-size: 0.9rem; }
         .input-pure:focus { border-color: var(--primario); background: white; }
         .capsule-menu { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border: 1px solid #f3f0ff; padding: 12px 30px; border-radius: 100px; display: flex; gap: 25px; align-items: center; box-shadow: 0 20px 50px rgba(216, 180, 254, 0.2); z-index: 1000; }
-        .nav-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; cursor: pointer; }
+        .nav-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; cursor: pointer; font-size: 1.2rem; }
         .nav-icon.active { background: #f3f0ff; color: #a855f7; }
         .btn-premium { background: linear-gradient(135deg, #d8b4fe 0%, #fbcfe8 100%); color: white; font-weight: 800; border-radius: 1.2rem; padding: 16px; transition: 0.4s; width: 100%; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(216, 180, 254, 0.4); }
+        .btn-action { transition: 0.2s; }
+        .btn-action:hover { transform: scale(1.1); }
     </style>
 </head>
 <body class="p-4 md:p-12">
 
     <header class="max-w-7xl mx-auto flex justify-between items-start mb-10">
         <div>
-            <h1 class="text-4xl font-black text-slate-800 tracking-tight">Panel de <span class="text-purple-400">Asistente</span></h1>
+            <h1 class="text-4xl font-black text-slate-800 tracking-tight italic">K.B <span class="text-purple-400">Assistant</span></h1>
             <p id="live-date" class="text-slate-400 font-medium mt-1 uppercase text-[10px] tracking-widest"></p>
         </div>
         <div class="flex items-center gap-3">
-            <span class="px-4 py-2 bg-emerald-50 text-emerald-500 rounded-full text-[9px] font-black uppercase border border-emerald-100">Sync Live</span>
+            <span class="px-4 py-2 bg-emerald-50 text-emerald-500 rounded-full text-[9px] font-black uppercase border border-emerald-100 animate-pulse">Live Sync Active</span>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 pb-32">
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 pb-32 text-left">
         
         <div class="lg:col-span-4 space-y-6">
             <div class="glass-panel p-8 border-t-8 border-purple-300">
-                <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">Atención Actual</h3>
+                <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 italic text-left">Control de Turno</h3>
                 <div class="mb-8">
                     <p class="text-3xl font-extrabold text-slate-700 leading-tight" id="patient-display">Seleccione Paciente</p>
-                    <p class="text-[10px] font-bold text-purple-400 uppercase mt-1 tracking-widest">Estado: Espera</p>
+                    <p id="patient-phone-display" class="text-[10px] font-bold text-slate-400 uppercase mt-1">Sin datos de contacto</p>
                 </div>
+                
+                <div class="flex gap-4 mb-6">
+                    <button onclick="contactarWhatsApp()" class="flex-1 py-3 bg-emerald-100 text-emerald-600 rounded-xl font-bold text-[10px] uppercase btn-action">WhatsApp</button>
+                    <button onclick="llamarPaciente()" class="flex-1 py-3 bg-blue-100 text-blue-600 rounded-xl font-bold text-[10px] uppercase btn-action">Llamar</button>
+                </div>
+
                 <div class="space-y-3">
-                    <button onclick="prepararCobro()" class="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-emerald-100 hover:bg-emerald-500 hover:text-white transition-all">
+                    <button onclick="prepararCobro()" class="w-full py-4 bg-purple-50 text-purple-600 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-purple-100 hover:bg-purple-500 hover:text-white transition-all">
                         💰 Finalizar y Cobrar
                     </button>
-                    <button onclick="nextPatient()" class="btn-premium">Siguiente Paciente ➜</button>
                 </div>
             </div>
 
             <div class="glass-panel p-8">
-                <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Notas para la Dra.</h3>
-                <textarea id="dr-msg" placeholder="Ej: El paciente Toby ya llegó..." class="input-pure h-28 resize-none"></textarea>
-                <button id="btn-nota" onclick="sendNote()" class="w-full mt-4 py-3 border border-purple-100 text-purple-400 rounded-xl font-bold text-[9px] uppercase tracking-widest transition-all hover:bg-purple-50">Enviar Aviso</button>
+                <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 italic text-left">Calendario Inteligente</h3>
+                <input type="date" id="filtro-fecha" onchange="cargarCitasDesdeSupabase()" class="input-pure mb-2">
+                <p class="text-[8px] text-slate-400 px-2 italic text-left">Filtrar agenda por día específico</p>
+            </div>
+
+            <div class="glass-panel p-8">
+                <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 italic text-left">Buzón Dra. Alba</h3>
+                <textarea id="dr-msg" placeholder="Ej: Toby ya está en sala de espera..." class="input-pure h-24 resize-none"></textarea>
+                <button id="btn-nota" onclick="sendNote()" class="w-full mt-4 py-3 border border-purple-100 text-purple-400 rounded-xl font-bold text-[9px] uppercase tracking-widest transition-all hover:bg-purple-50">Sincronizar Aviso</button>
             </div>
         </div>
 
         <div class="lg:col-span-8">
             <div id="view-agenda" class="glass-panel p-10 min-h-[550px]">
                 <div class="flex justify-between items-center mb-8">
-                    <h3 class="text-[9px] font-black uppercase tracking-widest text-slate-400">Agenda del Día (Sync Motor K.B)</h3>
-                    <button onclick="cargarCitasDesdeSupabase()" class="text-[10px] font-black text-purple-400 uppercase">🔄 Refrescar</button>
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800">Agenda Activa (Motor K.B)</h3>
+                    <button onclick="cargarCitasDesdeSupabase()" class="text-[10px] font-black text-purple-400 uppercase">🔄 Actualizar</button>
                 </div>
                 <div class="overflow-hidden rounded-3xl border border-slate-50">
                     <table class="w-full text-left">
                         <thead class="bg-slate-50 text-[9px] uppercase font-black text-slate-400">
-                            <tr><th class="p-5">Paciente</th><th class="p-5">WhatsApp</th><th class="p-5">Fecha</th><th class="p-5">Acción</th></tr>
+                            <tr><th class="p-5">Paciente</th><th class="p-5">WhatsApp</th><th class="p-5">Estado IA</th><th class="p-5">Acción</th></tr>
                         </thead>
-                        <tbody id="tabla-citas-body" class="text-sm font-medium text-slate-600">
-                            </tbody>
+                        <tbody id="tabla-citas-body" class="text-sm font-medium text-slate-600"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="view-history" class="hidden glass-panel p-10">
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8 italic text-left">Historial de Pacientes Atendidos</h3>
+                <div class="overflow-hidden rounded-3xl border border-slate-50">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 text-[9px] uppercase font-black text-slate-400">
+                            <tr><th class="p-5">Paciente</th><th class="p-5">Fecha</th><th class="p-5">Motivo</th><th class="p-5">Status</th></tr>
+                        </thead>
+                        <tbody id="tabla-historial-body" class="text-sm font-medium text-slate-400 italic"></tbody>
                     </table>
                 </div>
             </div>
 
             <div id="view-register" class="hidden glass-panel p-10">
-                <h3 class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-8">Sincronización de Cobro SAT</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div>
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Nombre Completo</label>
-                        <input type="text" id="reg-nombre" class="input-pure" placeholder="Nombre del Paciente">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Tipo de Servicio</label>
-                        <select id="reg-servicio" class="input-pure">
-                            <option value="Consulta Especialidad">Consulta Especialidad</option>
-                            <option value="Consulta General">Consulta General</option>
-                            <option value="Procedimiento">Procedimiento</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">Monto ($)</label>
-                        <input type="number" id="reg-monto" class="input-pure" placeholder="0.00">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-2">RFC Receptor</label>
-                        <input type="text" id="reg-rfc" class="input-pure" placeholder="XAXX010101000">
-                    </div>
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8">Liquidación de Consulta</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-left">
+                    <div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Nombre</label><input type="text" id="reg-nombre" class="input-pure" readonly></div>
+                    <div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Monto ($)</label><input type="number" id="reg-monto" class="input-pure" placeholder="800.00"></div>
                 </div>
                 <div class="flex gap-4">
-                    <button onclick="procesarCobro()" class="btn-premium flex-grow">Registrar & Generar CFDI</button>
-                    <button onclick="switchView('agenda')" class="px-8 bg-slate-100 text-slate-400 rounded-2xl font-bold uppercase text-[10px]">Atrás</button>
+                    <button id="btn-procesar" onclick="procesarCobroFinal()" class="btn-premium flex-grow tracking-widest">Registrar Pago & PDF</button>
+                    <button onclick="switchView('agenda')" class="px-8 bg-slate-100 text-slate-400 rounded-2xl font-bold uppercase text-[10px]">Cerrar</button>
                 </div>
             </div>
         </div>
     </main>
 
+    <footer class="text-center py-10 opacity-60">
+        <p class="text-[11px] font-black text-slate-800 uppercase tracking-[0.4em] mb-1">K.B TECH SOLUTIONS</p>
+        <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Powered by <span class="text-pink-400">K.B Tech Solutions</span></p>
+    </footer>
+
     <nav class="capsule-menu">
-        <div class="nav-icon active" id="nav-agenda" onclick="switchView('agenda')">📅</div>
-        <div class="nav-icon" id="nav-register" onclick="switchView('register')">📄</div>
+        <div class="nav-icon active" id="nav-agenda" onclick="switchView('agenda')">📋</div>
+        <div class="nav-icon" id="nav-history" onclick="switchView('history')">🕰️</div>
         <div class="nav-icon" onclick="location.reload()">🔒</div>
     </nav>
 
@@ -114,114 +125,139 @@
         const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
 
+        let pacienteSeleccionado = null;
+
         function updateTime() {
             const now = new Date();
-            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-            document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', options);
+            document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
         }
         setInterval(updateTime, 1000); updateTime();
 
         function switchView(view) {
             document.getElementById('view-agenda').classList.toggle('hidden', view !== 'agenda');
             document.getElementById('view-register').classList.toggle('hidden', view !== 'register');
+            document.getElementById('view-history').classList.toggle('hidden', view !== 'history');
             document.getElementById('nav-agenda').classList.toggle('active', view === 'agenda');
-            document.getElementById('nav-register').classList.toggle('active', view === 'register');
+            document.getElementById('nav-history').classList.toggle('active', view === 'history');
         }
 
         async function cargarCitasDesdeSupabase() {
             try {
+                const fechaFiltro = document.getElementById('filtro-fecha').value;
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/Citas?select=*&order=id.desc`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const datos = await res.json();
-                const tbody = document.getElementById('tabla-citas-body');
                 
-                tbody.innerHTML = datos.map(c => `
-                    <tr class="border-b border-slate-50 hover:bg-purple-50 transition cursor-pointer" onclick="seleccionarPaciente('${c.nombre}')">
-                        <td class="p-5 font-bold">${c.nombre}</td>
+                const tbodyAgenda = document.getElementById('tabla-citas-body');
+                const tbodyHistorial = document.getElementById('tabla-historial-body');
+                
+                // Filtrar por fecha si existe el filtro
+                let citasFiltradas = datos;
+                if(fechaFiltro) citasFiltradas = datos.filter(c => c.fecha === fechaFiltro);
+
+                // Separar Activos de Cobrados
+                const activos = citasFiltradas.filter(c => c.estado_contacto !== 'Cobrado');
+                const historial = citasFiltradas.filter(c => c.estado_contacto === 'Cobrado');
+
+                tbodyAgenda.innerHTML = activos.map(c => `
+                    <tr class="border-b border-slate-50 hover:bg-purple-50 transition cursor-pointer" onclick="seleccionarPaciente('${c.nombre}', '${c.telefono}', ${c.id})">
+                        <td class="p-5 font-bold text-slate-800">${c.nombre}</td>
                         <td class="p-5">${c.telefono}</td>
-                        <td class="p-5">${c.fecha}</td>
-                        <td class="p-5"><button class="text-purple-400 text-[10px] font-black uppercase">Atender</button></td>
+                        <td class="p-5"><span class="px-2 py-1 rounded-lg bg-pink-50 text-pink-500 text-[9px] font-black uppercase tracking-tighter">${c.prioridad_ia || 'Analizando'}</span></td>
+                        <td class="p-5"><button class="text-purple-400 text-[10px] font-black uppercase">Seleccionar</button></td>
                     </tr>
                 `).join('');
+
+                tbodyHistorial.innerHTML = historial.map(c => `
+                    <tr class="border-b border-slate-50 opacity-60">
+                        <td class="p-5 font-bold">${c.nombre}</td>
+                        <td class="p-5">${c.fecha}</td>
+                        <td class="p-5 text-xs truncate max-w-[100px]">${c.motivo || 'N/A'}</td>
+                        <td class="p-5 text-emerald-500 font-black text-[9px] uppercase">COBRADO</td>
+                    </tr>
+                `).join('');
+
             } catch (e) { console.error("Fallo de motor", e); }
         }
 
-        function seleccionarPaciente(nombre) {
+        function seleccionarPaciente(nombre, tel, id) {
+            pacienteSeleccionado = { nombre, tel, id };
             document.getElementById('patient-display').innerText = nombre;
+            document.getElementById('patient-phone-display').innerText = "📱 " + tel;
         }
 
-        // --- 📝 FUNCIÓN MAESTRA DE NOTAS ---
+        function contactarWhatsApp() {
+            if(!pacienteSeleccionado) return alert("Selecciona un paciente.");
+            const cleanPhone = pacienteSeleccionado.tel.replace(/\D/g, '');
+            window.open(`https://wa.me/${cleanPhone}?text=Hola%20${pacienteSeleccionado.nombre},%20te%20escribimos%20de%20la%20clínica%20de%20la%20Dra.%20Alba.%20Favor%20de%20confirmar%20asistencia.`);
+        }
+
+        function llamarPaciente() {
+            if(!pacienteSeleccionado) return alert("Selecciona un paciente.");
+            window.location.href = `tel:${pacienteSeleccionado.tel}`;
+        }
+
         async function sendNote() {
             const btn = document.getElementById('btn-nota');
             const contenido = document.getElementById('dr-msg').value;
-
-            if(!contenido) return alert("Escribe un mensaje para la doctora.");
-
-            btn.innerText = "ENVIANDO...";
-            btn.disabled = true;
+            if(!contenido) return alert("Escribe un mensaje.");
+            btn.innerText = "SYNC..."; btn.disabled = true;
 
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/Notas`, {
+                await fetch(`${SUPABASE_URL}/rest/v1/Notas`, {
                     method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        contenido: contenido,
-                        remitente: 'Asistente'
-                    })
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contenido: contenido, remitente: 'Asistente' })
                 });
-
-                if (response.ok) {
-                    alert("✅ Nota enviada al panel de la Dra. Alba");
-                    document.getElementById('dr-msg').value = "";
-                } else {
-                    alert("❌ Error al enviar la nota.");
-                }
-            } catch (e) {
-                console.error(e);
-                alert("📡 Error de conexión.");
-            } finally {
-                btn.innerText = "ENVIAR AVISO";
-                btn.disabled = false;
-            }
+                alert("Nota enviada."); document.getElementById('dr-msg').value = "";
+            } catch (e) { alert("Error"); } finally { btn.innerText = "Sincronizar Aviso"; btn.disabled = false; }
         }
 
         function prepararCobro() {
-            const nombre = document.getElementById('patient-display').innerText;
-            if(nombre === "Seleccione Paciente") return alert("Elige un paciente de la lista.");
-            document.getElementById('reg-nombre').value = nombre;
+            if(!pacienteSeleccionado) return alert("Elige un paciente.");
+            document.getElementById('reg-nombre').value = pacienteSeleccionado.nombre;
             switchView('register');
         }
 
-        async function procesarCobro() {
-            const datos = {
-                nombre: document.getElementById('reg-nombre').value,
-                monto: document.getElementById('reg-monto').value,
-                servicio: document.getElementById('reg-servicio').value,
-                rfc: document.getElementById('reg-rfc').value || 'XAXX010101000'
-            };
+        async function procesarCobroFinal() {
+            const btn = document.getElementById('btn-procesar');
+            const monto = document.getElementById('reg-monto').value;
+            if(!monto) return alert("Ingresa el monto.");
 
-            if(!datos.nombre || !datos.monto) return alert("Datos insuficientes.");
-            generarFacturaSAT(datos);
-            alert("Operación Exitosa en Motor K.B");
-            location.reload();
+            btn.innerText = "COBRANDO..."; btn.disabled = true;
+
+            try {
+                // 🚀 ESTO ES LO QUE HACE QUE SE BORRE DE LA AGENDA
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas?id=eq.${pacienteSeleccionado.id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({ estado_contacto: 'Cobrado' })
+                });
+
+                if (response.ok) {
+                    generarFacturaPDF(pacienteSeleccionado.nombre, monto);
+                    alert("Pago registrado. El paciente ahora está en el Historial.");
+                    location.reload();
+                }
+            } catch (e) { alert("Error de Motor."); }
         }
 
-        function generarFacturaSAT(datos) {
+        function generarFacturaPDF(nombre, monto) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const uuid = Math.random().toString(36).substring(2, 15).toUpperCase();
             doc.setFillColor(216, 180, 254); doc.rect(0, 0, 210, 40, 'F');
-            doc.setTextColor(255, 255, 255); doc.setFontSize(20); doc.setFont("helvetica", "bold");
-            doc.text("HONORARIOS MÉDICOS", 20, 25);
-            doc.text(`UUID: ${uuid}`, 20, 35);
-            doc.setTextColor(60, 60, 60); doc.text(`PACIENTE: ${datos.nombre}`, 20, 60);
-            doc.text(`TOTAL: $${datos.monto}.00 MXN`, 20, 80);
-            doc.save(`Recibo_${datos.nombre}.pdf`);
+            doc.setTextColor(255, 255, 255); doc.setFontSize(20); doc.text("RECIBO DE HONORARIOS", 20, 25);
+            doc.setTextColor(60, 60, 60); doc.setFontSize(12);
+            doc.text(`PACIENTE: ${nombre}`, 20, 60);
+            doc.text(`TOTAL: $${monto}.00 MXN`, 20, 75);
+            doc.text(`K.B TECH SOLUTIONS - DRA. ALBA PATRICIA`, 20, 100);
+            doc.save(`Ticket_KB_${nombre}.pdf`);
         }
 
         cargarCitasDesdeSupabase();
