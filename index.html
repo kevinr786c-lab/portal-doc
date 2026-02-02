@@ -8,14 +8,15 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
         :root { --main: #7c3aed; --bg-soft: #f8fafc; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-soft); transition: 0.5s; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-soft); transition: background 0.5s ease; }
         .glass-card { background: white; border-radius: 2.5rem; border: 1px solid rgba(0,0,0,0.05); }
-        .accent-border { border-left: 4px solid var(--main); }
+        .fade-in { opacity: 0; transition: opacity 0.7s ease; }
+        .fade-in.visible { opacity: 1; }
     </style>
 </head>
 <body class="p-4 md:p-10 text-left">
 
-    <div id="main-container" class="max-w-xl mx-auto glass-card p-8 md:p-12 shadow-2xl text-left hidden opacity-0 transition-opacity duration-700">
+    <div id="main-container" class="max-w-xl mx-auto glass-card p-8 md:p-12 shadow-2xl text-left hidden fade-in">
         <header class="text-center mb-10">
             <div id="doctor-avatar" class="w-20 h-20 mx-auto bg-slate-100 rounded-full mb-4 flex items-center justify-center text-3xl shadow-inner border-4 border-white">🏥</div>
             <h1 id="doctor-name" class="text-2xl font-black text-slate-800 tracking-tighter italic">Cargando...</h1>
@@ -24,18 +25,18 @@
 
         <form id="form-cita" class="space-y-6 text-left">
             <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Nombre del Paciente</label>
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 text-left">Nombre del Paciente</label>
                 <input type="text" id="paciente" placeholder="Ej: Juan Pérez" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-opacity-50 transition" required>
             </div>
             
             <div class="grid grid-cols-2 gap-4 text-left">
                 <div class="space-y-2">
                     <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Fecha</label>
-                    <input type="date" id="fecha" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none" required>
+                    <input type="date" id="fecha" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none text-left" required>
                 </div>
                 <div class="space-y-2">
                     <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Hora</label>
-                    <select id="hora" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none" required>
+                    <select id="hora" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none text-left" required>
                         <option value="09:00 AM">09:00 AM</option>
                         <option value="10:00 AM">10:00 AM</option>
                         <option value="11:00 AM">11:00 AM</option>
@@ -47,7 +48,7 @@
 
             <div class="space-y-2">
                 <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Notas para el Médico</label>
-                <textarea id="notas" placeholder="¿Algún síntoma o duda?" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none h-24"></textarea>
+                <textarea id="notas" placeholder="¿Algún síntoma o duda?" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none h-24 text-left"></textarea>
             </div>
 
             <button type="submit" id="btn-submit" class="w-full py-5 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl hover:scale-105 transition-all duration-300">
@@ -57,9 +58,9 @@
     </div>
 
     <div id="error-screen" class="hidden max-w-sm mx-auto text-center p-10 bg-white rounded-[3rem] shadow-xl">
-        <span class="text-5xl block mb-4">⚠️</span>
-        <h2 class="font-black text-slate-800 uppercase tracking-tighter">Enlace Inválido</h2>
-        <p class="text-xs text-slate-400 mt-2">No se encontró el identificador del médico. Contacte a soporte de K.B Tech.</p>
+        <span class="text-5xl block mb-4 text-left">⚠️</span>
+        <h2 class="font-black text-slate-800 uppercase tracking-tighter text-left">Enlace Inválido</h2>
+        <p class="text-xs text-slate-400 mt-2 text-left text-left">No se encontró el identificador del médico. Contacte a soporte de K.B Tech.</p>
     </div>
 
     <script>
@@ -88,26 +89,25 @@
                     
                     aplicarTema(doc.template_id);
                     
-                    // Mostrar contenedor con animación
                     const container = document.getElementById('main-container');
                     container.classList.remove('hidden');
-                    setTimeout(() => { container.style.opacity = "1"; }, 50);
+                    setTimeout(() => container.classList.add('visible'), 50);
                 } else {
                     document.getElementById('error-screen').classList.remove('hidden');
                 }
             } catch (err) {
-                console.error("Error de conexión:", err);
+                console.error("Error:", err);
                 document.getElementById('error-screen').classList.remove('hidden');
             }
         }
 
         function aplicarTema(id) {
             const colors = {
-                1: { main: "#7c3aed", bg: "#f5f3ff", ring: "rgba(124, 58, 237, 0.2)" }, // Violeta
-                2: { main: "#2563eb", bg: "#eff6ff", ring: "rgba(37, 99, 235, 0.2)" },  // Azul
-                3: { main: "#059669", bg: "#ecfdf5", ring: "rgba(5, 150, 105, 0.2)" },  // Verde
-                4: { main: "#db2777", bg: "#fff1f2", ring: "rgba(219, 39, 119, 0.2)" }, // Rosa
-                5: { main: "#1e293b", bg: "#f8fafc", ring: "rgba(30, 41, 59, 0.2)" }   // Negro
+                1: { main: "#7c3aed", bg: "#f5f3ff" }, // Violeta
+                2: { main: "#2563eb", bg: "#eff6ff" }, // Azul
+                3: { main: "#059669", bg: "#ecfdf5" }, // Verde
+                4: { main: "#db2777", bg: "#fff1f2" }, // Rosa
+                5: { main: "#1e293b", bg: "#f8fafc" }  // Negro
             };
             const theme = colors[id] || colors[1];
             
@@ -116,8 +116,6 @@
             
             const btn = document.getElementById('btn-submit');
             btn.style.backgroundColor = theme.main;
-            btn.style.boxShadow = `0 10px 25px -5px ${theme.ring}`;
-            
             document.getElementById('doctor-name').style.color = theme.main;
             document.getElementById('doctor-avatar').style.color = theme.main;
         }
@@ -136,7 +134,7 @@
                 doctor_id: doctorId 
             };
 
-            await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
                 method: 'POST',
                 headers: { 
                     'apikey': SUPABASE_KEY, 
@@ -146,12 +144,17 @@
                 body: JSON.stringify(cita)
             });
 
-            alert(`¡Cita agendada con éxito para el paciente ${cita.nombre}!`);
-            location.reload();
+            if(response.ok) {
+                alert(`¡Cita confirmada, ${cita.nombre}! El Dr/Dra lo espera.`);
+                location.reload();
+            } else {
+                alert("Hubo un error. Intenta de nuevo.");
+                btn.innerText = "Confirmar Cita";
+                btn.disabled = false;
+            }
         });
 
         cargarConfiguracionDoctor();
     </script>
 </body>
 </html>
-
