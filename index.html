@@ -3,67 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K.B TECH | MASTER PANEL</title>
+    <title>K.B TECH SOLUTIONS | Sincronía Médica Total</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; color: #1e293b; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; color: #1e293b; scroll-behavior: smooth; }
         .kb-card { transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f1f5f9; cursor: pointer; }
         .kb-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.15); border-color: #6366f1; }
         .gradient-text { background: linear-gradient(90deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-bg { background: radial-gradient(circle at top right, #f5f3ff, transparent); }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="p-6 md:p-20 text-left">
+<body class="text-left hero-bg">
 
-    <header class="max-w-5xl mx-auto text-center mb-20 text-left">
-        <h1 class="text-6xl md:text-7xl font-black italic tracking-tighter mb-4 text-left">K.B <span class="gradient-text text-left">TECH</span></h1>
-        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.5em] mb-10 text-center text-left">Centro de Mando · Sincronía Perfecta</p>
+    <nav class="max-w-7xl mx-auto p-8 flex justify-between items-center sticky top-0 z-50 glass rounded-b-3xl">
+        <h1 id="master-logo" onclick="activarProtocoloSecreto()" class="text-3xl font-black italic tracking-tighter cursor-pointer">K.B <span class="gradient-text">TECH</span></h1>
+        <div class="space-x-8 hidden md:flex items-center">
+            <a href="#servicios" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-600">Servicios</a>
+            <a href="#precios" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-600">Precios</a>
+            <a href="registro.html" class="px-6 py-3 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition">Comenzar Ahora</a>
+        </div>
+    </nav>
+
+    <header class="max-w-5xl mx-auto text-center pt-24 pb-20 px-6">
+        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-500 mb-4 block">Tijuana · Baja California</span>
+        <h2 class="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter mb-8 leading-none">
+            La salud no espera, <br> tu <span class="gradient-text italic">agenda tampoco.</span>
+        </h2>
+        <p class="text-lg text-slate-500 max-w-2xl mx-auto mb-12 font-medium">
+            No somos solo un software; somos la columna vertebral de tu éxito médico. Automatiza, cobra y crece con tecnología de grado élite.
+        </p>
     </header>
 
-    <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
-        
-        <div onclick="window.location.href='registro.html'" class="kb-card bg-white p-10 rounded-[3rem] text-left">
-            <div class="text-4xl mb-6 text-left">🚀</div>
-            <h3 class="text-xl font-black mb-2 text-left">Alta de Médicos</h3>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Registrar Nuevo Cliente</p>
+    <section class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-6 mb-32">
+        <div onclick="window.location.href='registro.html'" class="kb-card bg-white p-10 rounded-[3rem]">
+            <div class="text-4xl mb-6">🚀</div>
+            <h3 class="text-xl font-black mb-2 uppercase tracking-tighter">Alta de Médicos</h3>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Registrar Nuevo Cliente</p>
         </div>
 
-        <div onclick="window.location.href='índice.html'" class="kb-card bg-white p-10 rounded-[3rem] text-left">
-            <div class="text-4xl mb-6 text-left">📅</div>
-            <h3 class="text-xl font-black mb-2 text-left">Portal de Citas</h3>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Link para Pacientes</p>
+        <div onclick="window.location.href='índice.html'" class="kb-card bg-white p-10 rounded-[3rem]">
+            <div class="text-4xl mb-6">📅</div>
+            <h3 class="text-xl font-black mb-2 uppercase tracking-tighter">Portal de Citas</h3>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Link para Pacientes</p>
         </div>
 
-        <div onclick="window.location.href='app.html'" class="kb-card bg-slate-900 p-10 rounded-[3rem] text-white text-left">
-            <div class="text-4xl mb-6 text-left">🔐</div>
-            <h3 class="text-xl font-black text-indigo-300 mb-2 text-left text-left text-left">Panel Médico</h3>
-            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-left text-left">Acceso con PIN</p>
+        <div onclick="window.location.href='app.html'" class="kb-card bg-slate-900 p-10 rounded-[3rem] text-white">
+            <div class="text-4xl mb-6">🔐</div>
+            <h3 class="text-xl font-black text-indigo-300 mb-2 uppercase tracking-tighter">Panel Médico</h3>
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Acceso con PIN</p>
         </div>
+    </section>
 
-        <div onclick="window.location.href='web.html'" class="kb-card bg-white p-10 rounded-[3rem] text-left">
-            <div class="text-4xl mb-6 text-left">🌐</div>
-            <h3 class="text-xl font-black mb-2 text-left">Web de Ventas</h3>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Planes y Beneficios</p>
+    <section id="servicios" class="max-w-7xl mx-auto px-6 py-20 border-t border-slate-100">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+            <div>
+                <h3 class="text-4xl font-black tracking-tighter mb-6">Nuestra <span class="text-indigo-600">Misión</span></h3>
+                <p class="text-slate-500 leading-relaxed mb-10 font-medium">
+                    Digitalizar la medicina en el norte del país, eliminando las esperas innecesarias y asegurando que cada doctor tenga el control absoluto de su tiempo y sus ingresos.
+                </p>
+                <div class="p-8 bg-indigo-50 rounded-[2.5rem] border border-indigo-100">
+                    <h4 class="font-black text-indigo-900 uppercase text-xs tracking-widest mb-2">Visión 2026</h4>
+                    <p class="text-sm text-indigo-600 font-medium">Ser el estándar tecnológico para todas las torres médicas de Zona Río y más allá.</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-6 bg-white border border-slate-100 rounded-3xl shadow-xl shadow-slate-100">
+                    <span class="text-2xl mb-4 block">⚡</span>
+                    <h5 class="font-black text-[10px] uppercase tracking-widest mb-2">Sincronía</h5>
+                    <p class="text-[10px] text-slate-400">Datos en tiempo real sin latencia.</p>
+                </div>
+                <div class="p-6 bg-white border border-slate-100 rounded-3xl mt-8">
+                    <span class="text-2xl mb-4 block">🛡️</span>
+                    <h5 class="font-black text-[10px] uppercase tracking-widest mb-2">Privacidad</h5>
+                    <p class="text-[10px] text-slate-400">Encriptación de grado militar.</p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div onclick="window.open('https://supabase.com/dashboard/project/ypxtceahtjxcdaefskxe/editor/30282', '_blank')" class="kb-card bg-white p-10 rounded-[3rem] text-left border-dashed border-2">
-            <div class="text-4xl mb-6 text-left">🗂️</div>
-            <h3 class="text-xl font-black mb-2 text-left text-left">Base de Datos</h3>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Gestionar Datos Reales</p>
+    <section id="precios" class="max-w-7xl mx-auto px-6 py-32">
+        <div class="text-center mb-16">
+            <h3 class="text-4xl font-black tracking-tighter">Planes que <span class="text-indigo-600">impulsan</span></h3>
+            <p class="text-slate-400 text-sm mt-4">Inversión inteligente para resultados reales.</p>
         </div>
-
-        <div onclick="window.location.href='dra_alba.html'" class="kb-card bg-indigo-50 p-10 rounded-[3rem] text-left border-indigo-100">
-            <div class="text-4xl mb-6 text-left">👩‍⚕️</div>
-            <h3 class="text-xl font-black text-indigo-900 mb-2 text-left">Dra. Alba</h3>
-            <p class="text-[10px] font-bold text-indigo-300 uppercase tracking-widest text-left">Prototipo Original</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div class="p-12 bg-white rounded-[3.5rem] border border-slate-100 hover:border-indigo-200 transition">
+                <h4 class="text-xl font-black mb-1">Plan Profesional</h4>
+                <p class="text-4xl font-black mb-8">$999 <span class="text-xs text-slate-300">MXN/mes</span></p>
+                <ul class="text-[10px] font-bold text-slate-500 uppercase tracking-widest space-y-4">
+                    <li>✓ Agenda Inteligente</li>
+                    <li>✓ Perfil Personalizado</li>
+                    <li>✓ Soporte Técnico</li>
+                </ul>
+            </div>
+            <div class="p-12 bg-slate-900 text-white rounded-[3.5rem] relative overflow-hidden shadow-2xl shadow-indigo-200">
+                <div class="absolute top-0 right-0 bg-indigo-600 px-6 py-2 text-[8px] font-black uppercase tracking-[0.3em]">Top Ventas</div>
+                <h4 class="text-xl font-black mb-1">Plan Dominio</h4>
+                <p class="text-4xl font-black mb-8 text-indigo-400">$1,599 <span class="text-xs text-slate-500">MXN/mes</span></p>
+                <ul class="text-[10px] font-bold text-slate-400 uppercase tracking-widest space-y-4">
+                    <li>✓ WhatsApp Bot API</li>
+                    <li>✓ Garantía de Asistencia</li>
+                    <li>✓ Reportes de Ingresos</li>
+                </ul>
+            </div>
         </div>
+    </section>
 
-    </main>
-
-    <footer class="mt-32 text-center opacity-20 text-left">
-        <p class="text-[9px] font-black uppercase tracking-[0.5em] text-left">K.B Tech Solutions &copy; 2026 | Tijuana, B.C.</p>
+    <footer class="bg-slate-50 pt-32 pb-10 px-6 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-20 text-left">
+            <div>
+                <h4 class="text-xl font-black italic mb-6">K.B <span class="text-indigo-600">TECH</span></h4>
+                <p class="text-xs text-slate-400 leading-relaxed uppercase font-bold tracking-widest">
+                    Liderando la revolución médica digital desde el corazón de Baja California.
+                </p>
+            </div>
+            <div>
+                <h5 class="text-[10px] font-black uppercase tracking-[0.3em] mb-6 text-slate-900">Legal</h5>
+                <ul class="text-[10px] font-bold text-slate-400 uppercase tracking-widest space-y-4">
+                    <li class="hover:text-indigo-600 cursor-pointer">Aviso de Privacidad</li>
+                    <li class="hover:text-indigo-600 cursor-pointer">Términos de Servicio</li>
+                </ul>
+            </div>
+            <div class="text-left">
+                <h5 class="text-[10px] font-black uppercase tracking-[0.3em] mb-6 text-slate-900">Contacto</h5>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tijuana, Zona Río</p>
+                <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mt-2">soporte@kbtech.solutions</p>
+            </div>
+        </div>
+        <div class="text-center pt-10 border-t border-slate-200">
+            <p class="text-[9px] font-black uppercase tracking-[0.5em] text-slate-300">
+                Powered by <span class="text-slate-900">K.B Tech Solutions</span> &copy; 2026
+            </p>
+        </div>
     </footer>
 
+    <script>
+        // Easter Egg: El Protocolo Secreto
+        let clics = 0;
+        function activarProtocoloSecreto() {
+            clics++;
+            if (clics === 3) {
+                const pin = prompt("PROTOCOLO DE SEGURIDAD ACTIVADO: INGRESE CÓDIGO MAESTRO");
+                if (pin === "2026") { 
+                    window.location.href = 'secreto.html';
+                } else {
+                    alert("ACCESO DENEGADO");
+                    clics = 0;
+                }
+            }
+            setTimeout(() => { clics = 0; }, 2000);
+        }
+    </script>
 </body>
 </html>
-
