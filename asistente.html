@@ -26,103 +26,118 @@
     <div id="pantalla-bloqueo" class="fixed inset-0 lock-screen flex items-center justify-center">
         <div class="text-center p-10 bg-white rounded-[3rem] shadow-2xl border border-violet-100">
             <span class="text-5xl mb-4 block">💜</span>
-            <h2 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-widest">Login Asistente</h2>
+            <h2 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-widest text-center">Login Asistente</h2>
             <input type="password" id="pin-acceso" class="w-full p-4 rounded-2xl bg-violet-50 text-center text-2xl tracking-[1em] mb-4 outline-none border-none" placeholder="****">
-            <button onclick="verificarAcceso()" class="w-full py-4 bg-violet-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-violet-700 transition-all">Entrar</button>
+            <button onclick="verificarAcceso()" class="w-full py-4 bg-violet-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-violet-700 transition-all text-center">Entrar</button>
         </div>
     </div>
 
     <div id="contenido-panel" class="hidden opacity-0 transition-opacity duration-700">
-        <header class="max-w-7xl mx-auto flex justify-between items-start mb-10">
+        <header class="max-w-7xl mx-auto flex justify-between items-start mb-10 text-left">
             <div>
                 <h1 class="text-4xl font-black text-slate-800 tracking-tight italic">K.B <span class="text-purple-400">Assistant</span></h1>
-                <p id="live-date" class="text-slate-400 font-medium mt-1 uppercase text-[10px] tracking-widest"></p>
+                <p id="live-date" class="text-slate-400 font-medium mt-1 uppercase text-[10px] tracking-widest text-left"></p>
             </div>
-            <div class="flex items-center gap-3">
-                <span class="px-4 py-2 bg-violet-50 text-violet-500 rounded-full text-[9px] font-black uppercase border border-violet-100 animate-pulse">Live Sync Active</span>
+            <div class="flex items-center gap-3 text-left">
+                <span class="px-4 py-2 bg-violet-50 text-violet-500 rounded-full text-[9px] font-black uppercase border border-violet-100 animate-pulse text-left">Live Sync Active</span>
             </div>
         </header>
 
         <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 pb-32 text-left">
             
-            <div class="lg:col-span-4 space-y-6">
-                <div class="glass-panel p-8 border-t-8 border-violet-400">
+            <div class="lg:col-span-4 space-y-6 text-left">
+                <div class="glass-panel p-8 border-t-8 border-violet-400 text-left">
                     <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 italic text-left">Control de Turno</h3>
-                    <div class="mb-8">
-                        <p class="text-3xl font-extrabold text-slate-700 leading-tight" id="patient-display">Seleccione Paciente</p>
-                        <p id="patient-phone-display" class="text-[10px] font-bold text-slate-400 uppercase mt-1">Sin datos de contacto</p>
-                        <div id="patient-extra-info" class="mt-4 p-4 bg-violet-50 rounded-2xl hidden">
-                            <p class="text-[9px] font-black text-violet-400 uppercase">Hora Programada:</p>
-                            <p id="patient-hour-display" class="text-lg font-bold text-violet-700 mb-2">--:--</p>
-                            <p class="text-[9px] font-black text-violet-400 uppercase">Notas para la Dra:</p>
-                            <p id="patient-note-display" class="text-xs font-medium text-slate-600 italic">Sin notas adjuntas</p>
+                    <div class="mb-8 text-left">
+                        <p class="text-3xl font-extrabold text-slate-700 leading-tight text-left" id="patient-display">Seleccione Paciente</p>
+                        <p id="patient-phone-display" class="text-[10px] font-bold text-slate-400 uppercase mt-1 text-left">Sin datos de contacto</p>
+                        <div id="patient-extra-info" class="mt-4 p-4 bg-violet-50 rounded-2xl hidden text-left">
+                            <p class="text-[9px] font-black text-violet-400 uppercase text-left">Hora Programada:</p>
+                            <p id="patient-hour-display" class="text-lg font-bold text-violet-700 mb-2 text-left">--:--</p>
                         </div>
                     </div>
                     
-                    <div class="flex gap-4 mb-6">
-                        <button onclick="contactarWhatsApp()" class="flex-1 py-3 bg-emerald-100 text-emerald-600 rounded-xl font-bold text-[10px] uppercase btn-action">WhatsApp</button>
-                        <button onclick="llamarPaciente()" class="flex-1 py-3 bg-blue-100 text-blue-600 rounded-xl font-bold text-[10px] uppercase btn-action">Llamar</button>
+                    <div class="flex gap-4 mb-6 text-left">
+                        <button onclick="contactarWhatsApp()" class="flex-1 py-3 bg-emerald-100 text-emerald-600 rounded-xl font-bold text-[10px] uppercase btn-action text-center">WhatsApp</button>
+                        <button onclick="llamarPaciente()" class="flex-1 py-3 bg-blue-100 text-blue-600 rounded-xl font-bold text-[10px] uppercase btn-action text-center">Llamar</button>
                     </div>
 
-                    <button onclick="prepararCobro()" class="w-full py-4 bg-violet-50 text-violet-600 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-violet-100 hover:bg-violet-500 hover:text-white transition-all">
+                    <button onclick="prepararCobro()" class="w-full py-4 bg-violet-50 text-violet-600 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-violet-100 hover:bg-violet-500 hover:text-white transition-all text-center">
                         💰 Finalizar y Cobrar
                     </button>
                 </div>
 
-                <div class="glass-panel p-8 bg-violet-50/30">
-                    <h3 class="text-[9px] font-black uppercase text-slate-400 mb-4 italic text-left">Registrar Gasto del Día</h3>
-                    <input type="text" id="gasto-desc" class="input-pure mb-3" placeholder="Descripción (Ej: Material médico)">
-                    <input type="number" id="gasto-monto" class="input-pure mb-3" placeholder="Monto $">
-                    <button onclick="registrarGasto()" class="w-full py-3 bg-slate-800 text-white rounded-xl font-bold text-[9px] uppercase tracking-widest">Sincronizar Gasto</button>
+                <div class="glass-panel p-8 bg-violet-50/30 text-left">
+                    <h3 class="text-[9px] font-black uppercase text-slate-400 mb-4 italic text-left">Notas para la Dra.</h3>
+                    <div class="p-5 bg-white rounded-2xl border border-violet-100 min-h-[100px] text-left">
+                        <p id="patient-note-display" class="text-xs font-medium text-slate-600 italic text-left">Seleccione un paciente para ver sus notas.</p>
+                    </div>
                 </div>
 
-                <div class="glass-panel p-8">
-                    <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 italic text-left">Filtrar por Fecha</h3>
+                <div class="glass-panel p-8 text-left">
+                    <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 italic text-left text-left">Filtrar por Fecha</h3>
                     <input type="date" id="filtro-fecha" onchange="cargarCitasDesdeSupabase()" class="input-pure">
                 </div>
             </div>
 
-            <div class="lg:col-span-8 space-y-8">
-                <div id="view-agenda" class="glass-panel p-10 min-h-[500px]">
-                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8 text-left">Agenda Activa (Motor K.B)</h3>
-                    <div class="overflow-hidden rounded-3xl border border-slate-50">
+            <div class="lg:col-span-8 space-y-8 text-left">
+                <div id="view-agenda" class="glass-panel p-10 min-h-[500px] text-left">
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8 text-left text-left">Agenda Activa (Motor K.B)</h3>
+                    <div class="overflow-hidden rounded-3xl border border-slate-50 text-left">
                         <table class="w-full text-left">
-                            <thead class="bg-violet-50 text-[9px] uppercase font-black text-violet-400">
-                                <tr><th class="p-5">Hora</th><th class="p-5">Paciente</th><th class="p-5">Estado</th></tr>
+                            <thead class="bg-violet-50 text-[9px] uppercase font-black text-violet-400 text-left">
+                                <tr><th class="p-5 text-left">Hora</th><th class="p-5 text-left">Paciente</th><th class="p-5 text-left">Estado</th></tr>
                             </thead>
                             <tbody id="tabla-citas-body" class="text-sm font-medium text-slate-600 text-left"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <div id="view-history" class="hidden glass-panel p-10">
+                <div id="view-finance" class="hidden glass-panel p-10 text-left">
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8 text-left">Contabilidad y Gastos</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                        <div class="p-6 bg-violet-50 rounded-[2rem] text-left">
+                            <h4 class="text-[9px] font-black uppercase text-violet-400 mb-4 text-left">Registrar Gasto</h4>
+                            <input type="text" id="gasto-desc" class="input-pure mb-3" placeholder="Descripción">
+                            <input type="number" id="gasto-monto" class="input-pure mb-3" placeholder="Monto $">
+                            <button onclick="registrarGasto()" class="w-full py-3 bg-violet-600 text-white rounded-xl font-bold text-[9px] uppercase tracking-widest text-center">Sincronizar Gasto</button>
+                        </div>
+                        <div class="p-6 bg-slate-50 rounded-[2rem] text-left border border-dashed border-slate-200">
+                            <h4 class="text-[9px] font-black uppercase text-slate-400 mb-4 text-left">Facturación Híbrida</h4>
+                            <p class="text-[10px] text-slate-400 mb-4 text-left italic">Módulo para emitir facturas manuales sincronizadas con el portal.</p>
+                            <button class="w-full py-3 bg-slate-200 text-slate-500 rounded-xl font-bold text-[9px] uppercase cursor-not-allowed text-center">Próximamente</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-history" class="hidden glass-panel p-10 text-left">
                     <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8 text-left">Historial de Cobros</h3>
-                    <div class="overflow-hidden rounded-3xl border border-slate-50">
+                    <div class="overflow-hidden rounded-3xl border border-slate-50 text-left">
                         <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-[9px] uppercase font-black text-slate-400">
-                                <tr><th class="p-5">Paciente</th><th class="p-5">Fecha</th><th class="p-5">Status</th></tr>
+                            <thead class="bg-slate-50 text-[9px] uppercase font-black text-slate-400 text-left">
+                                <tr><th class="p-5 text-left">Paciente</th><th class="p-5 text-left">Fecha</th><th class="p-5 text-left">Status</th></tr>
                             </thead>
                             <tbody id="tabla-historial-body" class="text-sm text-slate-400 italic text-left"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <div id="view-register" class="hidden glass-panel p-10">
+                <div id="view-register" class="hidden glass-panel p-10 text-left">
                     <h3 class="text-[10px] font-black uppercase text-slate-800 mb-8 text-left">Confirmar Liquidación</h3>
                     <input type="text" id="reg-nombre" class="input-pure mb-4" readonly>
                     <input type="number" id="reg-monto" class="input-pure mb-6" placeholder="800.00">
-                    <div class="flex gap-4">
-                        <button onclick="procesarCobroFinal()" class="flex-grow py-4 bg-violet-600 text-white rounded-2xl font-bold uppercase text-[10px] tracking-widest">Registrar Pago</button>
-                        <button onclick="switchView('agenda')" class="px-8 bg-slate-100 text-slate-400 rounded-2xl font-bold uppercase text-[10px]">Atrás</button>
+                    <div class="flex gap-4 text-left">
+                        <button onclick="procesarCobroFinal()" class="flex-grow py-4 bg-violet-600 text-white rounded-2xl font-bold uppercase text-[10px] tracking-widest text-center">Registrar Pago</button>
+                        <button onclick="switchView('agenda')" class="px-8 bg-slate-100 text-slate-400 rounded-2xl font-bold uppercase text-[10px] text-center">Atrás</button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <nav class="capsule-menu">
+    <nav class="capsule-menu text-left">
         <div class="nav-icon active" id="nav-agenda" onclick="switchView('agenda')">📋</div>
-        <div class="nav-icon" id="nav-history" onclick="switchView('history')">🕰️</div>
+        <div class="nav-icon" id="nav-finance" onclick="switchView('finance')">💸</div> <div class="nav-icon" id="nav-history" onclick="switchView('history')">🕰️</div>
         <div class="nav-icon" onclick="location.reload()">🔒</div>
     </nav>
 
@@ -154,14 +169,14 @@
             document.getElementById('tabla-citas-body').innerHTML = activos.map(c => `
                 <tr class="border-b border-violet-50 hover:bg-violet-50 transition cursor-pointer" 
                     onclick="seleccionarPaciente('${c.nombre}', '${c.telefono}', ${c.id}, '${c.hora || '--:--'}', '${c.notas || 'Sin notas'}')">
-                    <td class="p-5 font-bold text-violet-500">${c.hora || '--:--'}</td>
-                    <td class="p-5 font-bold">${c.nombre}</td>
-                    <td class="p-5"><span class="px-2 py-1 bg-violet-100 text-violet-600 rounded text-[9px] font-black">ACTIVO</span></td>
+                    <td class="p-5 font-bold text-violet-500 text-left">${c.hora || '--:--'}</td>
+                    <td class="p-5 font-bold text-left">${c.nombre}</td>
+                    <td class="p-5 text-left"><span class="px-2 py-1 bg-violet-100 text-violet-600 rounded text-[9px] font-black">ACTIVO</span></td>
                 </tr>
             `).join('');
 
             document.getElementById('tabla-historial-body').innerHTML = historial.map(c => `
-                <tr class="border-b border-slate-50">
+                <tr class="border-b border-slate-50 text-left">
                     <td class="p-5 text-left">${c.nombre}</td>
                     <td class="p-5 text-left">${c.fecha}</td>
                     <td class="p-5 text-left text-emerald-500 font-bold text-[9px]">COBRADO</td>
@@ -174,7 +189,6 @@
             document.getElementById('patient-display').innerText = nombre;
             document.getElementById('patient-phone-display').innerText = "📱 " + tel;
             
-            // Mostrar Info Extra (Notas y Hora)
             document.getElementById('patient-extra-info').classList.remove('hidden');
             document.getElementById('patient-hour-display').innerText = hora;
             document.getElementById('patient-note-display').innerText = notas;
@@ -208,9 +222,17 @@
         }
 
         function switchView(view) {
+            // Vistas
             document.getElementById('view-agenda').classList.toggle('hidden', view !== 'agenda');
+            document.getElementById('view-finance').classList.toggle('hidden', view !== 'finance');
             document.getElementById('view-register').classList.toggle('hidden', view !== 'register');
             document.getElementById('view-history').classList.toggle('hidden', view !== 'history');
+            
+            // Iconos
+            document.querySelectorAll('.nav-icon').forEach(el => el.classList.remove('active'));
+            if(document.getElementById('nav-' + view)) {
+                document.getElementById('nav-' + view).classList.add('active');
+            }
         }
 
         function prepararCobro() {
