@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Médicos | K.B Tech Solutions</title>
+    <title>Registro K.B Tech | Elite Mode</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
@@ -16,30 +16,30 @@
 </head>
 <body class="p-6 md:p-20 flex items-center justify-center min-h-screen">
 
-    <div id="registro-form" class="max-w-xl w-full bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl border border-slate-100 text-left">
+    <div id="registro-form" class="max-w-xl w-full bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl border border-slate-100">
         <header class="mb-10 text-center">
-            <h1 class="text-3xl font-black italic tracking-tighter mb-2">K.B <span class="text-indigo-600">TECH</span></h1>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Alta de Consultorio Élite</p>
+            <h1 class="text-3xl font-black italic tracking-tighter mb-2 italic">K.B <span class="text-indigo-600">TECH</span></h1>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Alta de Consultorio de Élite</p>
         </header>
 
         <form id="form-alta" class="space-y-6">
             <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Nombre del Especialista</label>
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 block text-left">Nombre del Especialista</label>
                 <input type="text" id="nombre" placeholder="Ej: Dra. Sarahí Martínez" class="w-full p-4 rounded-2xl kb-input text-sm font-medium" required>
             </div>
 
             <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Correo Electrónico</label>
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 block text-left">Correo Electrónico</label>
                 <input type="email" id="email" placeholder="doctor@ejemplo.com" class="w-full p-4 rounded-2xl kb-input text-sm font-medium" required>
             </div>
 
             <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Especialidad</label>
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 block text-left">Especialidad</label>
                 <input type="text" id="especialidad" placeholder="Ej: Cardiología Clínica" class="w-full p-4 rounded-2xl kb-input text-sm font-medium" required>
             </div>
 
             <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Plan Seleccionado</label>
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 block text-left">Nivel de Sistema (Plan)</label>
                 <select id="plan_select" class="w-full p-4 rounded-2xl kb-input text-sm font-bold text-indigo-600">
                     <option value="Semilla" data-color="1">Plan Profesional - $999</option>
                     <option value="Dominio" data-color="2">Plan Dominio - $1,599</option>
@@ -48,33 +48,33 @@
 
             <div class="pt-4">
                 <button type="submit" id="btn-submit" class="w-full py-5 bg-slate-900 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl hover:bg-indigo-600 transition-all">
-                    Activar Sistema
+                    Activar Red K.B
                 </button>
             </div>
         </form>
     </div>
 
-    <div id="success-screen" class="success-card max-w-2xl w-full bg-slate-900 text-white p-12 rounded-[4rem] shadow-2xl relative overflow-hidden text-left">
+    <div id="success-screen" class="success-card max-w-2xl w-full bg-slate-900 text-white p-12 rounded-[4rem] shadow-2xl relative overflow-hidden">
         <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl font-black">KB</div>
         
-        <h2 class="text-4xl font-black mb-2 tracking-tighter">¡Bienvenido a la <span class="text-indigo-400 italic">Élite!</span></h2>
-        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-10">Tu infraestructura está lista</p>
+        <h2 class="text-4xl font-black mb-2 tracking-tighter text-left">¡Bienvenido a la <span class="text-indigo-400 italic">Élite!</span></h2>
+        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-10 text-left italic">Infraestructura Sincronizada</p>
 
-        <div class="space-y-8">
+        <div class="space-y-8 text-left">
             <div class="p-6 bg-slate-800/50 rounded-3xl border border-slate-700">
-                <p class="text-[9px] font-black text-indigo-400 uppercase mb-2">Portal para Pacientes (Tijuana)</p>
+                <p class="text-[9px] font-black text-indigo-400 uppercase mb-2">Portal para Pacientes</p>
                 <code id="link-paciente" class="text-[10px] break-all text-slate-300">Generando...</code>
             </div>
 
             <div class="p-6 bg-slate-800/50 rounded-3xl border border-slate-700">
-                <p class="text-[9px] font-black text-green-400 uppercase mb-2">Tu Panel de Control Privado</p>
+                <p class="text-[9px] font-black text-green-400 uppercase mb-2">Acceso Médico Privado</p>
                 <code id="link-doctor" class="text-[10px] break-all text-slate-300">Generando...</code>
             </div>
         </div>
 
         <div class="mt-12 flex justify-between items-center">
-            <p class="text-[8px] font-black uppercase tracking-[0.4em] text-slate-500">Powered by K.B Tech Solutions</p>
-            <button onclick="window.location.reload()" class="text-[10px] font-black uppercase text-indigo-400 border-b border-indigo-400 pb-1">Registrar otro</button>
+            <p class="text-[8px] font-black uppercase tracking-[0.4em] text-slate-500">K.B TECH NETWORK · 2026</p>
+            <button onclick="window.location.reload()" class="text-[10px] font-black uppercase text-indigo-400 border-b border-indigo-400 pb-1">Nuevo Registro</button>
         </div>
     </div>
 
@@ -87,9 +87,10 @@
             const btn = document.getElementById('btn-submit');
             const select = document.getElementById('plan_select');
             
-            btn.innerText = "SINCRONIZANDO CON LA RED...";
+            btn.innerText = "SINCRO EN CURSO...";
             btn.disabled = true;
 
+            // Datos mapeados a tu SQL: nombre_doctor, email, especialidad, plan, template_id
             const datos = {
                 nombre_doctor: document.getElementById('nombre').value,
                 email: document.getElementById('email').value,
@@ -112,19 +113,19 @@
             const data = await res.json();
             
             if(res.ok && data.length > 0) {
-                const id = data[0].id; // Usamos el UUID que genera tu tabla
+                const id = data[0].id; // Tu ID UUID generado en Supabase
                 const repoBase = window.location.href.split('registro.html')[0];
                 
                 document.getElementById('registro-form').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
                 
-                // Links actualizados
+                // Links dinámicos
                 document.getElementById('link-paciente').innerText = `${repoBase}agendar.html?id=${id}`;
                 document.getElementById('link-doctor').innerText = `${repoBase}app.html?id=${id}`;
             } else {
-                console.error("Error:", data);
-                alert("Error de red K.B. Verifica que el correo no esté repetido.");
-                btn.innerText = "Activar Sistema";
+                console.error("Fallo técnico:", data);
+                alert("Error de red. Verifica que el correo no esté ya registrado.");
+                btn.innerText = "Activar Red K.B";
                 btn.disabled = false;
             }
         });
