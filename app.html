@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Médico | K.B Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
+        :root { --doctor-color: #6366f1; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
+        .sidebar { border-right: 1px solid #e2e8f0; }
+        .stat-card { border: 1px solid #f1f5f9; transition: 0.3s; }
+        .stat-card:hover { border-color: var(--doctor-color); transform: translateY(-5px); }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <aside class="w-64 bg-white sidebar p-8 hidden md:block">
+        <h2 class="text-xl font-black italic mb-10">K.B <span style="color: var(--doctor-color)">TECH</span></h2>
+        <nav class="space-y-6">
+            <a href="#" class="block text-[10px] font-black uppercase tracking-widest text-slate-900">📅 Agenda Hoy</a>
+            <a href="#" class="block text-[10px] font-black uppercase tracking-widest text-slate-400">👥 Mis Pacientes</a>
+            <a href="#" class="block text-[10px] font-black uppercase tracking-widest text-slate-400">💰 Ingresos</a>
+            <div class="pt-10">
+                <a href="index.html" class="block text-[10px] font-black uppercase tracking-widest text-red-400">← Salir al Centro</a>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-6 md:p-12">
+        <header class="flex justify-between items-center mb-12">
+            <div>
+                <h1 id="doc-title" class="text-3xl font-black text-slate-900 tracking-tighter">Bienvenido, Doctor/a</h1>
+                <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Resumen del día de hoy</p>
+            </div>
+            <div id="status-dot" class="w-4 h-4 rounded-full animate-pulse" style="background-color: var(--doctor-color)"></div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="stat-card bg-white p-8 rounded-[2rem]">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Citas Hoy</p>
+                <h4 class="text-4xl font-black text-slate-900">12</h4>
+            </div>
+            <div class="stat-card bg-white p-8 rounded-[2rem]">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Pacientes Nuevos</p>
+                <h4 class="text-4xl font-black text-slate-900">4</h4>
+            </div>
+            <div class="stat-card bg-white p-8 rounded-[2rem]">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Garantías Cobradas</p>
+                <h4 class="text-4xl font-black text-slate-900" style="color: var(--doctor-color)">$1,200</h4>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-[2.5rem] p-8 shadow-sm">
+            <h3 class="text-lg font-black mb-6">Próximos Pacientes</h3>
+            <div class="space-y-4" id="lista-citas">
+                <p class="text-xs text-slate-400 italic">Cargando agenda segura...</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
+
+        // Leer el ID del doctor desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const docId = urlParams.get('id');
+
+        async function iniciarPanel() {
+            if(!docId) {
+                alert("Acceso no autorizado. Regresando al centro.");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // 1. Cargar Perfil del Doctor
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/Perfiles_Medicos?id=eq.${docId}`, {
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            const data = await res.json();
+
+            if(data.length > 0) {
+                const doctor = data[0];
+                document.getElementById('doc-title').innerText = `Panel: ${doctor.nombre_doctor}`;
+                
+                // Aplicar el color de su plantilla
+                const colors = { 1: "#7c3aed", 2: "#2563eb", 3: "#059669", 4: "#db2777", 5: "#1e293b" };
+                const colorHex = colors[doctor.template_id] || "#6366f1";
+                document.documentElement.style.setProperty('--doctor-color', colorHex);
+            }
+        }
+
+        iniciarPanel();
+    </script>
+</body>
+</html>
