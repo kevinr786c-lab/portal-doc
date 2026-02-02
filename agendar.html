@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Cita | K.B Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
+        :root { --main: #7c3aed; --bg-soft: #f5f3ff; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-soft); }
+        .glass-card { background: white; border-radius: 2.5rem; border: 1px solid rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="p-4 md:p-10 text-left">
+
+    <div class="max-w-xl mx-auto glass-card p-8 md:p-12 shadow-2xl text-left">
+        <header class="text-center mb-10">
+            <div id="doctor-avatar" class="w-20 h-20 mx-auto bg-slate-100 rounded-full mb-4 flex items-center justify-center text-3xl">🏥</div>
+            <h1 id="doctor-name" class="text-2xl font-black text-slate-800 tracking-tighter italic">Cargando...</h1>
+            <p id="doctor-specialty" class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Por favor espere</p>
+        </header>
+
+        <form id="form-cita" class="space-y-6 text-left">
+            <input type="text" id="paciente" placeholder="Tu Nombre Completo" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-indigo-300 transition" required>
+            
+            <div class="grid grid-cols-2 gap-4 text-left">
+                <input type="date" id="fecha" class="p-4 rounded-2xl bg-slate-50 border-none outline-none text-left" required>
+                <select id="hora" class="p-4 rounded-2xl bg-slate-50 border-none outline-none text-left" required>
+                    <option value="09:00 AM">09:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="04:00 PM">04:00 PM</option>
+                </select>
+            </div>
+
+            <textarea id="notas" placeholder="Motivo de la consulta (Opcional)" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none h-24 text-left"></textarea>
+
+            <button type="submit" id="btn-submit" class="w-full py-5 bg-slate-900 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl hover:scale-105 transition">
+                Confirmar Cita
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
+
+        // 1. OBTENER EL ID DEL DOCTOR DESDE LA URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const doctorId = urlParams.get('id');
+
+        async function cargarConfiguracionDoctor() {
+            if(!doctorId) return alert("Enlace inválido. Falta ID de Doctor.");
+
+            // Consultamos los datos del doctor en tu nueva tabla
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/Perfiles_Medicos?id=eq.${doctorId}`, {
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            const data = await res.json();
+            
+            if(data.length > 0) {
+                const doc = data[0];
+                document.getElementById('doctor-name').innerText = doc.nombre_doctor;
+                document.getElementById('doctor-specialty').innerText = doc.especialidad;
+                
+                // Aplicar color según la plantilla guardada
+                aplicarTema(doc.template_id);
+            }
+        }
+
+        function aplicarTema(id) {
+            const colors = {
+                1: "#7c3aed", // Violeta
+                2: "#2563eb", // Azul
+                3: "#059669", // Verde
+                4: "#db2777", // Rosa
+                5: "#1e293b"  // Negro
+            };
+            const color = colors[id] || colors[1];
+            document.getElementById('btn-submit').style.backgroundColor = color;
+            document.getElementById('doctor-name').style.color = color;
+        }
+
+        // 2. ENVIAR LA CITA CONECTADA AL DOCTOR
+        document.getElementById('form-cita').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const cita = {
+                nombre: document.getElementById('paciente').value,
+                fecha: document.getElementById('fecha').value,
+                hora: document.getElementById('hora').value,
+                notas: document.getElementById('notas').value,
+                doctor_id: doctorId // IMPORTANTE: Se vincula al doctor
+            };
+
+            await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
+                method: 'POST',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(cita)
+            });
+
+            alert("Cita agendada con éxito.");
+            location.reload();
+        });
+
+        cargarConfiguracionDoctor();
+    </script>
+</body>
+</html>
