@@ -3,104 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Médicos | K.B Tech</title>
+    <title>Registro de Médicos | K.B Tech Solutions</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
-        .input-kb { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1rem; width: 100%; outline: none; transition: 0.3s; }
-        .input-kb:focus { border-color: #6366f1; ring: 2px ring-indigo-100; }
-        .card-plan { cursor: pointer; transition: 0.3s; border: 2px solid transparent; }
-        .card-plan.selected { border-color: #6366f1; background: #f5f3ff; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #1e293b; }
+        .kb-input { background: #ffffff; border: 1px solid #e2e8f0; transition: 0.3s; }
+        .kb-input:focus { border-color: #6366f1; ring: 2px; ring-color: #6366f1; outline: none; }
+        .success-card { display: none; animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
-<body class="p-6 md:p-20 text-left">
+<body class="p-6 md:p-20 flex items-center justify-center min-h-screen">
 
-    <div class="max-w-2xl mx-auto bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100 text-left">
-        <h1 class="text-3xl font-black text-slate-800 mb-2 tracking-tighter italic text-left">K.B <span class="text-indigo-600">ONBOARDING</span></h1>
-        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.3em] mb-10 text-left">Crea tu consultorio digital en segundos</p>
+    <div id="registro-form" class="max-w-xl w-full bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl border border-slate-100">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl font-black italic tracking-tighter mb-2">K.B <span class="text-indigo-600">TECH</span></h1>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Alta de Consultorio Élite</p>
+        </header>
 
-        <form id="registro-doctor" class="space-y-6 text-left">
-            <div>
-                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2 text-left">Nombre Completo</label>
-                <input type="text" id="nombre" class="input-kb" placeholder="Dr. Ejemplo Pérez" required>
+        <form id="form-alta" class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Nombre del Especialista</label>
+                <input type="text" id="nombre" placeholder="Ej: Dra. Sarahí Martínez" class="w-full p-4 rounded-2xl kb-input text-sm font-medium" required>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2 text-left">Especialidad</label>
-                    <select id="especialidad" class="input-kb text-left">
-                        <option value="General">Médico General</option>
-                        <option value="Ginecología">Ginecología</option>
-                        <option value="Pediatría">Pediatría</option>
-                        <option value="Urología">Urología</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2 text-left">Email Profesional</label>
-                    <input type="email" id="email" class="input-kb" placeholder="doctor@clinic.com" required>
-                </div>
+            <div class="space-y-2">
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Especialidad</label>
+                <input type="text" id="especialidad" placeholder="Ej: Cardiología Clínica" class="w-full p-4 rounded-2xl kb-input text-sm font-medium" required>
             </div>
 
-            <div>
-                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2 text-left">Elige tu Plantilla Visual (Personalidad)</label>
-                <div class="grid grid-cols-5 gap-2 mt-2 text-left">
-                    <button type="button" onclick="selectTemplate(1)" class="h-12 rounded-xl bg-violet-500 border-4 border-white shadow-sm hover:scale-110 transition"></button>
-                    <button type="button" onclick="selectTemplate(2)" class="h-12 rounded-xl bg-blue-500 border-4 border-white shadow-sm hover:scale-110 transition"></button>
-                    <button type="button" onclick="selectTemplate(3)" class="h-12 rounded-xl bg-emerald-500 border-4 border-white shadow-sm hover:scale-110 transition"></button>
-                    <button type="button" onclick="selectTemplate(4)" class="h-12 rounded-xl bg-pink-500 border-4 border-white shadow-sm hover:scale-110 transition"></button>
-                    <button type="button" onclick="selectTemplate(5)" class="h-12 rounded-xl bg-slate-800 border-4 border-white shadow-sm hover:scale-110 transition"></button>
-                </div>
-                <p id="temp-label" class="text-[9px] mt-2 font-bold text-slate-400 uppercase italic text-left">Plantilla Seleccionada: 1</p>
+            <div class="space-y-2">
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Plan Seleccionado</label>
+                <select id="plan" class="w-full p-4 rounded-2xl kb-input text-sm font-bold text-indigo-600">
+                    <option value="1">Plan Profesional - $999</option>
+                    <option value="2">Plan Dominio - $1,599</option>
+                </select>
             </div>
 
-            <button type="submit" class="w-full py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-indigo-600 shadow-xl transition-all text-center">
-                Crear mi Consultorio
-            </button>
+            <div class="pt-4">
+                <button type="submit" id="btn-submit" class="w-full py-5 bg-slate-900 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl hover:bg-indigo-600 transition-all">
+                    Activar Sistema
+                </button>
+            </div>
         </form>
     </div>
 
+    <div id="success-screen" class="success-card max-w-2xl w-full bg-slate-900 text-white p-12 rounded-[4rem] shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl font-black">KB</div>
+        
+        <h2 class="text-4xl font-black mb-2 tracking-tighter">¡Bienvenido a la <span class="text-indigo-400 italic">Élite!</span></h2>
+        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-10">Tu infraestructura está lista</p>
+
+        <div class="space-y-8">
+            <div class="p-6 bg-slate-800/50 rounded-3xl border border-slate-700">
+                <p class="text-[9px] font-black text-indigo-400 uppercase mb-2">Portal para Pacientes (Tijuana)</p>
+                <code id="link-paciente" class="text-[10px] break-all text-slate-300">Generando...</code>
+            </div>
+
+            <div class="p-6 bg-slate-800/50 rounded-3xl border border-slate-700">
+                <p class="text-[9px] font-black text-green-400 uppercase mb-2">Tu Panel de Control Privado</p>
+                <code id="link-doctor" class="text-[10px] break-all text-slate-300">Generando...</code>
+            </div>
+        </div>
+
+        <div class="mt-12 flex justify-between items-center">
+            <p class="text-[8px] font-black uppercase tracking-[0.4em] text-slate-500">Powered by K.B Tech Solutions</p>
+            <button onclick="window.location.href='index.html'" class="text-[10px] font-black uppercase text-indigo-400 border-b border-indigo-400 pb-1">Ir al Inicio</button>
+        </div>
+    </div>
+
     <script>
-        const SUPABASE_URL = "TU_URL_AQUI"; 
-        const SUPABASE_KEY = "TU_KEY_AQUI"; 
-        let selectedTemplate = 1;
+        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
 
-        function selectTemplate(id) {
-            selectedTemplate = id;
-            document.getElementById('temp-label').innerText = `Plantilla Seleccionada: ${id}`;
-        }
-
-        document.getElementById('registro-doctor').addEventListener('submit', async (e) => {
+        document.getElementById('form-alta').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const doctorData = {
+            const btn = document.getElementById('btn-submit');
+            btn.innerText = "SINCRONIZANDO CON LA RED...";
+            btn.disabled = true;
+
+            const datos = {
                 nombre_doctor: document.getElementById('nombre').value,
-                email: document.getElementById('email').value,
                 especialidad: document.getElementById('especialidad').value,
-                template_id: selectedTemplate,
-                pin_acceso: "1234" // PIN por defecto
+                template_id: document.getElementById('plan').value
             };
 
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/Perfiles_Medicos`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(doctorData)
-                });
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/Perfiles_Medicos`, {
+                method: 'POST',
+                headers: { 
+                    'apikey': SUPABASE_KEY, 
+                    'Authorization': `Bearer ${SUPABASE_KEY}`, 
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify(datos)
+            });
 
-                if(response.ok) {
-                    alert("¡Registro Exitoso! Bienvenido a K.B Tech Solutions.");
-                    // Aquí lo mandaríamos a la página de pago o a su dashboard
-                } else {
-                    alert("Error en el registro. Verifica si el email ya existe.");
-                }
-            } catch (err) {
-                console.error(err);
+            const data = await res.json();
+            
+            if(res.ok && data.length > 0) {
+                const id = data[0].id;
+                const repoBase = window.location.href.split('registro.html')[0];
+                
+                // Mostrar pantalla de éxito
+                document.getElementById('registro-form').style.display = 'none';
+                document.getElementById('success-screen').style.display = 'block';
+                
+                // Llenar los links
+                document.getElementById('link-paciente').innerText = `${repoBase}índice.html?id=${id}`;
+                document.getElementById('link-doctor').innerText = `${repoBase}app.html?id=${id}`;
+            } else {
+                alert("Error en la red K.B. Reintenta.");
+                btn.innerText = "Activar Sistema";
+                btn.disabled = false;
             }
         });
     </script>
