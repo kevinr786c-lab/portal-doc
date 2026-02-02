@@ -3,158 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservar Cita | K.B Tech</title>
+    <title>K.B TECH | MASTER PANEL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
-        :root { --main: #7c3aed; --bg-soft: #f8fafc; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-soft); transition: background 0.5s ease; }
-        .glass-card { background: white; border-radius: 2.5rem; border: 1px solid rgba(0,0,0,0.05); }
-        .fade-in { opacity: 0; transition: opacity 0.7s ease; }
-        .fade-in.visible { opacity: 1; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; color: #1e293b; }
+        .kb-card { transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f1f5f9; cursor: pointer; }
+        .kb-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.15); border-color: #6366f1; }
+        .gradient-text { background: linear-gradient(90deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
-<body class="p-4 md:p-10 text-left">
+<body class="p-6 md:p-20 text-left">
 
-    <div id="main-container" class="max-w-xl mx-auto glass-card p-8 md:p-12 shadow-2xl text-left hidden fade-in">
-        <header class="text-center mb-10">
-            <div id="doctor-avatar" class="w-20 h-20 mx-auto bg-slate-100 rounded-full mb-4 flex items-center justify-center text-3xl shadow-inner border-4 border-white">🏥</div>
-            <h1 id="doctor-name" class="text-2xl font-black text-slate-800 tracking-tighter italic">Cargando...</h1>
-            <p id="doctor-specialty" class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Por favor espere</p>
-        </header>
+    <header class="max-w-5xl mx-auto text-center mb-20 text-left">
+        <h1 class="text-6xl md:text-7xl font-black italic tracking-tighter mb-4 text-left">K.B <span class="gradient-text text-left">TECH</span></h1>
+        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.5em] mb-10 text-center text-left">Centro de Mando · Sincronía Perfecta</p>
+    </header>
 
-        <form id="form-cita" class="space-y-6 text-left">
-            <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 text-left">Nombre del Paciente</label>
-                <input type="text" id="paciente" placeholder="Ej: Juan Pérez" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-opacity-50 transition" required>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4 text-left">
-                <div class="space-y-2">
-                    <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Fecha</label>
-                    <input type="date" id="fecha" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none text-left" required>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Hora</label>
-                    <select id="hora" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none text-left" required>
-                        <option value="09:00 AM">09:00 AM</option>
-                        <option value="10:00 AM">10:00 AM</option>
-                        <option value="11:00 AM">11:00 AM</option>
-                        <option value="04:00 PM">04:00 PM</option>
-                        <option value="05:00 PM">05:00 PM</option>
-                    </select>
-                </div>
-            </div>
+    <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+        
+        <div onclick="window.location.href='registro.html'" class="kb-card bg-white p-10 rounded-[3rem] text-left">
+            <div class="text-4xl mb-6 text-left">🚀</div>
+            <h3 class="text-xl font-black mb-2 text-left">Alta de Médicos</h3>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Registrar Nuevo Cliente</p>
+        </div>
 
-            <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Notas para el Médico</label>
-                <textarea id="notas" placeholder="¿Algún síntoma o duda?" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none h-24 text-left"></textarea>
-            </div>
+        <div onclick="window.location.href='índice.html'" class="kb-card bg-white p-10 rounded-[3rem] text-left">
+            <div class="text-4xl mb-6 text-left">📅</div>
+            <h3 class="text-xl font-black mb-2 text-left">Portal de Citas</h3>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Link para Pacientes</p>
+        </div>
 
-            <button type="submit" id="btn-submit" class="w-full py-5 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl hover:scale-105 transition-all duration-300">
-                Confirmar Cita
-            </button>
-        </form>
-    </div>
+        <div onclick="window.location.href='app.html'" class="kb-card bg-slate-900 p-10 rounded-[3rem] text-white text-left">
+            <div class="text-4xl mb-6 text-left">🔐</div>
+            <h3 class="text-xl font-black text-indigo-300 mb-2 text-left text-left text-left">Panel Médico</h3>
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-left text-left">Acceso con PIN</p>
+        </div>
 
-    <div id="error-screen" class="hidden max-w-sm mx-auto text-center p-10 bg-white rounded-[3rem] shadow-xl">
-        <span class="text-5xl block mb-4 text-left">⚠️</span>
-        <h2 class="font-black text-slate-800 uppercase tracking-tighter text-left">Enlace Inválido</h2>
-        <p class="text-xs text-slate-400 mt-2 text-left text-left">No se encontró el identificador del médico. Contacte a soporte de K.B Tech.</p>
-    </div>
+        <div onclick="window.location.href='web.html'" class="kb-card bg-white p-10 rounded-[3rem] text-left">
+            <div class="text-4xl mb-6 text-left">🌐</div>
+            <h3 class="text-xl font-black mb-2 text-left">Web de Ventas</h3>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Planes y Beneficios</p>
+        </div>
 
-    <script>
-        const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
-        const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
+        <div onclick="window.open('https://supabase.com/dashboard/project/ypxtceahtjxcdaefskxe/editor/30282', '_blank')" class="kb-card bg-white p-10 rounded-[3rem] text-left border-dashed border-2">
+            <div class="text-4xl mb-6 text-left">🗂️</div>
+            <h3 class="text-xl font-black mb-2 text-left text-left">Base de Datos</h3>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Gestionar Datos Reales</p>
+        </div>
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const doctorId = urlParams.get('id');
+        <div onclick="window.location.href='dra_alba.html'" class="kb-card bg-indigo-50 p-10 rounded-[3rem] text-left border-indigo-100">
+            <div class="text-4xl mb-6 text-left">👩‍⚕️</div>
+            <h3 class="text-xl font-black text-indigo-900 mb-2 text-left">Dra. Alba</h3>
+            <p class="text-[10px] font-bold text-indigo-300 uppercase tracking-widest text-left">Prototipo Original</p>
+        </div>
 
-        async function cargarConfiguracionDoctor() {
-            if(!doctorId) {
-                document.getElementById('error-screen').classList.remove('hidden');
-                return;
-            }
+    </main>
 
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/Perfiles_Medicos?id=eq.${doctorId}`, {
-                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                });
-                const data = await res.json();
-                
-                if(data && data.length > 0) {
-                    const doc = data[0];
-                    document.getElementById('doctor-name').innerText = doc.nombre_doctor;
-                    document.getElementById('doctor-specialty').innerText = doc.especialidad;
-                    
-                    aplicarTema(doc.template_id);
-                    
-                    const container = document.getElementById('main-container');
-                    container.classList.remove('hidden');
-                    setTimeout(() => container.classList.add('visible'), 50);
-                } else {
-                    document.getElementById('error-screen').classList.remove('hidden');
-                }
-            } catch (err) {
-                console.error("Error:", err);
-                document.getElementById('error-screen').classList.remove('hidden');
-            }
-        }
+    <footer class="mt-32 text-center opacity-20 text-left">
+        <p class="text-[9px] font-black uppercase tracking-[0.5em] text-left">K.B Tech Solutions &copy; 2026 | Tijuana, B.C.</p>
+    </footer>
 
-        function aplicarTema(id) {
-            const colors = {
-                1: { main: "#7c3aed", bg: "#f5f3ff" }, // Violeta
-                2: { main: "#2563eb", bg: "#eff6ff" }, // Azul
-                3: { main: "#059669", bg: "#ecfdf5" }, // Verde
-                4: { main: "#db2777", bg: "#fff1f2" }, // Rosa
-                5: { main: "#1e293b", bg: "#f8fafc" }  // Negro
-            };
-            const theme = colors[id] || colors[1];
-            
-            document.documentElement.style.setProperty('--main', theme.main);
-            document.documentElement.style.setProperty('--bg-soft', theme.bg);
-            
-            const btn = document.getElementById('btn-submit');
-            btn.style.backgroundColor = theme.main;
-            document.getElementById('doctor-name').style.color = theme.main;
-            document.getElementById('doctor-avatar').style.color = theme.main;
-        }
-
-        document.getElementById('form-cita').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btn-submit');
-            btn.innerText = "PROCESANDO...";
-            btn.disabled = true;
-
-            const cita = {
-                nombre: document.getElementById('paciente').value,
-                fecha: document.getElementById('fecha').value,
-                hora: document.getElementById('hora').value,
-                notas: document.getElementById('notas').value,
-                doctor_id: doctorId 
-            };
-
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
-                method: 'POST',
-                headers: { 
-                    'apikey': SUPABASE_KEY, 
-                    'Authorization': `Bearer ${SUPABASE_KEY}`, 
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify(cita)
-            });
-
-            if(response.ok) {
-                alert(`¡Cita confirmada, ${cita.nombre}! El Dr/Dra lo espera.`);
-                location.reload();
-            } else {
-                alert("Hubo un error. Intenta de nuevo.");
-                btn.innerText = "Confirmar Cita";
-                btn.disabled = false;
-            }
-        });
-
-        cargarConfiguracionDoctor();
-    </script>
 </body>
 </html>
+
