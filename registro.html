@@ -16,7 +16,7 @@
 </head>
 <body class="p-6 md:p-20 flex items-center justify-center min-h-screen">
 
-    <div id="registro-form" class="max-w-xl w-full bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl border border-slate-100">
+    <div id="registro-form" class="max-w-xl w-full bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl border border-slate-100 text-left">
         <header class="mb-10 text-center">
             <h1 class="text-3xl font-black italic tracking-tighter mb-2">K.B <span class="text-indigo-600">TECH</span></h1>
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Alta de Consultorio Élite</p>
@@ -24,26 +24,25 @@
 
         <form id="form-alta" class="space-y-6">
             <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 text-left block">Nombre del Especialista</label>
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Nombre del Especialista</label>
                 <input type="text" id="nombre" placeholder="Ej: Dra. Sarahí Martínez" class="w-full p-4 rounded-2xl kb-input text-sm font-medium" required>
             </div>
 
             <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 text-left block">Correo Electrónico (Obligatorio)</label>
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Correo Electrónico</label>
                 <input type="email" id="email" placeholder="doctor@ejemplo.com" class="w-full p-4 rounded-2xl kb-input text-sm font-medium" required>
             </div>
 
             <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 text-left block">Especialidad</label>
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Especialidad</label>
                 <input type="text" id="especialidad" placeholder="Ej: Cardiología Clínica" class="w-full p-4 rounded-2xl kb-input text-sm font-medium" required>
             </div>
 
             <div class="space-y-2">
-                <label class="text-[9px] font-black uppercase text-slate-400 ml-4 text-left block">Plan Seleccionado</label>
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Plan Seleccionado</label>
                 <select id="plan_select" class="w-full p-4 rounded-2xl kb-input text-sm font-bold text-indigo-600">
                     <option value="Semilla" data-color="1">Plan Profesional - $999</option>
                     <option value="Dominio" data-color="2">Plan Dominio - $1,599</option>
-                </option>
                 </select>
             </div>
 
@@ -55,15 +54,15 @@
         </form>
     </div>
 
-    <div id="success-screen" class="success-card max-w-2xl w-full bg-slate-900 text-white p-12 rounded-[4rem] shadow-2xl relative overflow-hidden">
+    <div id="success-screen" class="success-card max-w-2xl w-full bg-slate-900 text-white p-12 rounded-[4rem] shadow-2xl relative overflow-hidden text-left">
         <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl font-black">KB</div>
         
-        <h2 class="text-4xl font-black mb-2 tracking-tighter text-left">¡Bienvenido a la <span class="text-indigo-400 italic">Élite!</span></h2>
-        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-10 text-left">Tu infraestructura está lista</p>
+        <h2 class="text-4xl font-black mb-2 tracking-tighter">¡Bienvenido a la <span class="text-indigo-400 italic">Élite!</span></h2>
+        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-10">Tu infraestructura está lista</p>
 
-        <div class="space-y-8 text-left">
+        <div class="space-y-8">
             <div class="p-6 bg-slate-800/50 rounded-3xl border border-slate-700">
-                <p class="text-[9px] font-black text-indigo-400 uppercase mb-2">Portal para Pacientes</p>
+                <p class="text-[9px] font-black text-indigo-400 uppercase mb-2">Portal para Pacientes (Tijuana)</p>
                 <code id="link-paciente" class="text-[10px] break-all text-slate-300">Generando...</code>
             </div>
 
@@ -91,13 +90,12 @@
             btn.innerText = "SINCRONIZANDO CON LA RED...";
             btn.disabled = true;
 
-            // Sincronización exacta con tus columnas SQL
             const datos = {
                 nombre_doctor: document.getElementById('nombre').value,
                 email: document.getElementById('email').value,
                 especialidad: document.getElementById('especialidad').value,
-                plan: select.value, // Envía 'Semilla' o 'Dominio'
-                template_id: parseInt(select.options[select.selectedIndex].getAttribute('data-color')) // Envía el número 1 o 2
+                plan: select.value,
+                template_id: parseInt(select.options[select.selectedIndex].getAttribute('data-color'))
             };
 
             const res = await fetch(`${SUPABASE_URL}/rest/v1/Perfiles_Medicos`, {
@@ -114,18 +112,18 @@
             const data = await res.json();
             
             if(res.ok && data.length > 0) {
-                const id = data[0].id; // Tu id es tipo UUID
+                const id = data[0].id; // Usamos el UUID que genera tu tabla
                 const repoBase = window.location.href.split('registro.html')[0];
                 
                 document.getElementById('registro-form').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
                 
-                // Generamos los links correctos
+                // Links actualizados
                 document.getElementById('link-paciente').innerText = `${repoBase}agendar.html?id=${id}`;
                 document.getElementById('link-doctor').innerText = `${repoBase}app.html?id=${id}`;
             } else {
-                console.error("Error Supabase:", data);
-                alert("Error en la red K.B. Revisa que el correo no esté repetido.");
+                console.error("Error:", data);
+                alert("Error de red K.B. Verifica que el correo no esté repetido.");
                 btn.innerText = "Activar Sistema";
                 btn.disabled = false;
             }
