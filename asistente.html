@@ -21,7 +21,7 @@
         .btn-action:hover { transform: scale(1.05); }
     </style>
 </head>
-<body class="p-4 md:p-12">
+<body class="p-4 md:p-12 text-left">
 
     <div id="pantalla-bloqueo" class="fixed inset-0 lock-screen flex items-center justify-center">
         <div class="text-center p-10 bg-white rounded-[3rem] shadow-2xl border border-violet-100">
@@ -51,6 +51,12 @@
                     <div class="mb-8">
                         <p class="text-3xl font-extrabold text-slate-700 leading-tight" id="patient-display">Seleccione Paciente</p>
                         <p id="patient-phone-display" class="text-[10px] font-bold text-slate-400 uppercase mt-1">Sin datos de contacto</p>
+                        <div id="patient-extra-info" class="mt-4 p-4 bg-violet-50 rounded-2xl hidden">
+                            <p class="text-[9px] font-black text-violet-400 uppercase">Hora Programada:</p>
+                            <p id="patient-hour-display" class="text-lg font-bold text-violet-700 mb-2">--:--</p>
+                            <p class="text-[9px] font-black text-violet-400 uppercase">Notas para la Dra:</p>
+                            <p id="patient-note-display" class="text-xs font-medium text-slate-600 italic">Sin notas adjuntas</p>
+                        </div>
                     </div>
                     
                     <div class="flex gap-4 mb-6">
@@ -64,45 +70,45 @@
                 </div>
 
                 <div class="glass-panel p-8 bg-violet-50/30">
-                    <h3 class="text-[9px] font-black uppercase text-slate-400 mb-4 italic">Registrar Gasto del Día</h3>
+                    <h3 class="text-[9px] font-black uppercase text-slate-400 mb-4 italic text-left">Registrar Gasto del Día</h3>
                     <input type="text" id="gasto-desc" class="input-pure mb-3" placeholder="Descripción (Ej: Material médico)">
                     <input type="number" id="gasto-monto" class="input-pure mb-3" placeholder="Monto $">
                     <button onclick="registrarGasto()" class="w-full py-3 bg-slate-800 text-white rounded-xl font-bold text-[9px] uppercase tracking-widest">Sincronizar Gasto</button>
                 </div>
 
                 <div class="glass-panel p-8">
-                    <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 italic text-left">Calendario</h3>
+                    <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 italic text-left">Filtrar por Fecha</h3>
                     <input type="date" id="filtro-fecha" onchange="cargarCitasDesdeSupabase()" class="input-pure">
                 </div>
             </div>
 
             <div class="lg:col-span-8 space-y-8">
                 <div id="view-agenda" class="glass-panel p-10 min-h-[500px]">
-                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8">Agenda Activa (Motor K.B)</h3>
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8 text-left">Agenda Activa (Motor K.B)</h3>
                     <div class="overflow-hidden rounded-3xl border border-slate-50">
                         <table class="w-full text-left">
                             <thead class="bg-violet-50 text-[9px] uppercase font-black text-violet-400">
-                                <tr><th class="p-5">Paciente</th><th class="p-5">WhatsApp</th><th class="p-5">Estado</th></tr>
+                                <tr><th class="p-5">Hora</th><th class="p-5">Paciente</th><th class="p-5">Estado</th></tr>
                             </thead>
-                            <tbody id="tabla-citas-body" class="text-sm font-medium text-slate-600"></tbody>
+                            <tbody id="tabla-citas-body" class="text-sm font-medium text-slate-600 text-left"></tbody>
                         </table>
                     </div>
                 </div>
 
                 <div id="view-history" class="hidden glass-panel p-10">
-                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8">Historial de Cobros</h3>
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-800 mb-8 text-left">Historial de Cobros</h3>
                     <div class="overflow-hidden rounded-3xl border border-slate-50">
                         <table class="w-full text-left">
                             <thead class="bg-slate-50 text-[9px] uppercase font-black text-slate-400">
                                 <tr><th class="p-5">Paciente</th><th class="p-5">Fecha</th><th class="p-5">Status</th></tr>
                             </thead>
-                            <tbody id="tabla-historial-body" class="text-sm text-slate-400 italic"></tbody>
+                            <tbody id="tabla-historial-body" class="text-sm text-slate-400 italic text-left"></tbody>
                         </table>
                     </div>
                 </div>
 
                 <div id="view-register" class="hidden glass-panel p-10">
-                    <h3 class="text-[10px] font-black uppercase text-slate-800 mb-8">Confirmar Liquidación</h3>
+                    <h3 class="text-[10px] font-black uppercase text-slate-800 mb-8 text-left">Confirmar Liquidación</h3>
                     <input type="text" id="reg-nombre" class="input-pure mb-4" readonly>
                     <input type="number" id="reg-monto" class="input-pure mb-6" placeholder="800.00">
                     <div class="flex gap-4">
@@ -146,26 +152,32 @@
             const historial = filtrados.filter(c => c.estado_contacto === 'Cobrado');
 
             document.getElementById('tabla-citas-body').innerHTML = activos.map(c => `
-                <tr class="border-b border-violet-50 hover:bg-violet-50 transition cursor-pointer" onclick="seleccionarPaciente('${c.nombre}', '${c.telefono}', ${c.id})">
+                <tr class="border-b border-violet-50 hover:bg-violet-50 transition cursor-pointer" 
+                    onclick="seleccionarPaciente('${c.nombre}', '${c.telefono}', ${c.id}, '${c.hora || '--:--'}', '${c.notas || 'Sin notas'}')">
+                    <td class="p-5 font-bold text-violet-500">${c.hora || '--:--'}</td>
                     <td class="p-5 font-bold">${c.nombre}</td>
-                    <td class="p-5">${c.telefono}</td>
                     <td class="p-5"><span class="px-2 py-1 bg-violet-100 text-violet-600 rounded text-[9px] font-black">ACTIVO</span></td>
                 </tr>
             `).join('');
 
             document.getElementById('tabla-historial-body').innerHTML = historial.map(c => `
                 <tr class="border-b border-slate-50">
-                    <td class="p-5">${c.nombre}</td>
-                    <td class="p-5">${c.fecha}</td>
-                    <td class="p-5 text-emerald-500 font-bold text-[9px]">COBRADO</td>
+                    <td class="p-5 text-left">${c.nombre}</td>
+                    <td class="p-5 text-left">${c.fecha}</td>
+                    <td class="p-5 text-left text-emerald-500 font-bold text-[9px]">COBRADO</td>
                 </tr>
             `).join('');
         }
 
-        function seleccionarPaciente(nombre, tel, id) {
-            pacienteSeleccionado = { nombre, tel, id };
+        function seleccionarPaciente(nombre, tel, id, hora, notas) {
+            pacienteSeleccionado = { nombre, tel, id, hora, notas };
             document.getElementById('patient-display').innerText = nombre;
             document.getElementById('patient-phone-display').innerText = "📱 " + tel;
+            
+            // Mostrar Info Extra (Notas y Hora)
+            document.getElementById('patient-extra-info').classList.remove('hidden');
+            document.getElementById('patient-hour-display').innerText = hora;
+            document.getElementById('patient-note-display').innerText = notas;
         }
 
         async function registrarGasto() {
