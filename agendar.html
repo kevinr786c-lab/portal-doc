@@ -7,98 +7,146 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
-        :root { --main: #7c3aed; --bg-soft: #f5f3ff; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-soft); }
+        :root { --main: #7c3aed; --bg-soft: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-soft); transition: 0.5s; }
         .glass-card { background: white; border-radius: 2.5rem; border: 1px solid rgba(0,0,0,0.05); }
+        .accent-border { border-left: 4px solid var(--main); }
     </style>
 </head>
 <body class="p-4 md:p-10 text-left">
 
-    <div class="max-w-xl mx-auto glass-card p-8 md:p-12 shadow-2xl text-left">
+    <div id="main-container" class="max-w-xl mx-auto glass-card p-8 md:p-12 shadow-2xl text-left hidden opacity-0 transition-opacity duration-700">
         <header class="text-center mb-10">
-            <div id="doctor-avatar" class="w-20 h-20 mx-auto bg-slate-100 rounded-full mb-4 flex items-center justify-center text-3xl">🏥</div>
+            <div id="doctor-avatar" class="w-20 h-20 mx-auto bg-slate-100 rounded-full mb-4 flex items-center justify-center text-3xl shadow-inner border-4 border-white">🏥</div>
             <h1 id="doctor-name" class="text-2xl font-black text-slate-800 tracking-tighter italic">Cargando...</h1>
             <p id="doctor-specialty" class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Por favor espere</p>
         </header>
 
         <form id="form-cita" class="space-y-6 text-left">
-            <input type="text" id="paciente" placeholder="Tu Nombre Completo" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-indigo-300 transition" required>
+            <div class="space-y-2">
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Nombre del Paciente</label>
+                <input type="text" id="paciente" placeholder="Ej: Juan Pérez" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-opacity-50 transition" required>
+            </div>
             
             <div class="grid grid-cols-2 gap-4 text-left">
-                <input type="date" id="fecha" class="p-4 rounded-2xl bg-slate-50 border-none outline-none text-left" required>
-                <select id="hora" class="p-4 rounded-2xl bg-slate-50 border-none outline-none text-left" required>
-                    <option value="09:00 AM">09:00 AM</option>
-                    <option value="10:00 AM">10:00 AM</option>
-                    <option value="04:00 PM">04:00 PM</option>
-                </select>
+                <div class="space-y-2">
+                    <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Fecha</label>
+                    <input type="date" id="fecha" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Hora</label>
+                    <select id="hora" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none" required>
+                        <option value="09:00 AM">09:00 AM</option>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="11:00 AM">11:00 AM</option>
+                        <option value="04:00 PM">04:00 PM</option>
+                        <option value="05:00 PM">05:00 PM</option>
+                    </select>
+                </div>
             </div>
 
-            <textarea id="notas" placeholder="Motivo de la consulta (Opcional)" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none h-24 text-left"></textarea>
+            <div class="space-y-2">
+                <label class="text-[9px] font-black uppercase text-slate-400 ml-4">Notas para el Médico</label>
+                <textarea id="notas" placeholder="¿Algún síntoma o duda?" class="w-full p-4 rounded-2xl bg-slate-50 border-none outline-none h-24"></textarea>
+            </div>
 
-            <button type="submit" id="btn-submit" class="w-full py-5 bg-slate-900 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl hover:scale-105 transition">
+            <button type="submit" id="btn-submit" class="w-full py-5 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl hover:scale-105 transition-all duration-300">
                 Confirmar Cita
             </button>
         </form>
+    </div>
+
+    <div id="error-screen" class="hidden max-w-sm mx-auto text-center p-10 bg-white rounded-[3rem] shadow-xl">
+        <span class="text-5xl block mb-4">⚠️</span>
+        <h2 class="font-black text-slate-800 uppercase tracking-tighter">Enlace Inválido</h2>
+        <p class="text-xs text-slate-400 mt-2">No se encontró el identificador del médico. Contacte a soporte de K.B Tech.</p>
     </div>
 
     <script>
         const SUPABASE_URL = "https://ypxtceahtjxcdaefskxe.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_C9j37Nup330TMa-jb3QC4A_z7GhzEBM"; 
 
-        // 1. OBTENER EL ID DEL DOCTOR DESDE LA URL
         const urlParams = new URLSearchParams(window.location.search);
         const doctorId = urlParams.get('id');
 
         async function cargarConfiguracionDoctor() {
-            if(!doctorId) return alert("Enlace inválido. Falta ID de Doctor.");
+            if(!doctorId) {
+                document.getElementById('error-screen').classList.remove('hidden');
+                return;
+            }
 
-            // Consultamos los datos del doctor en tu nueva tabla
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/Perfiles_Medicos?id=eq.${doctorId}`, {
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            });
-            const data = await res.json();
-            
-            if(data.length > 0) {
-                const doc = data[0];
-                document.getElementById('doctor-name').innerText = doc.nombre_doctor;
-                document.getElementById('doctor-specialty').innerText = doc.especialidad;
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/Perfiles_Medicos?id=eq.${doctorId}`, {
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                });
+                const data = await res.json();
                 
-                // Aplicar color según la plantilla guardada
-                aplicarTema(doc.template_id);
+                if(data && data.length > 0) {
+                    const doc = data[0];
+                    document.getElementById('doctor-name').innerText = doc.nombre_doctor;
+                    document.getElementById('doctor-specialty').innerText = doc.especialidad;
+                    
+                    aplicarTema(doc.template_id);
+                    
+                    // Mostrar contenedor con animación
+                    const container = document.getElementById('main-container');
+                    container.classList.remove('hidden');
+                    setTimeout(() => { container.style.opacity = "1"; }, 50);
+                } else {
+                    document.getElementById('error-screen').classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error("Error de conexión:", err);
+                document.getElementById('error-screen').classList.remove('hidden');
             }
         }
 
         function aplicarTema(id) {
             const colors = {
-                1: "#7c3aed", // Violeta
-                2: "#2563eb", // Azul
-                3: "#059669", // Verde
-                4: "#db2777", // Rosa
-                5: "#1e293b"  // Negro
+                1: { main: "#7c3aed", bg: "#f5f3ff", ring: "rgba(124, 58, 237, 0.2)" }, // Violeta
+                2: { main: "#2563eb", bg: "#eff6ff", ring: "rgba(37, 99, 235, 0.2)" },  // Azul
+                3: { main: "#059669", bg: "#ecfdf5", ring: "rgba(5, 150, 105, 0.2)" },  // Verde
+                4: { main: "#db2777", bg: "#fff1f2", ring: "rgba(219, 39, 119, 0.2)" }, // Rosa
+                5: { main: "#1e293b", bg: "#f8fafc", ring: "rgba(30, 41, 59, 0.2)" }   // Negro
             };
-            const color = colors[id] || colors[1];
-            document.getElementById('btn-submit').style.backgroundColor = color;
-            document.getElementById('doctor-name').style.color = color;
+            const theme = colors[id] || colors[1];
+            
+            document.documentElement.style.setProperty('--main', theme.main);
+            document.documentElement.style.setProperty('--bg-soft', theme.bg);
+            
+            const btn = document.getElementById('btn-submit');
+            btn.style.backgroundColor = theme.main;
+            btn.style.boxShadow = `0 10px 25px -5px ${theme.ring}`;
+            
+            document.getElementById('doctor-name').style.color = theme.main;
+            document.getElementById('doctor-avatar').style.color = theme.main;
         }
 
-        // 2. ENVIAR LA CITA CONECTADA AL DOCTOR
         document.getElementById('form-cita').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            btn.innerText = "PROCESANDO...";
+            btn.disabled = true;
+
             const cita = {
                 nombre: document.getElementById('paciente').value,
                 fecha: document.getElementById('fecha').value,
                 hora: document.getElementById('hora').value,
                 notas: document.getElementById('notas').value,
-                doctor_id: doctorId // IMPORTANTE: Se vincula al doctor
+                doctor_id: doctorId 
             };
 
             await fetch(`${SUPABASE_URL}/rest/v1/Citas`, {
                 method: 'POST',
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+                headers: { 
+                    'apikey': SUPABASE_KEY, 
+                    'Authorization': `Bearer ${SUPABASE_KEY}`, 
+                    'Content-Type': 'application/json' 
+                },
                 body: JSON.stringify(cita)
             });
 
-            alert("Cita agendada con éxito.");
+            alert(`¡Cita agendada con éxito para el paciente ${cita.nombre}!`);
             location.reload();
         });
 
